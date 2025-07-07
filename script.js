@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const opsiMakanContainer = document.getElementById('opsi-makan-container');
     const pesanInfoLabel = document.getElementById('pesan-info-label');
     const paymentChoiceButtons = document.getElementById('payment-choice-buttons'); // Container opsi pembayaran (Tunai/QRIS)
-    const pesanWhatsappBtn = document.getElementById('pesan-whatsapp'); // Tombol WhatsApp utama
-    const cetakStrukButton = document.getElementById('cetak-struk-button'); // Tombol Cetak Struk baru
+    const pesanWhatsappBtn = document.getElementById('pesan-whatsapp'); // Tombol WhatsApp utama (untuk pelanggan)
+    const cetakStrukButton = document.getElementById('cetak-struk-button'); // Tombol Cetak Struk baru (untuk kasir)
     const namaPemesanInput = document.getElementById('nama-pemesan');
     const alamatPemesanInput = document.getElementById('alamat-pemesan');
-    const keteranganPesananInput = document.getElementById('keterangan-pesanan');
+    const keteranganPesananInput = document.getElementById('keterangan-pesanan'); // Keterangan pesanan
     const nominalPembayaranInput = document.getElementById('nominal-pembayaran');
     const kembalianDisplay = document.getElementById('kembalian-display');
     const produkList = document.getElementById('produk-list');
@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearCartFab = document.getElementById('clear-cart-fab');
     const btnBayarTunai = document.getElementById('btn-bayar-tunai');
     const btnBayarQris = document.getElementById('btn-bayar-qris');
+
+    // NEW: Referensi ke pop-up pilihan cetak
+    const printOptionsPopup = document.getElementById('print-options-popup');
+    const btnPrintTunai = document.getElementById('btn-print-tunai');
+    const btnPrintQris = document.getElementById('btn-print-qris');
+    const closePrintPopupBtn = document.getElementById('close-print-popup');
 
 
     // --- DATA PRODUK ---
@@ -190,18 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateKeranjang();
         hitungKembalian();
 
+        // Mengatur visibilitas FABs kasir
         if (currentUserRole === 'kasir') {
-            kasirFabs.style.display = 'block'; // Tampilkan FAB kasir untuk kasir
-            cetakStrukButton.style.display = 'block'; // Tampilkan tombol cetak untuk kasir
+            kasirFabs.style.display = 'block'; // FAB lainnya (manual, clear, barcode) untuk kasir
         } else {
-            kasirFabs.style.display = 'none'; // Sembunyikan FAB kasir untuk pelanggan
-            cetakStrukButton.style.display = 'none'; // Sembunyikan tombol cetak untuk pelanggan
+            kasirFabs.style.display = 'none';
         }
         hideOpsiMakanKasir(); // Selalu sembunyikan opsi makan
 
-        // Sembunyikan tombol WhatsApp utama saat inisialisasi
-        // Tombol ini akan muncul hanya jika pelanggan menekan opsi pembayaran QRIS
-        pesanWhatsappBtn.style.display = 'none';
+        // Atur visibilitas tombol Cetak Struk dan WhatsApp berdasarkan peran
+        updateActionButtonVisibility(); 
 
         // Opsi pembayaran (Tunai/QRIS) akan selalu terlihat dari awal
         paymentChoiceButtons.style.display = 'flex'; 
@@ -212,12 +216,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (storedRole) { // Jika sudah ada role tersimpan (sudah pernah login)
         loginPopup.style.display = 'none';
         appContainer.style.display = 'block';
+        // Set visibilitas awal FABs dan tombol cetak saat halaman dimuat jika sudah login
         if (storedRole === 'kasir') {
             kasirFabs.style.display = 'block';
-            cetakStrukButton.style.display = 'block'; // Tampilkan tombol cetak untuk kasir
+            cetakStrukButton.style.display = 'block'; // Tombol cetak untuk kasir
         } else {
             kasirFabs.style.display = 'none';
-            cetakStrukButton.style.display = 'none'; // Sembunyikan tombol cetak untuk pelanggan
+            cetakStrukButton.style.display = 'none'; // Tombol cetak untuk pelanggan
         }
         hideOpsiMakanKasir(); // Pastikan opsi makan disembunyikan
         initializeApp(); // Lanjutkan inisialisasi aplikasi
@@ -402,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hitungKembalian();
         // Sembunyikan tombol WhatsApp dan Cetak Struk saat keranjang dibersihkan
         pesanWhatsappBtn.style.display = 'none';
-        cetakStrukButton.style.display = 'none'; // Gunakan cetakStrukButton yang baru
+        cetakStrukButton.style.display = 'none'; 
     });
 
     // --- HITUNG KEMBALIAN ---
@@ -436,12 +441,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- CETAK STRUK ---
-    // Fungsi ini dipanggil oleh btnBayarTunai dan btnBayarQris
+    // --- FUNGSI CETAK STRUK UTAMA (dipanggil oleh cetakStrukButton, Tunai, dan QRIS) ---
     function printStruk(paymentMethod) {
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
-        const keteranganPesanan = keteranganPesananInput.value.trim(); // Ambil nilai keterangan
+        const keteranganPesanan = keteranganPesananInput.value.trim();
 
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
         const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
@@ -539,14 +543,14 @@ document.addEventListener('DOMContentLoaded', () => {
             nominalPembayaranInput.value = 0;
             // Opsi makan tidak lagi ditampilkan, jadi tidak perlu reset radio
             hitungKembalian();
-            // Sembunyikan tombol pembayaran dan tampilkan kembali tombol aksi
+            // Sembunyikan tombol pembayaran (Tunai/QRIS) dan tombol aksi (WA/Cetak)
             paymentChoiceButtons.style.display = 'none'; // Sembunyikan tombol Tunai/QRIS
-            updateActionButtonVisibility(); // Tampilkan tombol WA / FAB Print
+            updateActionButtonVisibility(); // Tampilkan tombol WA / Cetak Struk
         }, 300);
         return true;
     }
 
-    // --- PESAN WHATSAPP ---
+    // --- FUNGSI KIRIM PESAN WHATSAPP ---
     function kirimWhatsappMessage(paymentMethod) {
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
@@ -617,14 +621,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Fungsi untuk mengupdate visibilitas tombol aksi (WhatsApp/Cetak) ---
+    // Dipanggil setelah transaksi selesai atau inisialisasi
     function updateActionButtonVisibility() {
         const currentUserRole = localStorage.getItem('userRole');
         if (currentUserRole === 'pelanggan') {
-            pesanWhatsappBtn.style.display = 'block'; // Pelanggan hanya melihat tombol WhatsApp
-            // printOrderFab tidak lagi digunakan sebagai FAB, jadi biarkan disembunyikan
+            pesanWhatsappBtn.style.display = 'block'; // Pelanggan melihat tombol WhatsApp
+            cetakStrukButton.style.display = 'none'; // Pelanggan tidak melihat tombol Cetak Struk
         } else { // Kasir
-            pesanWhatsappBtn.style.display = 'none'; // Kasir tidak perlu tombol WA utama ini
-            cetakStrukButton.style.display = 'block'; // Kasir hanya melihat tombol Cetak Struk (yang di bawah pembayaran)
+            pesanWhatsappBtn.style.display = 'none'; // Kasir tidak melihat tombol WA utama
+            cetakStrukButton.style.display = 'block'; // Kasir melihat tombol Cetak Struk
         }
     }
 
@@ -636,9 +641,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Keranjang belanja kosong. Harap tambahkan produk.');
             return;
         }
-        // Jalankan aksi kirim pesan dan cetak struk
-        kirimWhatsappMessage('Tunai');
-        printStruk('Tunai');
+        // Kirim WhatsApp dan cetak struk (parameter Tunai)
+        kirimWhatsappMessage('Tunai'); // Kirim WhatsApp Tunai
+        printStruk('Tunai'); // Cetak Struk Tunai
     });
 
     btnBayarQris.addEventListener('click', () => {
@@ -647,10 +652,44 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Keranjang belanja kosong. Harap tambahkan produk.');
             return;
         }
-        // Jalankan aksi kirim pesan dan cetak struk
-        kirimWhatsappMessage('QRIS');
+        // Kirim WhatsApp dan cetak struk (parameter QRIS)
+        kirimWhatsappMessage('QRIS'); // Kirim WhatsApp QRIS
+        printStruk('QRIS'); // Cetak Struk QRIS
+    });
+
+    // --- Event Listener untuk Tombol CETAK STRUK (hanya untuk Kasir) ---
+    // Ini adalah tombol yang akan memunculkan pop-up pilihan pembayaran cetak.
+    cetakStrukButton.addEventListener('click', () => {
+        if (keranjang.length === 0) {
+            alert('Keranjang belanja kosong. Tidak ada yang bisa dicetak.');
+            return;
+        }
+        // Tampilkan pop-up pilihan cetak
+        printOptionsPopup.style.display = 'flex';
+    });
+
+    // --- Event Listener untuk pilihan di pop-up Cetak Struk ---
+    // (Pilihan Tunai di Pop-up Cetak)
+    btnPrintTunai.addEventListener('click', () => {
+        // Tutup pop-up
+        printOptionsPopup.style.display = 'none';
+        // Cetak struk sebagai Tunai (tanpa QRIS)
+        printStruk('Tunai');
+    });
+
+    // (Pilihan QRIS di Pop-up Cetak)
+    btnPrintQris.addEventListener('click', () => {
+        // Tutup pop-up
+        printOptionsPopup.style.display = 'none';
+        // Cetak struk sebagai QRIS (dengan QRIS)
         printStruk('QRIS');
     });
+
+    // (Tombol Tutup Pop-up Cetak)
+    closePrintPopupBtn.addEventListener('click', () => {
+        printOptionsPopup.style.display = 'none';
+    });
+
 
     // --- MODAL & PESANAN MANUAL ---
     addManualOrderFab.addEventListener('click', () => {
@@ -740,7 +779,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showOpsiMakanKasir() {
-        // Fungsi ini dikosongkan karena opsi makan tidak akan ditampilkan sama sekali
         hideOpsiMakanKasir(); // Memastikan selalu tersembunyi
     }
 });

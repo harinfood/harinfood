@@ -44,6 +44,17 @@
         </div>
     </div>
 
+    <div id="print-options-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h2>Pilih Metode Pembayaran Cetak</h2>
+            <div class="button-group">
+                <button id="btn-print-tunai" class="btn-payment btn-tunai"><i class="fas fa-money-bill-wave"></i> Tunai</button>
+                <button id="btn-print-qris" class="btn-payment btn-qris"><i class="fas fa-qrcode"></i> QRIS</button>
+            </div>
+            <button id="close-print-popup" class="close-popup-btn">&times;</button>
+        </div>
+    </div>
+
     <div id="app-container" style="display: none;">
         <header></header>
         <div class="main-layout">
@@ -83,14 +94,17 @@
                     <button id="btn-bayar-qris" class="btn-payment btn-qris"><i class="fas fa-qrcode"></i> QRIS</button>
                 </div>
 
-                <button id="cetak-struk-button" class="btn-action btn-default" style="display: none; margin-top: 15px;"><i class="fas fa-print"></i> Cetak Struk</button>
+                <button id="cetak-struk-button" class="btn-action btn-print-green" style="display: none; margin-top: 15px;"><i class="fas fa-print"></i> Cetak Struk</button>
 
 
                 <div class="pemesanan-container">
                     <h2 class="section-title">Detail Pemesanan</h2>
                     <label for="nama-pemesan">Nama Pemesan:</label>
-                    <input type="text" id="nama-pemesan"> <label for="alamat-pemesan">Alamat Lengkap:</label>
-                    <textarea id="alamat-pemesan" rows="3"></textarea> <label id="pesan-info-label" style="color:white; font-size:10px;font-style: italic;">Silahkan memesan dengan menekan tombol di bawah !</label>
+                    <input type="text" id="nama-pemesan">
+                    <label for="alamat-pemesan">Alamat Lengkap:</label>
+                    <textarea id="alamat-pemesan" rows="3"></textarea>
+                    
+                    <label id="pesan-info-label" style="color:white; font-size:10px;font-style: italic;">Silahkan memesan dengan menekan tombol di bawah !</label>
                     <div id="opsi-makan-container">
                         <input type="radio" id="dibawa-pulang" name="opsi-makan" value="Dibawa Pulang">
                         <label for="dibawa-pulang">Dibawa Pulang</label>
@@ -98,7 +112,7 @@
                         <label for="makan-disini">Makan di Sini</label>
                     </div>
                     <div class="action-buttons">
-                        <button id="pesan-whatsapp" class="btn-action btn-whatsapp" style="display: none;"><i class="fab fa-whatsapp"></i> TEKAN UNTUK MEMESAN</button>
+                        
                     </div>
                 </div>
             </section>

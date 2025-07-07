@@ -26,6 +26,7 @@
     --danger-color: #dc3545;
     --btn-qris-bg: linear-gradient(45deg, #007bff, #00b0ff); /* Biru untuk QRIS */
     --btn-tunai-bg: linear-gradient(45deg, #ffc107, #e0a800); /* Kuning untuk Tunai */
+    --btn-print-green-bg: linear-gradient(45deg, #28a745, #1e7e34); /* Hijau untuk cetak */
 }
 
 /* ====== Global ====== */
@@ -93,7 +94,7 @@ footer {
     font-size: 2em;
 }
 
-/* ====== Gaya untuk Pop-up Login ====== */
+/* ====== Gaya untuk Pop-up Login (Juga digunakan untuk Pop-up Cetak) ====== */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -369,6 +370,20 @@ footer {
     outline: none;
     border-color: var(--border-neon-color);
     box-shadow: 0 0 10px var(--shadow-neon-color);
+}
+
+/* ====== Gaya untuk Tombol Cetak Struk (Hijau) ====== */
+/* Menggunakan kelas 'btn-action' dan 'btn-print-green' */
+.btn-action.btn-print-green {
+    background: var(--btn-print-green-bg); /* Menggunakan variabel warna hijau */
+    color: white;
+    /* Properti lain seperti padding, border-radius, font-size sudah diwarisi dari .btn-action */
+}
+
+.btn-action.btn-print-green:hover {
+    background: linear-gradient(45deg, #218838, #155724); /* Warna hijau yang sedikit lebih gelap saat hover */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 
