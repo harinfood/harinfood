@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPrintQris = document.getElementById('btn-print-qris');
     const closePrintPopupBtn = document.getElementById('close-print-popup');
 
-    // BARU: Referensi untuk input pencarian/barcode dan feedbacknya
+    // Referensi untuk input pencarian/barcode dan feedbacknya (TETAP ADA KARENA INI FITUR V1.6.0)
     const productSearchBarcodeInput = document.getElementById('product-search-barcode');
     const searchBarcodeFeedback = document.getElementById('search-barcode-feedback');
 
@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayPhoneNumber = "081235368643";
     const whatsappPhoneNumber = "6281235368643";
     const defaultAddress = "Jl Ender Rakit - Gedongan";
-    // BARU: Pesan footer diganti dengan emoji
+    // Pesan footer dengan emoji (TETAP ADA)
     const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰"; 
     const qrisImagePath = "qris.webp"; // Untuk cetak struk lokal
-    // Link QRIS ini digunakan untuk teks di pesan share/WhatsApp
+    // Link QRIS ini digunakan untuk teks di pesan share/WhatsApp (TETAP ADA)
     const qrisDownloadLink = "https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk"; 
 
 
@@ -131,8 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'none'; // Pelanggan tidak melihat FAB kasir
             pesanInfoLabel.style.display = 'block'; // Tampilkan info pesan untuk pelanggan
-            // BARU: Set teks pesan info untuk pelanggan
-            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
+            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya"; // TETAP ADA
             alert(`Selamat datang, ${nama}! Anda masuk sebagai Pelanggan.`);
             initializeApp();
         } else {
@@ -147,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (namaKasir === 'Harry' && passwordKasir === '313121') {
             localStorage.setItem('userRole', 'kasir');
-            localStorage.setItem('namaKasir', namaKasir); // BARU: Simpan nama kasir
-            document.body.classList.add('kasir-mode'); // Tambahkan kelas kasir-mode ke body
+            localStorage.setItem('namaKasir', namaKasir); // Simpan nama kasir
+            // document.body.classList.add('kasir-mode'); // DIHAPUS - tidak lagi digunakan di CSS
             loginPopup.style.display = 'none';
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'block'; // Kasir melihat FAB kasir
@@ -218,16 +217,15 @@ document.addEventListener('DOMContentLoaded', () => {
             kasirFabs.style.display = 'block'; 
             pesanInfoLabel.style.display = 'none'; 
             shareOrderFab.style.display = 'flex'; 
-            // BARU: Fokus ke input pencarian/barcode saat kasir login
-            productSearchBarcodeInput.style.display = 'block'; // Pastikan terlihat
+            // Fokus ke input pencarian/barcode saat kasir login (TETAP ADA)
+            productSearchBarcodeInput.style.display = 'block'; 
             productSearchBarcodeInput.focus();
         } else {
             kasirFabs.style.display = 'none';
             pesanInfoLabel.style.display = 'block'; 
-            // BARU: Set teks pesan info untuk pelanggan
-            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
+            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya"; // TETAP ADA
             shareOrderFab.style.display = 'none'; 
-            productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan
+            productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan (TETAP ADA)
         }
 
         updateActionButtonVisibility(); 
@@ -241,22 +239,21 @@ document.addEventListener('DOMContentLoaded', () => {
         appContainer.style.display = 'block';
         // Set visibilitas awal FABs dan tombol cetak saat halaman dimuat jika sudah login
         if (storedRole === 'kasir') {
-            document.body.classList.add('kasir-mode'); // Tambahkan kelas kasir-mode ke body
+            // document.body.classList.add('kasir-mode'); // DIHAPUS - tidak lagi digunakan di CSS
             kasirFabs.style.display = 'block';
             cetakStrukButton.style.display = 'block'; 
             pesanInfoLabel.style.display = 'none'; 
             shareOrderFab.style.display = 'flex'; 
-            productSearchBarcodeInput.style.display = 'block'; // Pastikan terlihat
-            productSearchBarcodeInput.focus(); // Fokus saat dimuat
+            productSearchBarcodeInput.style.display = 'block'; // Pastikan terlihat (TETAP ADA)
+            productSearchBarcodeInput.focus(); // Fokus saat dimuat (TETAP ADA)
         } else {
-            document.body.classList.remove('kasir-mode'); // Hapus kelas kasir-mode dari body
+            // document.body.classList.remove('kasir-mode'); // DIHAPUS - tidak lagi digunakan di CSS
             kasirFabs.style.display = 'none';
             cetakStrukButton.style.display = 'none'; 
             pesanInfoLabel.style.display = 'block'; 
-            // BARU: Set teks pesan info untuk pelanggan
-            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
+            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya"; // TETAP ADA
             shareOrderFab.style.display = 'none'; 
-            productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan
+            productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan (TETAP ADA)
         }
         initializeApp(); 
     } else { // Belum login
@@ -276,13 +273,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const produkDiv = document.createElement('div');
             produkDiv.classList.add('produk-item');
 
-            let hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span></p>`;
+            let hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span</p>`;
 
-            // Jika peran adalah kasir, tampilkan input harga
+            // Mengembalikan struktur HTML untuk edit harga kasir ke bentuk inline V1.6.0
             if (currentUserRole === 'kasir') {
                 hargaDisplayHtml = `
-                    <div class="kasir-price-edit-group"> 
-                        <span class="price-label">Harga:</span>
+                    <p class="edit-price-wrapper">
+                        Harga: 
                         <input type="number" 
                                class="product-price-input" 
                                data-id="${produk.id}" 
@@ -290,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                min="0" 
                                onchange="handlePriceChange(this, ${produk.id})"
                                onblur="formatPriceInput(this)">
-                    </div>
+                    </p>
                 `;
             }
 
@@ -481,15 +478,15 @@ document.addEventListener('DOMContentLoaded', () => {
         keranjang = [];
         updateKeranjang();
         updateProdukControls();
-        namaPemesanInput.value = ''; // BARU: Reset nama pemesan
-        alamatPemesanInput.value = ''; // BARU: Reset alamat pemesan
-        keteranganPesananInput.value = ''; // BARU: Reset keterangan pesanan
+        namaPemesanInput.value = ''; 
+        alamatPemesanInput.value = ''; 
+        keteranganPesananInput.value = ''; 
         nominalPembayaranInput.value = 0;
         delete nominalPembayaranInput.dataset.autofilled;
         hitungKembalian();
         updateActionButtonVisibility(); 
-        productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
-        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
+        productSearchBarcodeInput.value = ''; 
+        productSearchBarcodeInput.focus(); 
     });
 
     // --- HITUNG KEMBALIAN ---
@@ -528,8 +525,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
         const keteranganPesanan = keteranganPesananInput.value.trim();
-        const kasirName = localStorage.getItem('namaKasir') || '-'; // Ambil nama kasir
-        const currentUserRole = localStorage.getItem('userRole'); // Ambil peran user
+        const kasirName = localStorage.getItem('namaKasir') || '-'; 
+        const currentUserRole = localStorage.getItem('userRole'); 
 
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
         const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
@@ -572,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                     </div>
         `;
-        if (keteranganPesanan) { // Tambahkan keterangan pesanan jika ada
+        if (keteranganPesanan) { 
             printContent += `
                     <div class="print-notes">
                         <p>Catatan: ${keteranganPesanan}</p>
@@ -595,7 +592,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="print-payment-info"><span>KEMBALIAN:</span> ${formatRupiah(kembalian)}</p>
         `;
 
-        // Sertakan QRIS hanya jika metode pembayaran QRIS
         if (paymentMethod === 'QRIS') {
             printContent += `
                     <div style="text-align: center; margin-top: 10px; margin-bottom: 5px;">
@@ -603,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
             `;
             printContent += `<p class="thank-you">${defaultFooterText} - Scan QRIS Untuk Pembayaran</p>`;
-        } else { // Jika Tunai, tidak ada gambar QRIS
+        } else { 
             printContent += `<p class="thank-you">${defaultFooterText}</p>`;
         }
 
@@ -617,18 +613,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         setTimeout(() => {
             printWindow.print();
-            // Setelah cetak, bersihkan keranjang dan reset form
             keranjang = [];
             updateKeranjang();
-            namaPemesanInput.value = '';
-            alamatPemesanInput.value = '';
-            keteranganPesananInput.value = ''; // Reset keterangan
+            namaPemesanInput.value = ''; 
+            alamatPemesanInput.value = ''; 
+            keteranganPesananInput.value = ''; 
             nominalPembayaranInput.value = 0;
             hitungKembalian();
             paymentChoiceButtons.style.display = 'flex'; 
             updateActionButtonVisibility(); 
-            productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
-            productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
+            productSearchBarcodeInput.value = ''; 
+            productSearchBarcodeInput.focus(); 
         }, 300);
         return true;
     }
@@ -681,7 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (paymentMethod === 'QRIS') {
             whatsappMessage += `*Metode Pembayaran: QRIS*\n`;
             whatsappMessage += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
-            whatsappMessage += `(Bayar sesuai nominal total pembayaran jika anda menggunakan QRIS)\n`; // BARU: Pesan diubah
+            whatsappMessage += `(Bayar sesuai nominal total pembayaran jika anda menggunakan QRIS)\n`; 
         } else { 
             whatsappMessage += `*Metode Pembayaran: Tunai*\n`;
             whatsappMessage += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
@@ -690,7 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (keteranganPesanan) { 
             whatsappMessage += `*Catatan:*\n${keteranganPesanan}\n\n`;
         }
-        whatsappMessage += defaultFooterText; // BARU: defaultFooterText sudah mengandung emoji
+        whatsappMessage += defaultFooterText; 
         const encodedMessage = encodeURIComponent(whatsappMessage);
         const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
@@ -765,7 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     window.closeManualOrderModal = function() {
         manualOrderModal.style.display = 'none';
-        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian setelah modal ditutup
+        productSearchBarcodeInput.focus(); 
     };
     window.addManualOrderItem = function() {
         const name = manualProductNameInput.value.trim();
@@ -786,13 +781,13 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         tambahKeKeranjang(newManualItem);
         manualOrderModal.style.display = 'none';
-        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian setelah menambahkan item
+        productSearchBarcodeInput.focus(); 
     };
 
-    // --- BARU: Logika Pencarian/Scan Barcode di Input Tunggal ---
+    // --- Logika Pencarian/Scan Barcode di Input Tunggal (TETAP ADA) ---
     productSearchBarcodeInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault(); // Mencegah submit form jika input ada di dalam form
+            e.preventDefault(); 
             const query = productSearchBarcodeInput.value.trim();
             if (query) {
                 const foundProduct = produkData.find(p => 
@@ -803,7 +798,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     tambahKeKeranjang(foundProduct);
                     searchBarcodeFeedback.textContent = `Produk "${foundProduct.nama}" ditambahkan!`;
                     searchBarcodeFeedback.style.color = 'var(--success-color)';
-                    productSearchBarcodeInput.value = ''; // Bersihkan input setelah berhasil
+                    productSearchBarcodeInput.value = ''; 
                 } else {
                     searchBarcodeFeedback.textContent = `Produk atau barcode "${query}" tidak ditemukan.`;
                     searchBarcodeFeedback.style.color = 'var(--danger-color)';
@@ -812,20 +807,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchBarcodeFeedback.textContent = 'Masukkan nama produk atau scan barcode.';
                 searchBarcodeFeedback.style.color = 'var(--text-color)';
             }
-            // Setelah proses, fokus tetap di input pencarian
             productSearchBarcodeInput.focus();
         }
     });
 
     productSearchBarcodeInput.addEventListener('input', () => {
-        // Bersihkan feedback saat pengguna mulai mengetik lagi
         searchBarcodeFeedback.textContent = '';
     });
 
 
     // --- FAB SHARE ORDER (MERAH) ---
     shareOrderFab.addEventListener('click', async () => {
-        // Panggil generateShareMessage dengan metode 'Tunai' untuk menghasilkan teks seperti print Tunai
         const shareResult = generateShareMessage('Tunai'); 
 
         if (!shareResult.success) {
@@ -837,12 +829,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalBelanja = shareResult.total;
         const nominalPembayaran = shareResult.nominal;
         
-        if (totalBelanja === 0) { // Jika tidak ada item di keranjang, tidak ada transaksi untuk dibagikan
+        if (totalBelanja === 0) { 
             alert('Keranjang belanja kosong. Tidak ada transaksi untuk dibagikan.');
             return;
         }
 
-        // Pastikan nominal pembayaran sudah cukup atau transaksi sudah selesai
         if (nominalPembayaran < totalBelanja) {
             alert('Nominal pembayaran kurang dari total belanja. Harap selesaikan pembayaran sebelum membagikan transaksi.');
             return;
@@ -850,58 +841,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Perubahan di sini: Tidak lagi mencoba menyematkan gambar secara langsung ---
         try {
-            // Coba gunakan Web Share API untuk berbagi teks saja
             if (navigator.share) {
                 await navigator.share({
                     title: 'Detail Transaksi HARINFOOD',
-                    text: messageToShare // Hanya berbagi teks
+                    text: messageToShare 
                 });
                 console.log('Konten berhasil dibagikan menggunakan Web Share API.');
-                // Setelah berhasil berbagi, bersihkan keranjang dan reset form
                 keranjang = [];
                 updateKeranjang();
-                namaPemesanInput.value = '';
-                alamatPemesanInput.value = '';
+                namaPemesanInput.value = ''; 
+                alamatPemesanInput.value = ''; 
                 keteranganPesananInput.value = ''; 
                 nominalPembayaranInput.value = 0;
                 hitungKembalian();
                 updateActionButtonVisibility(); 
-                productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
-                productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
-                return; // Keluar setelah berhasil berbagi
+                productSearchBarcodeInput.value = ''; 
+                productSearchBarcodeInput.focus(); 
+                return; 
             }
         } catch (error) {
             console.error('Gagal berbagi via Web Share API:', error);
-            // Lanjutkan ke fallback WhatsApp jika Web Share API gagal/dibatalkan
         }
 
-        // Fallback ke WhatsApp jika Web Share API tidak didukung atau gagal
         alert('Tidak dapat membagikan langsung ke aplikasi lain. Menggunakan WhatsApp sebagai gantinya.');
         const encodedMessage = encodeURIComponent(messageToShare);
         const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
 
-        // Setelah berbagi via WhatsApp, bersihkan keranjang dan reset form
         keranjang = [];
         updateKeranjang();
-        namaPemesanInput.value = '';
-        alamatPemesanInput.value = '';
+        namaPemesanInput.value = ''; 
+        alamatPemesanInput.value = ''; 
         keteranganPesananInput.value = ''; 
         nominalPembayaranInput.value = 0;
         hitungKembalian();
         updateActionButtonVisibility(); 
-        productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
-        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
+        productSearchBarcodeInput.value = ''; 
+        productSearchBarcodeInput.focus(); 
     });
 
     // Fungsi untuk menghasilkan pesan transaksi yang bisa dibagikan
-    // (Sekarang menerima parameter paymentMethodForShare untuk konsistensi dengan kirimWhatsappMessage)
+    // (Mengembalikan ke logika V1.6.0 untuk penamaan kasir dan default address)
     function generateShareMessage(paymentMethodForShare) { 
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
         const keteranganPesanan = keteranganPesananInput.value.trim();
-        const kasirName = localStorage.getItem('namaKasir') || '-'; // Ambil nama kasir
-        const currentUserRole = localStorage.getItem('userRole'); // Ambil peran user
+        const kasirName = localStorage.getItem('namaKasir') || '-'; 
+        const currentUserRole = localStorage.getItem('userRole'); 
 
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
         const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
@@ -918,10 +904,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const formattedTime = tanggalWaktu.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
         let shareText = `*${defaultShopName}*\n`;
-        shareText += `${defaultAddress}\n`; // Ditambahkan: Alamat toko
+        shareText += `${defaultAddress}\n`; // Ditambahkan: Alamat toko (TETAP ADA)
         shareText += `Telp: ${displayPhoneNumber}\n`;
         shareText += "-----------------------------\n";
-        if (currentUserRole === 'kasir') { // Tambahkan nama kasir jika kasir
+        if (currentUserRole === 'kasir') { // Tambahkan nama kasir jika kasir (TETAP ADA)
              shareText += `Kasir: ${kasirName}\n`;
         }
         shareText += `Pelanggan: ${namaPemesan || '-'}\n`;
@@ -936,27 +922,26 @@ document.addEventListener('DOMContentLoaded', () => {
         shareText += "-----------------------------\n";
         shareText += `*Total: ${formatRupiah(totalBelanja)}*\n`;
         
-        // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage
+        // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage (TETAP ADA)
         if (paymentMethodForShare === 'QRIS') {
             shareText += `*Metode Pembayaran: QRIS*\n`;
-            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; // Menggunakan link view
-            shareText += `(Bayar sesuai nominal total pembayaran jika anda menggunakan QRIS)\n`; // Pesan diubah
-        } else { // Jika Tunai atau metode lain yang tidak spesifik
+            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
+            shareText += `(Bayar sesuai nominal total pembayaran jika anda menggunakan QRIS)\n`; 
+        } else { 
             shareText += `*Metode Pembayaran: Tunai*\n`;
             shareText += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
             shareText += `*Kembalian: ${formatRupiah(kembalian)}*\n\n`;
         }
         
-        if (keteranganPesanan) {
+        if (keteranganPesanan) { 
             shareText += `*Catatan:*\n${keteranganPesanan}\n\n`;
         }
-        // Jika metode Tunai, dan ada total belanja, tambahkan info QRIS sebagai pilihan lain
-        // Ini memastikan link QRIS selalu ada di pesan share meskipun transaksi di-share sebagai Tunai
+        // Jika metode Tunai, dan ada total belanja, tambahkan info QRIS sebagai pilihan lain (TETAP ADA)
         if (totalBelanja > 0 && paymentMethodForShare === 'Tunai') {
              shareText += `\n*Pilihan Lain: Scan QRIS untuk Pembayaran:*\n${qrisDownloadLink}\n`;
         }
 
-        shareText += defaultFooterText; // defaultFooterText sudah mengandung emoji
+        shareText += defaultFooterText; // defaultFooterText sudah mengandung emoji (TETAP ADA)
 
         return { success: true, message: shareText, total: totalBelanja, nominal: nominalPembayaran };
     }

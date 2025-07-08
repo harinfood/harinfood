@@ -34,36 +34,11 @@
 }
 
 /* ====== Global ====== */
-/* Base font size untuk responsivitas dengan rem */
+/* Mengembalikan font-size html ke nilai default browser (16px) atau tidak ditentukan */
+/* Hapus semua @media query yang mengubah html font-size */
 html {
-    font-size: 17px; /* Default base font size untuk PC Desktop besar (1rem = 17px) */
+    /* font-size: 16px; */ /* Dihapus atau dikomentari agar kembali ke default browser atau nilai sebelumnya */
 }
-
-/* Penyesuaian font-size untuk berbagai resolusi */
-@media (max-width: 1200px) { /* Untuk laptop/desktop yang lebih kecil (1200px ke bawah) */
-    html {
-        font-size: 16px; /* 1rem = 16px */
-    }
-}
-
-@media (max-width: 1024px) { /* Untuk tablet besar dan desktop kecil (1024px ke bawah) */
-    html {
-        font-size: 15px; /* 1rem = 15px */
-    }
-}
-
-@media (max-width: 768px) { /* Untuk tablet kecil dan ponsel besar (768px ke bawah) */
-    html {
-        font-size: 14px; /* 1rem = 14px */
-    }
-}
-
-@media (max-width: 480px) { /* Untuk ponsel kecil (480px ke bawah) */
-    html {
-        font-size: 13px; /* 1rem = 13px */
-    }
-}
-
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -475,62 +450,62 @@ footer {
 }
 .produk-item h3 {
     color: var(--text-accent-color);
-    margin-bottom: 0.2rem; /* Consistent unit */
-    font-size: 1rem; /* Diubah ke rem */
+    margin-bottom: 0.2em; /* Kembali ke em */
+    font-size: 1em; /* Kembali ke em */
     font-weight: 600;
-    white-space: normal; /* Memastikan teks melingkar */
-    overflow-wrap: break-word; /* Memastikan kata panjang melingkar */
-    line-height: 1.2; /* Mengontrol tinggi baris */
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.2;
 }
 .produk-item p {
-    font-size: 0.9rem; /* Diubah ke rem */
+    font-size: 0.9em; /* Kembali ke em */
     font-weight: bold;
     color: var(--text-price-color);
-    margin-top: 0.2rem; /* Consistent unit */
-    white-space: normal; /* Memastikan teks melingkar */
-    overflow-wrap: break-word; /* Memastikan kata panjang melingkar */
-    line-height: 1.2; /* Mengontrol tinggi baris */
+    margin-top: 0.2em; /* Kembali ke em */
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.2;
 }
 
-/* Gaya default untuk edit-price-wrapper (digunakan pelanggan) */
+/* Mengembalikan gaya untuk edit-price-wrapper (digunakan pelanggan) */
 .produk-item .edit-price-wrapper {
     display: flex;
     align-items: center; /* Sejajar secara horizontal */
     justify-content: center;
     gap: 5px;
-    margin-top: 0.2rem;
-    font-size: 0.9rem; /* Ukuran font default untuk non-kasir */
+    margin-top: 0.2em; /* Kembali ke em */
+    font-size: 0.9em; /* Kembali ke em */
     font-weight: bold;
     color: var(--text-price-color);
 }
 
-/* BARU: Gaya untuk grup edit harga kasir (hanya aktif saat body memiliki kelas kasir-mode) */
-body.kasir-mode .produk-item .kasir-price-edit-group {
+/* MENGHAPUS GAYA UNTUK .kasir-price-edit-group YANG MENYEBABKAN TATA LETAK TIDAK BERATURAN */
+/* body.kasir-mode .produk-item .kasir-price-edit-group {
     display: flex;
-    flex-direction: column; /* Atur menjadi kolom */
-    align-items: center; /* Pusatkan secara horizontal */
-    justify-content: center; /* Pusatkan secara vertikal jika ada ruang */
-    gap: 0.2rem; /* Mengurangi gap agar lebih rapat */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
     margin-top: 0.2rem;
-    color: var(--text-price-color); /* Warna teks harga */
+    color: var(--text-price-color);
     font-weight: bold;
 }
 
-body.kasir-mode .produk-item .kasir-price-edit-group .price-label { /* Gaya untuk teks "Harga:" di mode kasir */
-    font-size: 1rem; /* BARU: Disamakan dengan input field untuk konsistensi */
-    margin-bottom: 0.1rem; /* Sedikit spasi di bawah label */
-    text-align: center; /* Pastikan teks Harga: berada di tengah */
-}
+body.kasir-mode .produk-item .kasir-price-edit-group .price-label {
+    font-size: 1rem;
+    margin-bottom: 0.1rem;
+    text-align: center;
+} */
 
 
 .produk-item .product-price-input {
-    width: 5em; /* BARU: Diubah ke em agar responsif dengan font-size */
+    width: 80px; /* Kembali ke px */
     padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--input-border-color);
     background: var(--input-bg);
     color: var(--text-primary-color);
-    font-size: 1rem; /* Diubah ke rem, skalanya ikut html font-size */
+    font-size: 1em; /* Kembali ke em */
     text-align: right;
     -moz-appearance: textfield;
 }
@@ -917,7 +892,7 @@ body.kasir-mode .produk-item .kasir-price-edit-group .price-label { /* Gaya untu
     background-color: #218838;
 }
 
-/* BARU: Gaya untuk input pencarian/barcode */
+/* Gaya untuk input pencarian/barcode */
 .search-barcode-input {
     margin-bottom: 20px;
     text-align: center;
@@ -960,38 +935,29 @@ body.kasir-mode .produk-item .kasir-price-edit-group .price-label { /* Gaya untu
 
 /* ====== RESPONSIVE GRID PRODUK & LAYOUT ====== */
 
-/* BARU: Atur font-size dasar untuk responsivitas */
+/* Mengembalikan font-size html ke nilai default browser (16px) atau tidak ditentukan */
+/* Hapus semua @media query yang mengubah html font-size */
+/* BARU: Kembalikan perilaku font-size ke V1.6.0 (tanpa skala html) */
 html {
-    font-size: 17px; /* Default base font size untuk PC Desktop besar (1rem = 17px) */
+    /* Font-size default browser akan digunakan (biasanya 16px) */
 }
 
-/* BARU: Penyesuaian font-size untuk berbagai resolusi */
-@media (max-width: 1200px) { /* Untuk laptop/desktop yang lebih kecil (1200px ke bawah) */
-    html {
-        font-size: 16px; /* 1rem = 16px */
-    }
-}
-
-@media (max-width: 1024px) { /* Untuk tablet besar dan desktop kecil (1024px ke bawah) */
-    html {
-        font-size: 15px; /* 1rem = 15px */
-    }
-    /* Khusus untuk tampilan kasir di tablet dan desktop kecil */
-    body.kasir-mode .main-layout {
-        grid-template-columns: 2fr 1fr; /* Tetap 2 kolom */
-        gap: 1em; /* Mengurangi gap */
-    }
-    body.kasir-mode #produk-list {
-        grid-template-columns: repeat(2, 1fr); /* Ubah menjadi 2 kolom produk */
-    }
-}
-
-@media (max-width: 768px) { /* Untuk tablet kecil dan ponsel besar (768px ke bawah) */
-    html {
-        font-size: 14px; /* 1rem = 14px */
-    }
+/* Mengembalikan konfigurasi media query seperti di V1.6.0 */
+@media (max-width: 1024px) { /* Untuk tablet besar dan desktop kecil */
     .main-layout {
-        display: block; /* Menumpuk kolom utama */
+        grid-template-columns: 2fr 1fr; /* Kembali ke 2 kolom utama */
+        gap: 1em;
+    }
+    #produk-list {
+        grid-template-columns: repeat(2, 1fr); /* Kembali ke 2 kolom produk untuk tablet/PC kecil */
+    }
+    /* Menghapus atau mengembalikan gaya kasir-mode yang mengubah layout product item */
+    /* body.kasir-mode .produk-item .kasir-price-edit-group dan children-nya dihapus/dikomentari */
+}
+
+@media (max-width: 768px) { /* Untuk tablet kecil dan ponsel besar */
+    .main-layout {
+        display: block;
         padding: 0.5em;
     }
     #menu-produk-section, #keranjang-form-section {
@@ -999,7 +965,7 @@ html {
         margin-bottom: 1em;
     }
     #produk-list {
-        grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom produk */
+        grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom untuk ponsel */
         gap: 0.8em;
     }
     .produk-item img {
@@ -1018,10 +984,7 @@ html {
     #kasir-fabs .fab-print  { bottom: 55px; right: 10px; }
 }
 
-@media (max-width: 480px) { /* Untuk ponsel kecil (480px ke bawah) */
-    html {
-        font-size: 13px; /* 1rem = 13px */
-    }
+@media (max-width: 480px) { /* Untuk ponsel kecil */
     #produk-list {
         grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom produk */
         gap: 0.4em;
@@ -1045,6 +1008,68 @@ html {
     #kasir-fabs .fab-print  { bottom: 43px;  right: 7px; }
 }
 
+/* BARU: Mengembalikan ukuran font dan posisi input harga kasir ke V1.6.0 */
+.produk-item h3 {
+    color: var(--text-accent-color);
+    margin-bottom: 0.2em; /* Kembali ke em */
+    font-size: 1em; /* Kembali ke em */
+    font-weight: 600;
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.2;
+}
+.produk-item p {
+    font-size: 0.9em; /* Kembali ke em */
+    font-weight: bold;
+    color: var(--text-price-color);
+    margin-top: 0.2em; /* Kembali ke em */
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.2;
+}
+
+/* Mengembalikan gaya .edit-price-wrapper untuk tampilan default (pelanggan & kasir sekarang) */
+.produk-item .edit-price-wrapper {
+    display: flex;
+    align-items: center; /* Sejajar secara horizontal */
+    justify-content: center;
+    gap: 5px;
+    margin-top: 0.2em; /* Kembali ke em */
+    font-size: 0.9em; /* Ukuran font sesuai V1.6.0 */
+    font-weight: bold;
+    color: var(--text-price-color);
+}
+
+/* Menghapus gaya .kasir-price-edit-group karena strukturnya di JS akan diubah */
+/* dan mengandalkan .edit-price-wrapper untuk kasir juga */
+/* (Pastikan tidak ada .kasir-price-edit-group di HTML yang dihasilkan JS) */
+
+
+.produk-item .product-price-input {
+    width: 80px; /* Kembali ke px */
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--input-border-color);
+    background: var(--input-bg);
+    color: var(--text-primary-color);
+    font-size: 1em; /* Kembali ke em */
+    text-align: right;
+    -moz-appearance: textfield;
+}
+
+.produk-item .product-price-input::-webkit-outer-spin-button,
+.produk-item .product-price-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.produk-item .product-price-input:focus {
+    outline: none;
+    border-color: var(--border-neon-color);
+    box-shadow: 0 0 10px var(--shadow-neon-color);
+}
+
+
 /* ====== PRINT STRUK ====== */
 @media print {
     body * {
@@ -1057,8 +1082,8 @@ html {
         visibility: visible !important;
         color: #000 !important;
         font-family: 'Poppins', sans-serif !important;
-        font-weight: 700 !important; /* Default tebal untuk semua teks di print-area */
-        font-size: 10px !important; /* Default ukuran font 10px */
+        font-weight: 700 !important;
+        font-size: 10px !important; /* KEMBALI KE 10px */
         line-height: 1.2 !important;
     }
     #print-area {
@@ -1080,17 +1105,17 @@ html {
     /* Style untuk nama toko di header cetak */
     .print-header .shop-name-print {
         margin: 0 !important;
-        font-size: 1.5em !important; /* Ukuran font lebih besar untuk nama toko (1.5 * 10px = 15px) */
-        font-weight: 900 !important; /* Sangat tebal */
+        font-size: 1.5em !important; 
+        font-weight: 900 !important;
         line-height: 1.2 !important;
     }
     /* Style untuk alamat dan telepon di header cetak */
     .print-header .shop-address-print,
     .print-header .shop-phone-print {
         margin: 0 !important;
-        font-size: 1.1em !important; /* 1.1 * 10px = 11px */
+        font-size: 1.1em !important; 
         line-height: 1.2 !important;
-        font-weight: 700 !important; /* Tetap tebal */
+        font-weight: 700 !important;
     }
 
     .print-info {
@@ -1100,14 +1125,14 @@ html {
     }
     .print-info p {
         margin: 0 !important;
-        font-size: 1em !important; /* Tetap 10px */
+        font-size: 1em !important; 
         line-height: 1.2 !important;
         font-weight: 700 !important;
     }
     .print-notes {
         margin-top: 5px !important;
         margin-bottom: 10px !important;
-        font-size: 1em !important; /* Tetap 10px */
+        font-size: 1em !important; 
         font-weight: 700 !important;
         padding-top: 5px !important;
     }
@@ -1122,21 +1147,21 @@ html {
     table td {
         padding: 1px 0 !important;
         text-align: left !important;
-        font-size: 1em !important; /* Tetap 10px */
+        font-size: 1em !important; 
     }
     table td:nth-child(1) {
         width: 70% !important;
         word-wrap: break-word !important;
-        font-weight: 800 !important; /* Lebih tebal untuk nama produk */
+        font-weight: 800 !important;
     }
     table td:nth-child(2) {
         width: 30% !important;
         text-align: right !important;
-        font-weight: 700 !important; /* Tebal juga untuk harga */
+        font-weight: 700 !important;
     }
     .total-row {
-        font-size: 1.1em !important; /* Relatif terhadap 10px, jadi sekitar 11px */
-        font-weight: 900 !important; /* Sangat tebal untuk total */
+        font-size: 1.1em !important; 
+        font-weight: 900 !important;
         text-align: right !important;
         margin-top: 5px !important;
         padding-top: 5px !important;
@@ -1144,7 +1169,7 @@ html {
     }
     .total-row span { float: left !important; }
     .print-payment-info {
-        font-size: 1em !important; /* Tetap 10px */
+        font-size: 1em !important; 
         font-weight: 700 !important;
         text-align: right !important;
         margin: 2px 0 !important;
@@ -1153,7 +1178,7 @@ html {
     .thank-you {
         text-align: center !important;
         margin-top: 15px !important;
-        font-size: 1em !important; /* Tetap 10px */
+        font-size: 1em !important; 
         line-height: 1.4 !important;
         font-weight: 700 !important;
     }
