@@ -37,8 +37,34 @@
 /* ====== Global ====== */
 /* BARU: Base font size untuk responsivitas dengan rem */
 html {
-    font-size: 16px; /* Default base font size (contoh: 1rem = 16px) */
+    font-size: 17px; /* Default base font size untuk PC Desktop besar (1rem = 17px) */
 }
+
+/* BARU: Penyesuaian font-size untuk berbagai resolusi */
+@media (max-width: 1200px) { /* Untuk laptop/desktop yang lebih kecil (1200px ke bawah) */
+    html {
+        font-size: 16px; /* 1rem = 16px */
+    }
+}
+
+@media (max-width: 1024px) { /* Untuk tablet besar dan desktop kecil (1024px ke bawah) */
+    html {
+        font-size: 15px; /* 1rem = 15px */
+    }
+}
+
+@media (max-width: 768px) { /* Untuk tablet kecil dan ponsel besar (768px ke bawah) */
+    html {
+        font-size: 14px; /* 1rem = 14px */
+    }
+}
+
+@media (max-width: 480px) { /* Untuk ponsel kecil (480px ke bawah) */
+    html {
+        font-size: 13px; /* 1rem = 13px */
+    }
+}
+
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -485,7 +511,7 @@ footer {
     border-radius: 5px;
     border: 1px solid var(--input-border-color);
     background: var(--input-bg);
-    color: var(--text-price-color); /* Warna teks di input */
+    color: var(--text-primary-color);
     font-size: 1rem; /* BARU: Diubah ke rem */
     text-align: right; /* Angka rata kanan */
     -moz-appearance: textfield; /* Sembunyikan panah di Firefox */
