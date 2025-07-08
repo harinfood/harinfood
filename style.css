@@ -24,23 +24,22 @@
     --input-bg: rgba(255, 255, 255, 0.1);
     --table-header-bg: rgba(255, 255, 255, 0.1);
     --danger-color: #dc3545;
-    --success-color: #28a745; /* BARU: Warna sukses */
-    --text-color: #e0e0e0; /* BARU: Warna teks umum */
+    --success-color: #28a745; /* Warna sukses */
+    --text-color: #e0e0e0; /* Warna teks umum */
     --btn-qris-bg: linear-gradient(45deg, #007bff, #00b0ff); /* Biru untuk QRIS */
     --btn-tunai-bg: linear-gradient(45deg, #ffc107, #e0a800); /* Kuning untuk Tunai */
     --btn-print-green-bg: linear-gradient(45deg, #28a745, #1e7e34); /* Hijau untuk cetak */
 
-    /* BARU: Variabel untuk border-radius */
     --border-radius: 8px;
 }
 
 /* ====== Global ====== */
-/* BARU: Base font size untuk responsivitas dengan rem */
+/* Base font size untuk responsivitas dengan rem */
 html {
     font-size: 17px; /* Default base font size untuk PC Desktop besar (1rem = 17px) */
 }
 
-/* BARU: Penyesuaian font-size untuk berbagai resolusi */
+/* Penyesuaian font-size untuk berbagai resolusi */
 @media (max-width: 1200px) { /* Untuk laptop/desktop yang lebih kecil (1200px ke bawah) */
     html {
         font-size: 16px; /* 1rem = 16px */
@@ -127,7 +126,7 @@ footer {
     text-align: center;
     margin-top: 0;
     margin-bottom: 1.5em;
-    font-size: 2em; /* Tetap em atau ubah ke rem */
+    font-size: 2em;
 }
 
 /* ====== Gaya untuk Pop-up Login (Juga digunakan untuk Pop-up Cetak) ====== */
@@ -477,49 +476,68 @@ footer {
 .produk-item h3 {
     color: var(--text-accent-color);
     margin-bottom: 0.2rem; /* Consistent unit */
-    font-size: 1rem; /* BARU: Diubah ke rem */
+    font-size: 1rem; /* Diubah ke rem */
     font-weight: 600;
-    white-space: normal; /* BARU: Memastikan teks melingkar */
-    overflow-wrap: break-word; /* BARU: Memastikan kata panjang melingkar */
-    line-height: 1.2; /* BARU: Mengontrol tinggi baris */
+    white-space: normal; /* Memastikan teks melingkar */
+    overflow-wrap: break-word; /* Memastikan kata panjang melingkar */
+    line-height: 1.2; /* Mengontrol tinggi baris */
 }
 .produk-item p {
-    font-size: 0.9rem; /* BARU: Diubah ke rem */
+    font-size: 0.9rem; /* Diubah ke rem */
     font-weight: bold;
     color: var(--text-price-color);
     margin-top: 0.2rem; /* Consistent unit */
-    white-space: normal; /* BARU: Memastikan teks melingkar */
-    overflow-wrap: break-word; /* BARU: Memastikan kata panjang melingkar */
-    line-height: 1.2; /* BARU: Mengontrol tinggi baris */
+    white-space: normal; /* Memastikan teks melingkar */
+    overflow-wrap: break-word; /* Memastikan kata panjang melingkar */
+    line-height: 1.2; /* Mengontrol tinggi baris */
 }
 
-/* Gaya BARU untuk input harga di produk-item */
+/* Gaya default untuk edit-price-wrapper (digunakan pelanggan) */
 .produk-item .edit-price-wrapper {
     display: flex;
-    align-items: center;
-    justify-content: center; /* Pusatkan jika hanya satu item di dalamnya */
+    align-items: center; /* Sejajar secara horizontal */
+    justify-content: center;
     gap: 5px;
-    margin-top: 0.2rem; /* Consistent unit */
-    font-size: 0.9rem; /* BARU: Diubah ke rem */
+    margin-top: 0.2rem;
+    font-size: 0.9rem; /* Ukuran font default untuk non-kasir */
     font-weight: bold;
-    color: var(--text-price-color); /* Warna teks harga */
+    color: var(--text-price-color);
 }
 
+/* BARU: Gaya untuk grup edit harga kasir (hanya aktif saat body memiliki kelas kasir-mode) */
+body.kasir-mode .produk-item .kasir-price-edit-group {
+    display: flex;
+    flex-direction: column; /* Atur menjadi kolom */
+    align-items: center; /* Pusatkan secara horizontal */
+    justify-content: center; /* Pusatkan secara vertikal jika ada ruang */
+    gap: 0.2rem; /* Mengurangi gap agar lebih rapat */
+    margin-top: 0.2rem;
+    color: var(--text-price-color); /* Warna teks harga */
+    font-weight: bold;
+}
+
+body.kasir-mode .produk-item .kasir-price-edit-group .price-label { /* Gaya untuk teks "Harga:" di mode kasir */
+    font-size: 1rem; /* BARU: Disamakan dengan input field untuk konsistensi */
+    margin-bottom: 0.1rem; /* Sedikit spasi di bawah label */
+    text-align: center; /* Pastikan teks Harga: berada di tengah */
+}
+
+
 .produk-item .product-price-input {
-    width: 80px; /* Lebar input yang sesuai */
+    width: 5em; /* BARU: Diubah ke em agar responsif dengan font-size */
     padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--input-border-color);
     background: var(--input-bg);
     color: var(--text-primary-color);
-    font-size: 1rem; /* BARU: Diubah ke rem */
-    text-align: right; /* Angka rata kanan */
-    -moz-appearance: textfield; /* Sembunyikan panah di Firefox */
+    font-size: 1rem; /* Diubah ke rem, skalanya ikut html font-size */
+    text-align: right;
+    -moz-appearance: textfield;
 }
 
 .produk-item .product-price-input::-webkit-outer-spin-button,
 .produk-item .product-price-input::-webkit-inner-spin-button {
-    -webkit-appearance: none; /* Sembunyikan panah di Chrome/Safari */
+    -webkit-appearance: none;
     margin: 0;
 }
 
@@ -804,7 +822,6 @@ footer {
 }
 
 /* Posisi FAB di dalam div #kasir-fabs */
-/* FAB Barcode lama sudah tidak ada, sesuaikan posisi lainnya */
 #kasir-fabs .fab-manual {
     bottom: 240px; /* Dulu 170px, naik karena barcode fab hilang */
     right: 30px;
@@ -944,40 +961,37 @@ footer {
 /* ====== RESPONSIVE GRID PRODUK & LAYOUT ====== */
 
 /* BARU: Atur font-size dasar untuk responsivitas */
-@media (max-width: 1024px) {
-    html {
-        font-size: 15px; /* Sedikit lebih kecil untuk tablet */
-    }
-    .main-layout {
-        grid-template-columns: 1fr 1fr;
-        padding: 1em;
-        gap: 1em;
-    }
-    #produk-list {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1em;
-    }
-    .produk-item img {
-        height: auto;
-    }
-    .fab-button {
-        width: 50px;
-        height: 50px;
-        font-size: 1.3em;
-    }
-    /* Posisi FAB di dalam div #kasir-fabs pada ukuran kecil */
-    #kasir-fabs .fab-share { bottom: 255px; right: 15px; } 
-    #kasir-fabs .fab-manual { bottom: 195px; right: 15px; } 
-    #kasir-fabs .fab-clear  { bottom: 135px; right: 15px; }
-    #kasir-fabs .fab-print  { bottom: 75px; right: 15px; }
+html {
+    font-size: 17px; /* Default base font size untuk PC Desktop besar (1rem = 17px) */
 }
 
-@media (max-width: 768px) {
+/* BARU: Penyesuaian font-size untuk berbagai resolusi */
+@media (max-width: 1200px) { /* Untuk laptop/desktop yang lebih kecil (1200px ke bawah) */
     html {
-        font-size: 14px; /* Lebih kecil lagi untuk ponsel */
+        font-size: 16px; /* 1rem = 16px */
+    }
+}
+
+@media (max-width: 1024px) { /* Untuk tablet besar dan desktop kecil (1024px ke bawah) */
+    html {
+        font-size: 15px; /* 1rem = 15px */
+    }
+    /* Khusus untuk tampilan kasir di tablet dan desktop kecil */
+    body.kasir-mode .main-layout {
+        grid-template-columns: 2fr 1fr; /* Tetap 2 kolom */
+        gap: 1em; /* Mengurangi gap */
+    }
+    body.kasir-mode #produk-list {
+        grid-template-columns: repeat(2, 1fr); /* Ubah menjadi 2 kolom produk */
+    }
+}
+
+@media (max-width: 768px) { /* Untuk tablet kecil dan ponsel besar (768px ke bawah) */
+    html {
+        font-size: 14px; /* 1rem = 14px */
     }
     .main-layout {
-        display: block;
+        display: block; /* Menumpuk kolom utama */
         padding: 0.5em;
     }
     #menu-produk-section, #keranjang-form-section {
@@ -985,7 +999,7 @@ footer {
         margin-bottom: 1em;
     }
     #produk-list {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom produk */
         gap: 0.8em;
     }
     .produk-item img {
@@ -1004,12 +1018,12 @@ footer {
     #kasir-fabs .fab-print  { bottom: 55px; right: 10px; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) { /* Untuk ponsel kecil (480px ke bawah) */
     html {
-        font-size: 13px; /* Terkecil untuk ponsel sangat kecil */
+        font-size: 13px; /* 1rem = 13px */
     }
     #produk-list {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom produk */
         gap: 0.4em;
     }
     .produk-item {
