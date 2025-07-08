@@ -46,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBarcodeButton = document.getElementById('submitBarcodeButton');
     const addManualOrderFab = document.getElementById('add-manual-order-fab');
     const clearCartFab = document.getElementById('clear-cart-fab');
+    // btnBayarTunai dihapus karena digantikan oleh pesanWhatsappPelangganBtn
     const btnBayarQris = document.getElementById('btn-bayar-qris');
+    const shareOrderFab = document.getElementById('share-order-fab'); // NEW: FAB Share
 
     // Referensi ke pop-up pilihan cetak
     const printOptionsPopup = document.getElementById('print-options-popup');
@@ -223,13 +225,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Mengatur visibilitas FABs kasir
         if (currentUserRole === 'kasir') {
-            kasirFabs.style.display = 'block'; // FAB lainnya (manual, clear, barcode) untuk kasir
+            kasirFabs.style.display = 'block'; // FAB lainnya (manual, clear, barcode, share) untuk kasir
             opsiMakanContainer.style.display = 'flex'; // Kasir bisa melihat opsi makan
             pesanInfoLabel.style.display = 'none'; // Sembunyikan info pesan
+            shareOrderFab.style.display = 'flex'; // Tampilkan FAB Share untuk kasir
         } else {
             kasirFabs.style.display = 'none';
             opsiMakanContainer.style.display = 'none'; // Pelanggan tidak melihat opsi makan
             pesanInfoLabel.style.display = 'block'; // Tampilkan info pesan
+            shareOrderFab.style.display = 'none'; // Sembunyikan FAB Share untuk pelanggan
         }
 
         // Atur visibilitas tombol Cetak Struk dan WhatsApp berdasarkan peran
@@ -250,11 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
             cetakStrukButton.style.display = 'block'; // Tombol cetak untuk kasir
             opsiMakanContainer.style.display = 'flex'; // Kasir bisa melihat opsi makan
             pesanInfoLabel.style.display = 'none'; // Sembunyikan info pesan
+            shareOrderFab.style.display = 'flex'; // Tampilkan FAB Share untuk kasir
         } else {
             kasirFabs.style.display = 'none';
             cetakStrukButton.style.display = 'none'; // Tombol cetak untuk pelanggan
             opsiMakanContainer.style.display = 'none'; // Pelanggan tidak melihat opsi makan
             pesanInfoLabel.style.display = 'block'; // Tampilkan info pesan
+            shareOrderFab.style.display = 'none'; // Sembunyikan FAB Share untuk pelanggan
         }
         initializeApp(); // Lanjutkan inisialisasi aplikasi
     } else { // Belum login
@@ -829,5 +835,128 @@ document.addEventListener('DOMContentLoaded', () => {
             scanFeedback.textContent = 'Harap masukkan barcode.';
         }
     });
+
+    // --- FAB SHARE ORDER (MERAH) ---
+    shareOrderFab.addEventListener('click', async () => {
+        const shareResult = generateShareMessage();
+
+        if (!shareResult.success) {
+            alert(shareResult.message);
+            return;
+        }
+
+        const messageToShare = shareResult.message;
+        const totalBelanja = shareResult.total;
+        const nominalPembayaran = shareResult.nominal;
+        
+        // Cek nominal pembayaran, karena tombol Share (merah) ini bukan untuk pembayaran
+        // tetapi untuk membagikan detail transaksi setelah pembayaran selesai
+        // atau untuk tujuan lain. Jadi, pastikan nominal pembayaran sudah cukup.
+        if (nominalPembayaran < totalBelanja) {
+            alert('Nominal pembayaran kurang dari total belanja. Tidak bisa membagikan transaksi.');
+            return;
+        }
+
+
+        // Coba gunakan Web Share API
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Detail Transaksi HARINFOOD',
+                    text: messageToShare,
+                    url: window.location.href // Bisa juga berbagi URL aplikasi Anda
+                });
+                console.log('Konten berhasil dibagikan');
+                // Setelah berhasil share, bersihkan keranjang dan reset form
+                keranjang = [];
+                updateKeranjang();
+                namaPemesanInput.value = '';
+                alamatPemesanInput.value = '';
+                keteranganPesananInput.value = ''; 
+                nominalPembayaranInput.value = 0;
+                hitungKembalian();
+                updateActionButtonVisibility(); // Update visibilitas tombol
+            } catch (error) {
+                console.error('Gagal berbagi menggunakan Web Share API:', error);
+                // Fallback ke WhatsApp jika Web Share API gagal/dibatalkan
+                alert('Gagal berbagi via Web Share API. Menggunakan WhatsApp sebagai gantinya.');
+                const encodedMessage = encodeURIComponent(messageToShare);
+                const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
+                window.open(whatsappURL, '_blank');
+                // Setelah pengiriman WA, bersihkan keranjang dan reset form
+                keranjang = [];
+                updateKeranjang();
+                namaPemesanInput.value = '';
+                alamatPemesanInput.value = '';
+                keteranganPesananInput.value = ''; 
+                nominalPembayaranInput.value = 0;
+                hitungKembalian();
+                updateActionButtonVisibility(); // Update visibilitas tombol
+            }
+        } else {
+            // Fallback ke WhatsApp jika Web Share API tidak didukung
+            alert('Web Share API tidak didukung browser Anda. Menggunakan WhatsApp sebagai gantinya.');
+            const encodedMessage = encodeURIComponent(messageToShare);
+            const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
+            window.open(whatsappURL, '_blank');
+            // Setelah pengiriman WA, bersihkan keranjang dan reset form
+            keranjang = [];
+            updateKeranjang();
+            namaPemesanInput.value = '';
+            alamatPemesanInput.value = '';
+            keteranganPesananInput.value = ''; 
+            nominalPembayaranInput.value = 0;
+            hitungKembalian();
+            updateActionButtonVisibility(); // Update visibilitas tombol
+        }
+    });
+
+    // Fungsi untuk menghasilkan pesan transaksi yang bisa dibagikan (dipindahkan ke sini agar tidak terpotong)
+    function generateShareMessage() {
+        const namaPemesan = namaPemesanInput.value.trim();
+        const alamatPemesan = alamatPemesanInput.value.trim();
+        const keteranganPesanan = keteranganPesananInput.value.trim();
+
+        const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+        const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
+        const kembalian = nominalPembayaran - totalBelanja;
+
+        if (keranjang.length === 0) {
+            return { success: false, message: 'Keranjang belanja kosong, tidak bisa dibagikan!' };
+        }
+        
+        const opsiMakan = (document.querySelector('input[name="opsi-makan"]:checked'))
+                         ? document.querySelector('input[name="opsi-makan"]:checked').value
+                         : 'Tidak Dipilih';
+        
+        const tanggalWaktu = new Date();
+        const formattedDate = tanggalWaktu.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const formattedTime = tanggalWaktu.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        let shareText = `*${defaultShopName}*\n`;
+        shareText += `Telp: ${displayPhoneNumber}\n`;
+        shareText += "-----------------------------\n";
+        shareText += `Pelanggan: ${namaPemesan || '-'}\n`;
+        shareText += `Alamat: ${alamatPemesan || '-'}\n`;
+        shareText += `Tanggal: ${formattedDate}\n`;
+        shareText += `Jam: ${formattedTime}\n`;
+        shareText += `Opsi: ${opsiMakan}\n`; // Opsi makan selalu ada di share untuk kasir
+        shareText += "-----------------------------\n";
+        shareText += "*Detail Pesanan:*\n";
+        keranjang.forEach(item => {
+            shareText += `- ${item.nama} (${item.qty}x) ${formatRupiah(item.harga)}\n`;
+        });
+        shareText += "-----------------------------\n";
+        shareText += `*Total: ${formatRupiah(totalBelanja)}*\n`;
+        shareText += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
+        shareText += `*Kembalian: ${formatRupiah(kembalian)}*\n\n`;
+        
+        if (keteranganPesanan) {
+            shareText += `*Catatan:*\n${keteranganPesanan}\n\n`;
+        }
+        shareText += defaultFooterText;
+
+        return { success: true, message: shareText, total: totalBelanja, nominal: nominalPembayaran };
+    }
 
 }); // Akhir dari DOMContentLoaded
