@@ -35,6 +35,11 @@
 }
 
 /* ====== Global ====== */
+/* BARU: Base font size untuk responsivitas dengan rem */
+html {
+    font-size: 16px; /* Default base font size (contoh: 1rem = 16px) */
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -96,7 +101,7 @@ footer {
     text-align: center;
     margin-top: 0;
     margin-bottom: 1.5em;
-    font-size: 2em;
+    font-size: 2em; /* Tetap em atau ubah ke rem */
 }
 
 /* ====== Gaya untuk Pop-up Login (Juga digunakan untuk Pop-up Cetak) ====== */
@@ -446,11 +451,11 @@ footer {
 .produk-item h3 {
     color: var(--text-accent-color);
     margin-bottom: 0.2em;
-    font-size: 1em;
+    font-size: 1rem; /* BARU: Diubah ke rem */
     font-weight: 600;
 }
 .produk-item p {
-    font-size: 0.9em;
+    font-size: 0.9rem; /* BARU: Diubah ke rem */
     font-weight: bold;
     color: var(--text-price-color);
     margin-top: 0.2em;
@@ -463,7 +468,7 @@ footer {
     justify-content: center; /* Pusatkan jika hanya satu item di dalamnya */
     gap: 5px;
     margin-top: 0.2em;
-    font-size: 0.9em; /* Ukuran font sama dengan harga biasa */
+    font-size: 0.9rem; /* BARU: Diubah ke rem */
     font-weight: bold;
     color: var(--text-price-color); /* Warna teks harga */
 }
@@ -475,7 +480,7 @@ footer {
     border: 1px solid var(--input-border-color);
     background: var(--input-bg);
     color: var(--text-price-color); /* Warna teks di input */
-    font-size: 1em; /* Sesuaikan ukuran font */
+    font-size: 1rem; /* BARU: Diubah ke rem */
     text-align: right; /* Angka rata kanan */
     -moz-appearance: textfield; /* Sembunyikan panah di Firefox */
 }
@@ -906,13 +911,11 @@ footer {
 
 /* ====== RESPONSIVE GRID PRODUK & LAYOUT ====== */
 
-/* Default (PC/tablet besar): 3 kolom */
-#produk-list {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-/* Tablet (≤1024px): */
+/* BARU: Atur font-size dasar untuk responsivitas */
 @media (max-width: 1024px) {
+    html {
+        font-size: 15px; /* Sedikit lebih kecil untuk tablet */
+    }
     .main-layout {
         grid-template-columns: 1fr 1fr;
         padding: 1em;
@@ -931,15 +934,16 @@ footer {
         font-size: 1.3em;
     }
     /* Posisi FAB di dalam div #kasir-fabs pada ukuran kecil */
-    #kasir-fabs .fab-share { bottom: 255px; right: 15px; } /* Sesuaikan untuk tablet */
-    /* fab-barcode hilang */
-    #kasir-fabs .fab-manual { bottom: 195px; right: 15px; } /* Sesuaikan untuk tablet */
+    #kasir-fabs .fab-share { bottom: 255px; right: 15px; } 
+    #kasir-fabs .fab-manual { bottom: 195px; right: 15px; } 
     #kasir-fabs .fab-clear  { bottom: 135px; right: 15px; }
     #kasir-fabs .fab-print  { bottom: 75px; right: 15px; }
 }
 
-/* HP (≤768px): produk 2 kolom */
 @media (max-width: 768px) {
+    html {
+        font-size: 14px; /* Lebih kecil lagi untuk ponsel */
+    }
     .main-layout {
         display: block;
         padding: 0.5em;
@@ -962,15 +966,16 @@ footer {
         font-size: 1em;
     }
     /* Posisi FAB di dalam div #kasir-fabs pada ukuran sangat kecil */
-    #kasir-fabs .fab-share { bottom: 185px; right: 10px; } /* Sesuaikan untuk HP */
-    /* fab-barcode hilang */
-    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; } /* Sesuaikan untuk HP */
+    #kasir-fabs .fab-share { bottom: 185px; right: 10px; } 
+    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; } 
     #kasir-fabs .fab-clear  { bottom: 100px; right: 10px; }
     #kasir-fabs .fab-print  { bottom: 55px; right: 10px; }
 }
 
-/* HP sangat kecil (≤480px): produk 2 kolom */
 @media (max-width: 480px) {
+    html {
+        font-size: 13px; /* Terkecil untuk ponsel sangat kecil */
+    }
     #produk-list {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.4em;
@@ -988,9 +993,8 @@ footer {
         font-size: 0.8em;
     }
     /* Posisi FAB di dalam div #kasir-fabs pada ukuran ekstra kecil */
-    #kasir-fabs .fab-share { bottom: 148px; right: 7px; } /* Sesuaikan untuk HP kecil */
-    /* fab-barcode hilang */
-    #kasir-fabs .fab-manual { bottom: 113px; right: 7px; } /* Sesuaikan untuk HP kecil */
+    #kasir-fabs .fab-share { bottom: 148px; right: 7px; } 
+    #kasir-fabs .fab-manual { bottom: 113px; right: 7px; } 
     #kasir-fabs .fab-clear  { bottom: 78px; right: 7px; }
     #kasir-fabs .fab-print  { bottom: 43px;  right: 7px; }
 }

@@ -915,7 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage
         if (paymentMethodForShare === 'QRIS') {
             shareText += `*Metode Pembayaran: QRIS*\n`;
-            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
+            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; // Menggunakan link view
             shareText += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
         } else { // Jika Tunai atau metode lain yang tidak spesifik
             shareText += `*Metode Pembayaran: Tunai*\n`;
