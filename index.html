@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog HARINFOOD</title>
+    <title>Katalog HARINFOOD POS Lite</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
@@ -60,6 +60,10 @@
         <div class="main-layout">
             <section id="menu-produk-section">
                 <h2 class="section-title">Daftar Menu HARINFOOD</h2>
+                <div class="search-barcode-input">
+                    <input type="text" id="product-search-barcode" placeholder="Cari produk atau scan barcode..." autofocus>
+                    <span id="search-barcode-feedback" class="feedback-message"></span>
+                </div>
                 <div id="produk-list" class="produk-grid"></div>
             </section>
             <section id="keranjang-form-section">
@@ -124,13 +128,7 @@
             <div class="fab-button fab-clear" id="clear-cart-fab" title="Bersihkan Keranjang">
                 <i class="fas fa-trash"></i>
             </div>
-            <div class="fab-button fab-print" id="old-print-order-fab" title="Cetak Struk" style="display: none;">
-                <i class="fas fa-print"></i>
             </div>
-            <div class="fab-button fab-barcode" id="scan-barcode-fab" title="Scan Barcode">
-                <i class="fas fa-barcode"></i>
-            </div>
-        </div>
 
         <div id="manualOrderModal" class="modal">
             <div class="modal-content">
@@ -146,16 +144,6 @@
             </div>
         </div>
 
-        <div id="barcodeScannerModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button" onclick="closeBarcodeScannerModal()">&times;</span>
-                <h2 class="modal-title">Scan Barcode Produk</h2>
-                <label for="barcodeInput">Masukkan atau Scan Barcode:</label>
-                <input type="text" id="barcodeInput" autofocus>
-                <p class="scan-feedback" id="scan-feedback">Siap menerima barcode...</p>
-                <button id="submitBarcodeButton">Tambahkan</button>
-            </div>
-        </div>
-    </div> <script src="script.js"></script>
+        </div> <script src="script.js"></script>
 </body>
 </html>

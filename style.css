@@ -24,9 +24,14 @@
     --input-bg: rgba(255, 255, 255, 0.1);
     --table-header-bg: rgba(255, 255, 255, 0.1);
     --danger-color: #dc3545;
+    --success-color: #28a745; /* BARU: Warna sukses */
+    --text-color: #e0e0e0; /* BARU: Warna teks umum */
     --btn-qris-bg: linear-gradient(45deg, #007bff, #00b0ff); /* Biru untuk QRIS */
     --btn-tunai-bg: linear-gradient(45deg, #ffc107, #e0a800); /* Kuning untuk Tunai */
     --btn-print-green-bg: linear-gradient(45deg, #28a745, #1e7e34); /* Hijau untuk cetak */
+
+    /* BARU: Variabel untuk border-radius */
+    --border-radius: 8px;
 }
 
 /* ====== Global ====== */
@@ -762,16 +767,9 @@ footer {
 }
 
 /* Posisi FAB di dalam div #kasir-fabs */
-#kasir-fabs .fab-barcode {
-    bottom: 240px; /* Adjust position based on your existing FABs */
-    right: 30px;
-    background: linear-gradient(45deg, #007bff, #0056b3); /* Blue color for barcode */
-}
-#kasir-fabs .fab-barcode:hover {
-    background: linear-gradient(45deg, #0056b3, #007bff);
-}
+/* FAB Barcode lama sudah tidak ada, sesuaikan posisi lainnya */
 #kasir-fabs .fab-manual {
-    bottom: 170px;
+    bottom: 240px; /* Dulu 170px, naik karena barcode fab hilang */
     right: 30px;
     background: var(--button-manual-bg);
 }
@@ -779,7 +777,7 @@ footer {
     background: linear-gradient(45deg, #4b0082, #8a2be2);
 }
 #kasir-fabs .fab-clear {
-    bottom: 100px;
+    bottom: 170px; /* Dulu 100px, naik */
     right: 30px;
     background: var(--button-clear-bg);
 }
@@ -787,7 +785,7 @@ footer {
     background: linear-gradient(45deg, #c0392b, #ff4d4d);
 }
 #kasir-fabs .fab-print {
-    bottom: 30px;
+    bottom: 100px; /* Dulu 30px, naik */
     right: 30px;
     background: var(--button-default-bg);
 }
@@ -865,30 +863,46 @@ footer {
     background-color: #218838;
 }
 
-/* Barcode Scanner Modal Specific Styles */
-#barcodeScannerModal .modal-content {
-    background-color: #222; /* Darker background for scanner */
-    color: var(--text-primary-color);
-    border: 1px solid var(--border-neon-color);
-}
-#barcodeScannerModal .modal-title {
-    color: var(--text-accent-color);
-}
-#barcodeScannerModal .close-button {
-    color: var(--text-primary-color);
-}
-#barcodeScannerModal .close-button:hover,
-#barcodeScannerModal .close-button:focus {
-    color: var(--text-accent-color);
+/* BARU: Gaya untuk input pencarian/barcode */
+.search-barcode-input {
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.scan-feedback {
-    text-align: center;
-    font-size: 0.9em;
-    color: var(--text-price-color);
-    min-height: 1.2em; /* Prevent layout shift */
-    margin-top: 0.5em; /* Add some space */
+.search-barcode-input input {
+    width: calc(100% - 20px); /* Kurangi padding */
+    padding: 12px 10px;
+    border: 1px solid var(--input-border-color); /* Menggunakan variabel border input */
+    border-radius: var(--border-radius); /* Menggunakan variabel border-radius */
+    background: var(--input-bg); /* Menggunakan variabel background input */
+    color: var(--text-primary-color); /* Menggunakan variabel warna teks utama */
+    font-size: 1em;
+    box-sizing: border-box; /* Penting untuk perhitungan lebar */
+    margin-bottom: 5px;
 }
+
+.search-barcode-input input:focus {
+    border-color: var(--border-neon-color); /* Menggunakan variabel neon */
+    outline: none;
+    box-shadow: 0 0 10px var(--shadow-neon-color); /* Menggunakan variabel shadow neon */
+}
+
+.feedback-message {
+    display: block;
+    font-size: 0.85em;
+    min-height: 1.2em; /* Untuk mencegah layout bergeser */
+    text-align: center;
+}
+
+/* Warna feedback */
+.feedback-message.success-color {
+    color: var(--success-color);
+}
+
+.feedback-message.danger-color {
+    color: var(--danger-color);
+}
+
 
 /* ====== RESPONSIVE GRID PRODUK & LAYOUT ====== */
 
@@ -918,10 +932,10 @@ footer {
     }
     /* Posisi FAB di dalam div #kasir-fabs pada ukuran kecil */
     #kasir-fabs .fab-share { bottom: 255px; right: 15px; } /* Sesuaikan untuk tablet */
-    #kasir-fabs .fab-barcode { bottom: 195px; right: 15px; } /* Sesuaikan untuk tablet */
-    #kasir-fabs .fab-manual { bottom: 135px; right: 15px; }
-    #kasir-fabs .fab-clear  { bottom: 75px; right: 15px; }
-    #kasir-fabs .fab-print  { bottom: 15px; right: 15px; }
+    /* fab-barcode hilang */
+    #kasir-fabs .fab-manual { bottom: 195px; right: 15px; } /* Sesuaikan untuk tablet */
+    #kasir-fabs .fab-clear  { bottom: 135px; right: 15px; }
+    #kasir-fabs .fab-print  { bottom: 75px; right: 15px; }
 }
 
 /* HP (≤768px): produk 2 kolom */
@@ -949,10 +963,10 @@ footer {
     }
     /* Posisi FAB di dalam div #kasir-fabs pada ukuran sangat kecil */
     #kasir-fabs .fab-share { bottom: 185px; right: 10px; } /* Sesuaikan untuk HP */
-    #kasir-fabs .fab-barcode { bottom: 145px; right: 10px; } /* Sesuaikan untuk HP */
-    #kasir-fabs .fab-manual { bottom: 100px; right: 10px; }
-    #kasir-fabs .fab-clear  { bottom: 55px; right: 10px; }
-    #kasir-fabs .fab-print  { bottom: 10px; right: 10px; }
+    /* fab-barcode hilang */
+    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; } /* Sesuaikan untuk HP */
+    #kasir-fabs .fab-clear  { bottom: 100px; right: 10px; }
+    #kasir-fabs .fab-print  { bottom: 55px; right: 10px; }
 }
 
 /* HP sangat kecil (≤480px): produk 2 kolom */
@@ -975,10 +989,10 @@ footer {
     }
     /* Posisi FAB di dalam div #kasir-fabs pada ukuran ekstra kecil */
     #kasir-fabs .fab-share { bottom: 148px; right: 7px; } /* Sesuaikan untuk HP kecil */
-    #kasir-fabs .fab-barcode { bottom: 113px; right: 7px; } /* Sesuaikan untuk HP kecil */
-    #kasir-fabs .fab-manual { bottom: 78px; right: 7px; }
-    #kasir-fabs .fab-clear  { bottom: 43px; right: 7px; }
-    #kasir-fabs .fab-print  { bottom: 7px;  right: 7px; }
+    /* fab-barcode hilang */
+    #kasir-fabs .fab-manual { bottom: 113px; right: 7px; } /* Sesuaikan untuk HP kecil */
+    #kasir-fabs .fab-clear  { bottom: 78px; right: 7px; }
+    #kasir-fabs .fab-print  { bottom: 43px;  right: 7px; }
 }
 
 /* ====== PRINT STRUK ====== */

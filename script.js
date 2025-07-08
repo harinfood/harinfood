@@ -27,10 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const manualProductNameInput = document.getElementById('manualProductName');
     const manualProductPriceInput = document.getElementById('manualProductPrice');
     const manualProductQtyInput = document.getElementById('manualProductQty');
-    const barcodeScannerModal = document.getElementById('barcodeScannerModal');
-    const barcodeInput = document.getElementById('barcodeInput');
-    const scanFeedback = document.getElementById('scan-feedback');
-    const submitBarcodeButton = document.getElementById('submitBarcodeButton');
     const addManualOrderFab = document.getElementById('add-manual-order-fab');
     const clearCartFab = document.getElementById('clear-cart-fab');
     const btnBayarQris = document.getElementById('btn-bayar-qris');
@@ -42,10 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPrintQris = document.getElementById('btn-print-qris');
     const closePrintPopupBtn = document.getElementById('close-print-popup');
 
+    // BARU: Referensi untuk input pencarian/barcode dan feedbacknya
+    const productSearchBarcodeInput = document.getElementById('product-search-barcode');
+    const searchBarcodeFeedback = document.getElementById('search-barcode-feedback');
+
 
     // --- DATA PRODUK ---
     const produkData = [
-        { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
+        { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "0674448829853" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
         { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
         { id: 4, nama: "Topokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
@@ -213,10 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
             kasirFabs.style.display = 'block'; 
             pesanInfoLabel.style.display = 'none'; 
             shareOrderFab.style.display = 'flex'; 
+            // BARU: Fokus ke input pencarian/barcode saat kasir login
+            productSearchBarcodeInput.style.display = 'block'; // Pastikan terlihat
+            productSearchBarcodeInput.focus();
         } else {
             kasirFabs.style.display = 'none';
             pesanInfoLabel.style.display = 'block'; 
             shareOrderFab.style.display = 'none'; 
+            productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan
         }
 
         updateActionButtonVisibility(); 
@@ -234,11 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
             cetakStrukButton.style.display = 'block'; 
             pesanInfoLabel.style.display = 'none'; 
             shareOrderFab.style.display = 'flex'; 
+            productSearchBarcodeInput.style.display = 'block'; // Pastikan terlihat
+            productSearchBarcodeInput.focus(); // Fokus saat dimuat
         } else {
             kasirFabs.style.display = 'none';
             cetakStrukButton.style.display = 'none'; 
             pesanInfoLabel.style.display = 'block'; 
             shareOrderFab.style.display = 'none'; 
+            productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan
         }
         initializeApp(); 
     } else { // Belum login
@@ -463,10 +470,15 @@ document.addEventListener('DOMContentLoaded', () => {
         keranjang = [];
         updateKeranjang();
         updateProdukControls();
+        namaPemesanInput.value = ''; // BARU: Reset nama pemesan
+        alamatPemesanInput.value = ''; // BARU: Reset alamat pemesan
+        keteranganPesananInput.value = ''; // BARU: Reset keterangan pesanan
         nominalPembayaranInput.value = 0;
         delete nominalPembayaranInput.dataset.autofilled;
         hitungKembalian();
         updateActionButtonVisibility(); 
+        productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
+        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
     });
 
     // --- HITUNG KEMBALIAN ---
@@ -601,6 +613,8 @@ document.addEventListener('DOMContentLoaded', () => {
             hitungKembalian();
             paymentChoiceButtons.style.display = 'flex'; 
             updateActionButtonVisibility(); 
+            productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
+            productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
         }, 300);
         return true;
     }
@@ -732,6 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     window.closeManualOrderModal = function() {
         manualOrderModal.style.display = 'none';
+        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian setelah modal ditutup
     };
     window.addManualOrderItem = function() {
         const name = manualProductNameInput.value.trim();
@@ -752,44 +767,42 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         tambahKeKeranjang(newManualItem);
         manualOrderModal.style.display = 'none';
+        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian setelah menambahkan item
     };
 
-    // --- BARCODE SCANNER MODAL ---
-    document.getElementById('scan-barcode-fab').addEventListener('click', () => {
-        barcodeScannerModal.style.display = 'flex';
-        barcodeInput.value = ''; 
-        scanFeedback.textContent = 'Siap menerima barcode...';
-        barcodeInput.focus(); 
-    });
-
-    window.closeBarcodeScannerModal = function() {
-        barcodeScannerModal.style.display = 'none';
-    };
-
-    // Auto-submit saat Enter di barcode input
-    barcodeInput.addEventListener('keypress', function(e) {
+    // --- BARU: Logika Pencarian/Scan Barcode di Input Tunggal ---
+    productSearchBarcodeInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault(); 
-            submitBarcodeButton.click();
+            e.preventDefault(); // Mencegah submit form jika input ada di dalam form
+            const query = productSearchBarcodeInput.value.trim();
+            if (query) {
+                const foundProduct = produkData.find(p => 
+                    p.barcode === query || p.nama.toLowerCase().includes(query.toLowerCase())
+                );
+
+                if (foundProduct) {
+                    tambahKeKeranjang(foundProduct);
+                    searchBarcodeFeedback.textContent = `Produk "${foundProduct.nama}" ditambahkan!`;
+                    searchBarcodeFeedback.style.color = 'var(--success-color)';
+                    productSearchBarcodeInput.value = ''; // Bersihkan input setelah berhasil
+                } else {
+                    searchBarcodeFeedback.textContent = `Produk atau barcode "${query}" tidak ditemukan.`;
+                    searchBarcodeFeedback.style.color = 'var(--danger-color)';
+                }
+            } else {
+                searchBarcodeFeedback.textContent = 'Masukkan nama produk atau scan barcode.';
+                searchBarcodeFeedback.style.color = 'var(--text-color)';
+            }
+            // Setelah proses, fokus tetap di input pencarian
+            productSearchBarcodeInput.focus();
         }
     });
 
-    submitBarcodeButton.addEventListener('click', () => {
-        const barcodeValue = barcodeInput.value.trim();
-        if (barcodeValue) {
-            const product = produkData.find(p => p.barcode === barcodeValue);
-            if (product) {
-                tambahKeKeranjang(product);
-                scanFeedback.textContent = `Produk "${product.nama}" ditambahkan!`;
-                barcodeInput.value = ''; 
-                barcodeInput.focus(); 
-            } else {
-                scanFeedback.textContent = `Barcode "${barcodeValue}" tidak ditemukan.`;
-            }
-        } else {
-            scanFeedback.textContent = 'Harap masukkan barcode.';
-        }
+    productSearchBarcodeInput.addEventListener('input', () => {
+        // Bersihkan feedback saat pengguna mulai mengetik lagi
+        searchBarcodeFeedback.textContent = '';
     });
+
 
     // --- FAB SHARE ORDER (MERAH) ---
     shareOrderFab.addEventListener('click', async () => {
@@ -834,6 +847,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 nominalPembayaranInput.value = 0;
                 hitungKembalian();
                 updateActionButtonVisibility(); 
+                productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
+                productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
                 return; // Keluar setelah berhasil berbagi
             }
         } catch (error) {
@@ -856,6 +871,8 @@ document.addEventListener('DOMContentLoaded', () => {
         nominalPembayaranInput.value = 0;
         hitungKembalian();
         updateActionButtonVisibility(); 
+        productSearchBarcodeInput.value = ''; // BARU: Bersihkan input pencarian
+        productSearchBarcodeInput.focus(); // BARU: Fokus kembali ke input pencarian
     });
 
     // Fungsi untuk menghasilkan pesan transaksi yang bisa dibagikan
@@ -898,7 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage
         if (paymentMethodForShare === 'QRIS') {
             shareText += `*Metode Pembayaran: QRIS*\n`;
-            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; // Menggunakan link view
+            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
             shareText += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
         } else { // Jika Tunai atau metode lain yang tidak spesifik
             shareText += `*Metode Pembayaran: Tunai*\n`;
