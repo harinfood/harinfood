@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordKasirLoginInput = document.getElementById('password-kasir-login');
     const appContainer = document.getElementById('app-container');
     const kasirFabs = document.getElementById('kasir-fabs'); // Container untuk FABs kasir
-    // const opsiMakanContainer = document.getElementById('opsi-makan-container'); // DIHAPUS dari HTML & JS
     const pesanInfoLabel = document.getElementById('pesan-info-label');
     const paymentChoiceButtons = document.getElementById('payment-choice-buttons'); // Container opsi pembayaran (Tombol 'Pesan' dan QRIS)
     const pesanWhatsappPelangganBtn = document.getElementById('pesan-whatsapp-pelanggan'); // Tombol Pesan (WhatsApp) untuk pelanggan
@@ -69,8 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultAddress = "Jl Ender Rakit - Gedongan";
     const defaultFooterText = "Terima kasih sehat selalu ya";
     const qrisImagePath = "qris.webp"; // Untuk cetak struk lokal
-    // Tautan unduhan langsung Google Drive untuk QRIS (digunakan untuk share)
-    const qrisDownloadLink = "https://drive.google.com/uc?export=download&id=1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk"; 
+    // Link QRIS ini digunakan untuk teks di pesan share/WhatsApp
+    const qrisDownloadLink = "https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk"; 
+
 
     // --- FUNGSI UNTUK MEMUAT/MENYIMPAN HARGA KE LOCAL STORAGE ---
     function saveHargaProdukToLocalStorage() {
@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
             loginPopup.style.display = 'none';
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'none'; // Pelanggan tidak melihat FAB kasir
-            // opsiMakanContainer.style.display sudah dihapus dari HTML
             pesanInfoLabel.style.display = 'block'; // Tampilkan info pesan untuk pelanggan
             alert(`Selamat datang, ${nama}! Anda masuk sebagai Pelanggan.`);
             initializeApp();
@@ -149,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'block'; // Kasir melihat FAB kasir
             document.getElementById('namaPemesanModal').style.display = 'none';
-            // opsiMakanContainer.style.display sudah dihapus dari HTML
             pesanInfoLabel.style.display = 'none'; // Sembunyikan info pesan untuk kasir
             alert('Selamat datang, Harry! Anda masuk sebagai Kasir.');
             initializeApp();
@@ -213,12 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mengatur visibilitas FABs kasir
         if (currentUserRole === 'kasir') {
             kasirFabs.style.display = 'block'; 
-            // opsiMakanContainer.style.display sudah dihapus dari HTML
             pesanInfoLabel.style.display = 'none'; 
             shareOrderFab.style.display = 'flex'; 
         } else {
             kasirFabs.style.display = 'none';
-            // opsiMakanContainer.style.display sudah dihapus dari HTML
             pesanInfoLabel.style.display = 'block'; 
             shareOrderFab.style.display = 'none'; 
         }
@@ -236,13 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (storedRole === 'kasir') {
             kasirFabs.style.display = 'block';
             cetakStrukButton.style.display = 'block'; 
-            // opsiMakanContainer.style.display sudah dihapus dari HTML
             pesanInfoLabel.style.display = 'none'; 
             shareOrderFab.style.display = 'flex'; 
         } else {
             kasirFabs.style.display = 'none';
             cetakStrukButton.style.display = 'none'; 
-            // opsiMakanContainer.style.display sudah dihapus dari HTML
             pesanInfoLabel.style.display = 'block'; 
             shareOrderFab.style.display = 'none'; 
         }
@@ -285,7 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
             produkDiv.innerHTML = `
                 <img src="${produk.gambar}" alt="${produk.nama}">
                 <h3>${produk.nama}</h3>
-                ${hargaDisplayHtml} <div class="produk-controls" id="controls-${produk.id}">
+                ${hargaDisplayHtml} 
+                <div class="produk-controls" id="controls-${produk.id}">
                     ${
                         qty < 1 ? `
                         <button class="add-to-cart-btn qty-btn" data-id="${produk.id}" title="Tambah ke keranjang"><i class="fas fa-plus"></i></button>
@@ -524,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
         
-        const opsiMakan = '-'; // Opsi makan dihilangkan
+        const opsiMakan = '-'; 
         
         const tanggalWaktu = new Date();
         const formattedDate = tanggalWaktu.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -548,7 +543,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p>Alamat: ${alamatPemesan || '-'}</p>
                         <p>Tanggal: ${formattedDate}</p>
                         <p>Jam: ${formattedTime}</p>
-                        </div>
+                        
+                    </div>
         `;
         if (keteranganPesanan) { // Tambahkan keterangan pesanan jika ada
             printContent += `
@@ -628,7 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
 
-        const opsiMakan = '-'; // Opsi makan dihilangkan
+        const opsiMakan = '-'; 
         
         const tanggalWaktu = new Date();
         const formattedDate = tanggalWaktu.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -641,7 +637,6 @@ document.addEventListener('DOMContentLoaded', () => {
         whatsappMessage += `Alamat: ${alamatPemesan || '-'}\n`;
         whatsappMessage += `Tanggal: ${formattedDate}\n`;
         whatsappMessage += `Jam: ${formattedTime}\n`;
-        // whatsappMessage += `Opsi: ${opsiMakan}\n`; // Dihapus karena opsi makan dihilangkan
         whatsappMessage += "-----------------------------\n";
         whatsappMessage += "*Detail Pesanan:*\n";
         keranjang.forEach(item => {
@@ -652,14 +647,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (paymentMethod === 'QRIS') {
             whatsappMessage += `*Metode Pembayaran: QRIS*\n`;
-            whatsappMessage += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`;
+            whatsappMessage += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
             whatsappMessage += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
-        } else {
+        } else { 
             whatsappMessage += `*Metode Pembayaran: Tunai*\n`;
             whatsappMessage += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
         }
         
-        if (keteranganPesanan) { // Tambahkan keterangan pesanan jika ada
+        if (keteranganPesanan) { 
             whatsappMessage += `*Catatan:*\n${keteranganPesanan}\n\n`;
         }
         whatsappMessage += defaultFooterText;
@@ -681,7 +676,6 @@ document.addEventListener('DOMContentLoaded', () => {
             pesanWhatsappPelangganBtn.style.display = 'none';  
             cetakStrukButton.style.display = 'block';          
         }
-        // paymentChoiceButtons.style.display tetap flex karena di HTML selalu ada tombol "Pesan" dan "QRIS"
     }
 
 
@@ -799,7 +793,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FAB SHARE ORDER (MERAH) ---
     shareOrderFab.addEventListener('click', async () => {
-        const shareResult = generateShareMessage();
+        // Panggil generateShareMessage dengan metode 'Tunai' untuk menghasilkan teks seperti print Tunai
+        const shareResult = generateShareMessage('Tunai'); 
 
         if (!shareResult.success) {
             alert(shareResult.message);
@@ -821,25 +816,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let qrisFile = null;
+        // --- Perubahan di sini: Tidak lagi mencoba menyematkan gambar secara langsung ---
         try {
-            // Coba ambil gambar QRIS dari tautan unduhan langsung Google Drive
-            const response = await fetch(qrisDownloadLink); // Menggunakan qrisDownloadLink yang sudah diperbarui
-            if (!response.ok) {
-                throw new Error(`Gagal mengambil gambar QRIS: ${response.statusText}`);
-            }
-            const blob = await response.blob();
-            // Buat objek File dari Blob yang diambil, dengan nama file yang jelas
-            qrisFile = new File([blob], 'QRIS_HARINFOOD.webp', { type: blob.type });
-
-            // Coba gunakan Web Share API dengan file
-            if (navigator.canShare && navigator.canShare({ files: [qrisFile] })) {
+            // Coba gunakan Web Share API untuk berbagi teks saja
+            if (navigator.share) {
                 await navigator.share({
                     title: 'Detail Transaksi HARINFOOD',
-                    text: messageToShare,
-                    files: [qrisFile] // Sematkan file gambar QRIS
+                    text: messageToShare // Hanya berbagi teks
                 });
-                console.log('Konten dan QRIS berhasil dibagikan menggunakan Web Share API.');
+                console.log('Konten berhasil dibagikan menggunakan Web Share API.');
                 // Setelah berhasil berbagi, bersihkan keranjang dan reset form
                 keranjang = [];
                 updateKeranjang();
@@ -852,12 +837,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return; // Keluar setelah berhasil berbagi
             }
         } catch (error) {
-            console.error('Gagal mengambil atau berbagi QRIS via Web Share API:', error);
-            // Fallback ke WhatsApp jika pengambilan/berbagi file gagal
+            console.error('Gagal berbagi via Web Share API:', error);
+            // Lanjutkan ke fallback WhatsApp jika Web Share API gagal/dibatalkan
         }
 
         // Fallback ke WhatsApp jika Web Share API tidak didukung atau gagal
-        alert('Tidak dapat membagikan gambar QRIS secara langsung. Menggunakan WhatsApp dengan link sebagai gantinya.');
+        alert('Tidak dapat membagikan langsung ke aplikasi lain. Menggunakan WhatsApp sebagai gantinya.');
         const encodedMessage = encodeURIComponent(messageToShare);
         const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
@@ -874,7 +859,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Fungsi untuk menghasilkan pesan transaksi yang bisa dibagikan
-    function generateShareMessage() {
+    // (Sekarang menerima parameter paymentMethodForShare untuk konsistensi dengan kirimWhatsappMessage)
+    function generateShareMessage(paymentMethodForShare) { 
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
         const keteranganPesanan = keteranganPesananInput.value.trim();
@@ -887,20 +873,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return { success: false, message: 'Keranjang belanja kosong, tidak bisa dibagikan!' };
         }
         
-        const opsiMakan = '-'; // Opsi makan dihilangkan dari tampilan
+        const opsiMakan = '-'; 
         
         const tanggalWaktu = new Date();
         const formattedDate = tanggalWaktu.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const formattedTime = tanggalWaktu.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
         let shareText = `*${defaultShopName}*\n`;
+        shareText += `${defaultAddress}\n`; // Ditambahkan: Alamat toko
         shareText += `Telp: ${displayPhoneNumber}\n`;
         shareText += "-----------------------------\n";
         shareText += `Pelanggan: ${namaPemesan || '-'}\n`;
         shareText += `Alamat: ${alamatPemesan || '-'}\n`;
         shareText += `Tanggal: ${formattedDate}\n`;
         shareText += `Jam: ${formattedTime}\n`;
-        // shareText += `Opsi: ${opsiMakan}\n`; // Dihapus karena opsi makan dihilangkan
         shareText += "-----------------------------\n";
         shareText += "*Detail Pesanan:*\n";
         keranjang.forEach(item => {
@@ -908,16 +894,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         shareText += "-----------------------------\n";
         shareText += `*Total: ${formatRupiah(totalBelanja)}*\n`;
-        shareText += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
-        shareText += `*Kembalian: ${formatRupiah(kembalian)}*\n\n`;
+        
+        // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage
+        if (paymentMethodForShare === 'QRIS') {
+            shareText += `*Metode Pembayaran: QRIS*\n`;
+            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; // Menggunakan link view
+            shareText += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
+        } else { // Jika Tunai atau metode lain yang tidak spesifik
+            shareText += `*Metode Pembayaran: Tunai*\n`;
+            shareText += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
+            shareText += `*Kembalian: ${formatRupiah(kembalian)}*\n\n`;
+        }
         
         if (keteranganPesanan) {
             shareText += `*Catatan:*\n${keteranganPesanan}\n\n`;
         }
-
-        if (totalBelanja > 0) { // Tambahkan link QRIS jika ada transaksi
-            shareText += `\n*Scan QRIS untuk Pembayaran:*\n${qrisDownloadLink}\n`;
+        // Jika metode Tunai, dan ada total belanja, tambahkan info QRIS sebagai pilihan lain
+        // Ini memastikan link QRIS selalu ada di pesan share meskipun transaksi di-share sebagai Tunai
+        if (totalBelanja > 0 && paymentMethodForShare === 'Tunai') {
+             shareText += `\n*Pilihan Lain: Scan QRIS untuk Pembayaran:*\n${qrisDownloadLink}\n`;
         }
+
         shareText += defaultFooterText;
 
         return { success: true, message: shareText, total: totalBelanja, nominal: nominalPembayaran };
