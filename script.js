@@ -66,8 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayPhoneNumber = "081235368643";
     const whatsappPhoneNumber = "6281235368643";
     const defaultAddress = "Jl Ender Rakit - Gedongan";
-    // Pesan footer dengan emoji (TETAP ADA)
-    const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰"; 
+    const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰"; // TETAP ADA
     const qrisImagePath = "qris.webp"; // Untuk cetak struk lokal
     // Link QRIS ini digunakan untuk teks di pesan share/WhatsApp (TETAP ADA)
     const qrisDownloadLink = "https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk"; 
@@ -147,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (namaKasir === 'Harry' && passwordKasir === '313121') {
             localStorage.setItem('userRole', 'kasir');
             localStorage.setItem('namaKasir', namaKasir); // Simpan nama kasir
-            // document.body.classList.add('kasir-mode'); // DIHAPUS - tidak lagi digunakan di CSS
+            // document.body.classList.add('kasir-mode'); // DIHAPUS - tidak lagi digunakan di CSS untuk layout produk
             loginPopup.style.display = 'none';
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'block'; // Kasir melihat FAB kasir
@@ -273,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const produkDiv = document.createElement('div');
             produkDiv.classList.add('produk-item');
 
-            let hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span</p>`;
+            let hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span></p>`;
 
             // Mengembalikan struktur HTML untuk edit harga kasir ke bentuk inline V1.6.0
             if (currentUserRole === 'kasir') {
@@ -839,7 +838,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- Perubahan di sini: Tidak lagi mencoba menyematkan gambar secara langsung ---
         try {
             if (navigator.share) {
                 await navigator.share({
@@ -881,7 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Fungsi untuk menghasilkan pesan transaksi yang bisa dibagikan
-    // (Mengembalikan ke logika V1.6.0 untuk penamaan kasir dan default address)
+    // Mengembalikan ke logika V1.6.0 untuk penamaan kasir dan default address
     function generateShareMessage(paymentMethodForShare) { 
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
@@ -904,10 +902,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const formattedTime = tanggalWaktu.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
         let shareText = `*${defaultShopName}*\n`;
-        shareText += `${defaultAddress}\n`; // Ditambahkan: Alamat toko (TETAP ADA)
+        shareText += `${defaultAddress}\n`; 
         shareText += `Telp: ${displayPhoneNumber}\n`;
         shareText += "-----------------------------\n";
-        if (currentUserRole === 'kasir') { // Tambahkan nama kasir jika kasir (TETAP ADA)
+        if (currentUserRole === 'kasir') { 
              shareText += `Kasir: ${kasirName}\n`;
         }
         shareText += `Pelanggan: ${namaPemesan || '-'}\n`;
@@ -922,7 +920,6 @@ document.addEventListener('DOMContentLoaded', () => {
         shareText += "-----------------------------\n";
         shareText += `*Total: ${formatRupiah(totalBelanja)}*\n`;
         
-        // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage (TETAP ADA)
         if (paymentMethodForShare === 'QRIS') {
             shareText += `*Metode Pembayaran: QRIS*\n`;
             shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
@@ -936,12 +933,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (keteranganPesanan) { 
             shareText += `*Catatan:*\n${keteranganPesanan}\n\n`;
         }
-        // Jika metode Tunai, dan ada total belanja, tambahkan info QRIS sebagai pilihan lain (TETAP ADA)
         if (totalBelanja > 0 && paymentMethodForShare === 'Tunai') {
              shareText += `\n*Pilihan Lain: Scan QRIS untuk Pembayaran:*\n${qrisDownloadLink}\n`;
         }
 
-        shareText += defaultFooterText; // defaultFooterText sudah mengandung emoji (TETAP ADA)
+        shareText += defaultFooterText; 
 
         return { success: true, message: shareText, total: totalBelanja, nominal: nominalPembayaran };
     }

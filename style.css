@@ -34,10 +34,10 @@
 }
 
 /* ====== Global ====== */
-/* Mengembalikan font-size html ke nilai default browser (16px) atau tidak ditentukan */
-/* Hapus semua @media query yang mengubah html font-size */
+/* Mengembalikan font-size html ke nilai default browser (biasanya 16px) */
 html {
-    /* font-size: 16px; */ /* Dihapus atau dikomentari agar kembali ke default browser atau nilai sebelumnya */
+    /* Font-size default browser akan digunakan (biasanya 16px) */
+    /* Hapus semua @media query yang mengubah html font-size dari versi sebelumnya */
 }
 
 body {
@@ -413,7 +413,7 @@ footer {
 /* ====== Katalog Produk ====== */
 #produk-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /* Default 3 kolom */
     gap: 1.5em;
     align-content: start;
     flex-grow: 1;
@@ -467,35 +467,22 @@ footer {
     line-height: 1.2;
 }
 
-/* Mengembalikan gaya untuk edit-price-wrapper (digunakan pelanggan) */
+/* Mengembalikan gaya .edit-price-wrapper untuk tampilan default (pelanggan & kasir sekarang) */
 .produk-item .edit-price-wrapper {
     display: flex;
     align-items: center; /* Sejajar secara horizontal */
     justify-content: center;
     gap: 5px;
     margin-top: 0.2em; /* Kembali ke em */
-    font-size: 0.9em; /* Kembali ke em */
+    font-size: 0.9em; /* Ukuran font sesuai V1.6.0 */
     font-weight: bold;
     color: var(--text-price-color);
 }
 
-/* MENGHAPUS GAYA UNTUK .kasir-price-edit-group YANG MENYEBABKAN TATA LETAK TIDAK BERATURAN */
-/* body.kasir-mode .produk-item .kasir-price-edit-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    margin-top: 0.2rem;
-    color: var(--text-price-color);
-    font-weight: bold;
-}
-
-body.kasir-mode .produk-item .kasir-price-edit-group .price-label {
-    font-size: 1rem;
-    margin-bottom: 0.1rem;
-    text-align: center;
-} */
+/* Menghapus gaya .kasir-price-edit-group yang menyebabkan tata letak tidak beraturan */
+/* karena strukturnya di JS akan diubah dan mengandalkan .edit-price-wrapper untuk kasir juga */
+/* body.kasir-mode .produk-item .kasir-price-edit-group { ... } styling dihapus */
+/* body.kasir-mode .produk-item .kasir-price-edit-group .price-label { ... } styling dihapus */
 
 
 .produk-item .product-price-input {
@@ -935,9 +922,8 @@ body.kasir-mode .produk-item .kasir-price-edit-group .price-label {
 
 /* ====== RESPONSIVE GRID PRODUK & LAYOUT ====== */
 
-/* Mengembalikan font-size html ke nilai default browser (16px) atau tidak ditentukan */
-/* Hapus semua @media query yang mengubah html font-size */
-/* BARU: Kembalikan perilaku font-size ke V1.6.0 (tanpa skala html) */
+/* Mengembalikan html font-size ke nilai default browser (biasanya 16px) */
+/* Hapus semua @media query yang mengubah html font-size dari versi sebelumnya */
 html {
     /* Font-size default browser akan digunakan (biasanya 16px) */
 }
@@ -949,7 +935,7 @@ html {
         gap: 1em;
     }
     #produk-list {
-        grid-template-columns: repeat(2, 1fr); /* Kembali ke 2 kolom produk untuk tablet/PC kecil */
+        grid-template-columns: repeat(3, 1fr); /* KEMBALI KE 3 KOLOM UNTUK TABLET/PC KECIL */
     }
     /* Menghapus atau mengembalikan gaya kasir-mode yang mengubah layout product item */
     /* body.kasir-mode .produk-item .kasir-price-edit-group dan children-nya dihapus/dikomentari */
@@ -1008,7 +994,7 @@ html {
     #kasir-fabs .fab-print  { bottom: 43px;  right: 7px; }
 }
 
-/* BARU: Mengembalikan ukuran font dan posisi input harga kasir ke V1.6.0 */
+/* Mengembalikan ukuran font dan posisi input harga kasir ke V1.6.0 */
 .produk-item h3 {
     color: var(--text-accent-color);
     margin-bottom: 0.2em; /* Kembali ke em */
@@ -1040,9 +1026,10 @@ html {
     color: var(--text-price-color);
 }
 
-/* Menghapus gaya .kasir-price-edit-group karena strukturnya di JS akan diubah */
-/* dan mengandalkan .edit-price-wrapper untuk kasir juga */
-/* (Pastikan tidak ada .kasir-price-edit-group di HTML yang dihasilkan JS) */
+/* Menghapus gaya .kasir-price-edit-group yang menyebabkan tata letak tidak beraturan */
+/* karena strukturnya di JS akan diubah dan mengandalkan .edit-price-wrapper untuk kasir juga */
+/* body.kasir-mode .produk-item .kasir-price-edit-group { ... } styling dihapus */
+/* body.kasir-mode .produk-item .kasir-price-edit-group .price-label { ... } styling dihapus */
 
 
 .produk-item .product-price-input {
