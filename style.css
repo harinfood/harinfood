@@ -450,15 +450,21 @@ footer {
 }
 .produk-item h3 {
     color: var(--text-accent-color);
-    margin-bottom: 0.2em;
+    margin-bottom: 0.2rem; /* Consistent unit */
     font-size: 1rem; /* BARU: Diubah ke rem */
     font-weight: 600;
+    white-space: normal; /* BARU: Memastikan teks melingkar */
+    overflow-wrap: break-word; /* BARU: Memastikan kata panjang melingkar */
+    line-height: 1.2; /* BARU: Mengontrol tinggi baris */
 }
 .produk-item p {
     font-size: 0.9rem; /* BARU: Diubah ke rem */
     font-weight: bold;
     color: var(--text-price-color);
-    margin-top: 0.2em;
+    margin-top: 0.2rem; /* Consistent unit */
+    white-space: normal; /* BARU: Memastikan teks melingkar */
+    overflow-wrap: break-word; /* BARU: Memastikan kata panjang melingkar */
+    line-height: 1.2; /* BARU: Mengontrol tinggi baris */
 }
 
 /* Gaya BARU untuk input harga di produk-item */
@@ -467,7 +473,7 @@ footer {
     align-items: center;
     justify-content: center; /* Pusatkan jika hanya satu item di dalamnya */
     gap: 5px;
-    margin-top: 0.2em;
+    margin-top: 0.2rem; /* Consistent unit */
     font-size: 0.9rem; /* BARU: Diubah ke rem */
     font-weight: bold;
     color: var(--text-price-color); /* Warna teks harga */
