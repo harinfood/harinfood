@@ -66,7 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayPhoneNumber = "081235368643";
     const whatsappPhoneNumber = "6281235368643";
     const defaultAddress = "Jl Ender Rakit - Gedongan";
-    const defaultFooterText = "Terima kasih sehat selalu ya";
+    // BARU: Pesan footer diganti dengan emoji
+    const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰"; 
     const qrisImagePath = "qris.webp"; // Untuk cetak struk lokal
     // Link QRIS ini digunakan untuk teks di pesan share/WhatsApp
     const qrisDownloadLink = "https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk"; 
@@ -680,7 +681,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (paymentMethod === 'QRIS') {
             whatsappMessage += `*Metode Pembayaran: QRIS*\n`;
             whatsappMessage += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
-            whatsappMessage += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
+            whatsappMessage += `(Bayar sesuai nominal total pembayaran jika anda menggunakan QRIS)\n`; // BARU: Pesan diubah
         } else { 
             whatsappMessage += `*Metode Pembayaran: Tunai*\n`;
             whatsappMessage += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
@@ -689,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (keteranganPesanan) { 
             whatsappMessage += `*Catatan:*\n${keteranganPesanan}\n\n`;
         }
-        whatsappMessage += defaultFooterText;
+        whatsappMessage += defaultFooterText; // BARU: defaultFooterText sudah mengandung emoji
         const encodedMessage = encodeURIComponent(whatsappMessage);
         const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
@@ -939,7 +940,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (paymentMethodForShare === 'QRIS') {
             shareText += `*Metode Pembayaran: QRIS*\n`;
             shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; // Menggunakan link view
-            shareText += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
+            shareText += `(Bayar sesuai nominal total pembayaran jika anda menggunakan QRIS)\n`; // Pesan diubah
         } else { // Jika Tunai atau metode lain yang tidak spesifik
             shareText += `*Metode Pembayaran: Tunai*\n`;
             shareText += `*Bayar: ${formatRupiah(nominalPembayaran)}*\n`;
@@ -955,7 +956,7 @@ document.addEventListener('DOMContentLoaded', () => {
              shareText += `\n*Pilihan Lain: Scan QRIS untuk Pembayaran:*\n${qrisDownloadLink}\n`;
         }
 
-        shareText += defaultFooterText;
+        shareText += defaultFooterText; // defaultFooterText sudah mengandung emoji
 
         return { success: true, message: shareText, total: totalBelanja, nominal: nominalPembayaran };
     }
