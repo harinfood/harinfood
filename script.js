@@ -50,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
         { id: 4, nama: "Topokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
         { id: 5, nama: "Tteokbokki Besar", harga: 10000, gambar: "toppoki.webp", barcode: "toppoki10" },
-        /*{ id: 6, nama: "Spaghetti", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
+        { id: 6, nama: "Spaghetti", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
         { id: 7, nama: "Spaghetti Besar", harga: 10000, gambar: "spaghetti.webp", barcode: "spaghetti10" },
-        { id: 8, nama: "Balungan", harga: 5000, gambar: "balungan.webp", barcode: "balungan" },*/
+        { id: 8, nama: "Balungan", harga: 5000, gambar: "balungan.webp", barcode: "balungan" },
         { id: 9, nama: "Es Teh Jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" },
         { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh.webp", barcode: "esteh2" }
     ];
@@ -146,6 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (namaKasir === 'Harry' && passwordKasir === '313121') {
             localStorage.setItem('userRole', 'kasir');
+            localStorage.setItem('namaKasir', namaKasir); // BARU: Simpan nama kasir
+            document.body.classList.add('kasir-mode'); // Tambahkan kelas kasir-mode ke body
             loginPopup.style.display = 'none';
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'block'; // Kasir melihat FAB kasir
@@ -238,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appContainer.style.display = 'block';
         // Set visibilitas awal FABs dan tombol cetak saat halaman dimuat jika sudah login
         if (storedRole === 'kasir') {
+            document.body.classList.add('kasir-mode'); // Tambahkan kelas kasir-mode ke body
             kasirFabs.style.display = 'block';
             cetakStrukButton.style.display = 'block'; 
             pesanInfoLabel.style.display = 'none'; 
@@ -245,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             productSearchBarcodeInput.style.display = 'block'; // Pastikan terlihat
             productSearchBarcodeInput.focus(); // Fokus saat dimuat
         } else {
+            document.body.classList.remove('kasir-mode'); // Hapus kelas kasir-mode dari body
             kasirFabs.style.display = 'none';
             cetakStrukButton.style.display = 'none'; 
             pesanInfoLabel.style.display = 'block'; 
@@ -276,8 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Jika peran adalah kasir, tampilkan input harga
             if (currentUserRole === 'kasir') {
                 hargaDisplayHtml = `
-                    <p class="edit-price-wrapper">
-                        Harga: 
+                    <div class="kasir-price-edit-group"> 
+                        <span class="price-label">Harga:</span>
                         <input type="number" 
                                class="product-price-input" 
                                data-id="${produk.id}" 
@@ -285,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                min="0" 
                                onchange="handlePriceChange(this, ${produk.id})"
                                onblur="formatPriceInput(this)">
-                    </p>
+                    </div>
                 `;
             }
 
@@ -523,6 +527,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
         const keteranganPesanan = keteranganPesananInput.value.trim();
+        const kasirName = localStorage.getItem('namaKasir') || '-'; // Ambil nama kasir
+        const currentUserRole = localStorage.getItem('userRole'); // Ambil peran user
 
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
         const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
@@ -557,6 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="shop-phone-print">${displayPhoneNumber}</p>
                     </div>
                     <div class="print-info">
+                        ${currentUserRole === 'kasir' ? `<p>Kasir: ${kasirName}</p>` : ''}
                         <p>Pelanggan: ${namaPemesan || '-'}</p>
                         <p>Alamat: ${alamatPemesan || '-'}</p>
                         <p>Tanggal: ${formattedDate}</p>
@@ -630,6 +637,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
         const keteranganPesanan = keteranganPesananInput.value.trim(); // Ambil nilai keterangan
+        const kasirName = localStorage.getItem('namaKasir') || '-'; // Ambil nama kasir
+        const currentUserRole = localStorage.getItem('userRole'); // Ambil peran user
 
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
         const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
@@ -653,6 +662,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let whatsappMessage = `*${defaultShopName}*\n`;
         whatsappMessage += `Telp: ${displayPhoneNumber}\n`;
         whatsappMessage += "-----------------------------\n";
+        if (currentUserRole === 'kasir') { // Tampilkan nama kasir di pesan WA jika kasir
+             whatsappMessage += `Kasir: ${kasirName}\n`;
+        }
         whatsappMessage += `Pelanggan: ${namaPemesan || '-'}\n`;
         whatsappMessage += `Alamat: ${alamatPemesan || '-'}\n`;
         whatsappMessage += `Tanggal: ${formattedDate}\n`;
@@ -887,6 +899,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const namaPemesan = namaPemesanInput.value.trim();
         const alamatPemesan = alamatPemesanInput.value.trim();
         const keteranganPesanan = keteranganPesananInput.value.trim();
+        const kasirName = localStorage.getItem('namaKasir') || '-'; // Ambil nama kasir
+        const currentUserRole = localStorage.getItem('userRole'); // Ambil peran user
 
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
         const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
@@ -906,6 +920,9 @@ document.addEventListener('DOMContentLoaded', () => {
         shareText += `${defaultAddress}\n`; // Ditambahkan: Alamat toko
         shareText += `Telp: ${displayPhoneNumber}\n`;
         shareText += "-----------------------------\n";
+        if (currentUserRole === 'kasir') { // Tambahkan nama kasir jika kasir
+             shareText += `Kasir: ${kasirName}\n`;
+        }
         shareText += `Pelanggan: ${namaPemesan || '-'}\n`;
         shareText += `Alamat: ${alamatPemesan || '-'}\n`;
         shareText += `Tanggal: ${formattedDate}\n`;
@@ -921,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage
         if (paymentMethodForShare === 'QRIS') {
             shareText += `*Metode Pembayaran: QRIS*\n`;
-            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
+            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; // Menggunakan link view
             shareText += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
         } else { // Jika Tunai atau metode lain yang tidak spesifik
             shareText += `*Metode Pembayaran: Tunai*\n`;
