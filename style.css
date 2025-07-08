@@ -18,7 +18,7 @@
     --text-price-color: #ffcc00;
     --button-default-bg: linear-gradient(45deg, #00f0ff, #00b0ff);
     --button-clear-bg: linear-gradient(45deg, #ff4d4d, #ff8c8c);
-    --button-whatsapp-bg: linear-gradient(45deg, #25D366, #128C7E);
+    --button-whatsapp-bg: linear-gradient(45deg, #25D366, #128C7E); /* Variabel ini sudah ada */
     --button-manual-bg: linear-gradient(45deg, #8a2be2, #4b0082);
     --input-border-color: #00f0ff;
     --input-bg: rgba(255, 255, 255, 0.1);
@@ -339,6 +339,19 @@ footer {
     background: linear-gradient(45deg, #00aaff, #007bff);
 }
 
+/* Gaya spesifik untuk tombol WhatsApp */
+#pesan-whatsapp-pelanggan.btn-whatsapp {
+    background: var(--button-whatsapp-bg); /* Menggunakan variabel warna hijau WhatsApp */
+    color: white; /* Pastikan teksnya putih agar kontras */
+}
+
+#pesan-whatsapp-pelanggan.btn-whatsapp:hover {
+    background: linear-gradient(45deg, #128C7E, #25D366); /* Sedikit perubahan warna saat hover */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+
 /* ====== Keterangan Section Styling ====== */
 #keterangan-section {
     padding-top: 1em;
@@ -437,6 +450,43 @@ footer {
     color: var(--text-price-color);
     margin-top: 0.2em;
 }
+
+/* Gaya BARU untuk input harga di produk-item */
+.produk-item .edit-price-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Pusatkan jika hanya satu item di dalamnya */
+    gap: 5px;
+    margin-top: 0.2em;
+    font-size: 0.9em; /* Ukuran font sama dengan harga biasa */
+    font-weight: bold;
+    color: var(--text-price-color); /* Warna teks harga */
+}
+
+.produk-item .product-price-input {
+    width: 80px; /* Lebar input yang sesuai */
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--input-border-color);
+    background: var(--input-bg);
+    color: var(--text-price-color); /* Warna teks di input */
+    font-size: 1em; /* Sesuaikan ukuran font */
+    text-align: right; /* Angka rata kanan */
+    -moz-appearance: textfield; /* Sembunyikan panah di Firefox */
+}
+
+.produk-item .product-price-input::-webkit-outer-spin-button,
+.produk-item .product-price-input::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Sembunyikan panah di Chrome/Safari */
+    margin: 0;
+}
+
+.produk-item .product-price-input:focus {
+    outline: none;
+    border-color: var(--border-neon-color);
+    box-shadow: 0 0 10px var(--shadow-neon-color);
+}
+
 
 /* ====== Qty Control di Katalog ====== */
 .produk-controls {
