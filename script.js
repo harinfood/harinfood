@@ -130,6 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'none'; // Pelanggan tidak melihat FAB kasir
             pesanInfoLabel.style.display = 'block'; // Tampilkan info pesan untuk pelanggan
+            // BARU: Set teks pesan info untuk pelanggan
+            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
             alert(`Selamat datang, ${nama}! Anda masuk sebagai Pelanggan.`);
             initializeApp();
         } else {
@@ -219,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             kasirFabs.style.display = 'none';
             pesanInfoLabel.style.display = 'block'; 
+            // BARU: Set teks pesan info untuk pelanggan
+            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
             shareOrderFab.style.display = 'none'; 
             productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan
         }
@@ -244,6 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
             kasirFabs.style.display = 'none';
             cetakStrukButton.style.display = 'none'; 
             pesanInfoLabel.style.display = 'block'; 
+            // BARU: Set teks pesan info untuk pelanggan
+            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
             shareOrderFab.style.display = 'none'; 
             productSearchBarcodeInput.style.display = 'none'; // Sembunyikan untuk pelanggan
         }
@@ -915,7 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Logika untuk metode pembayaran, sesuai dengan kirimWhatsappMessage
         if (paymentMethodForShare === 'QRIS') {
             shareText += `*Metode Pembayaran: QRIS*\n`;
-            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; // Menggunakan link view
+            shareText += `\nSilakan scan QRIS untuk pembayaran: ${qrisDownloadLink}\n`; 
             shareText += `(Abaikan nominal bayar/kembalian jika Anda menggunakan QRIS)\n`;
         } else { // Jika Tunai atau metode lain yang tidak spesifik
             shareText += `*Metode Pembayaran: Tunai*\n`;
