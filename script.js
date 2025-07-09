@@ -131,10 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
             kasirFabs.style.display = 'none'; // Pelanggan tidak melihat FAB kasir
             pesanInfoLabel.style.display = 'block'; // Tampilkan info pesan untuk pelanggan
             pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya"; // TETAP ADA
-            alert(`Selamat datang, ${nama}! Anda masuk sebagai Pelanggan.`);
+           
             initializeApp();
         } else {
-            alert('Harap isi nama dan alamat Anda.');
+           
         }
     });
 
@@ -152,10 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
             kasirFabs.style.display = 'block'; // Kasir melihat FAB kasir
             document.getElementById('namaPemesanModal').style.display = 'none';
             pesanInfoLabel.style.display = 'none'; // Sembunyikan info pesan untuk kasir
-            alert('Selamat datang, Harry! Anda masuk sebagai Kasir.');
+            
             initializeApp();
         } else {
-            alert('Nama kasir atau password salah.');
+            
         }
     });
 
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnSimpanNamaPemesan').onclick = function() {
         var nama = document.getElementById('inputNamaPemesan').value.trim();
         if (nama.length < 2) {
-            alert('Nama pemesan wajib diisi!');
+            
             return;
         }
         localStorage.setItem('namaPemesan', nama);
@@ -688,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const encodedMessage = encodeURIComponent(whatsappMessage);
         const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
-        alert('Pesan WhatsApp telah disiapkan. Silakan pilih kontak dan kirim!');
+        
         updateActionButtonVisibility();
     }
 
@@ -861,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Gagal berbagi via Web Share API:', error);
         }
 
-        alert('Tidak dapat membagikan langsung ke aplikasi lain. Menggunakan WhatsApp sebagai gantinya.');
+        
         const encodedMessage = encodeURIComponent(messageToShare);
         const whatsappURL = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
