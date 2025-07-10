@@ -18,26 +18,24 @@
     --text-price-color: #ffcc00;
     --button-default-bg: linear-gradient(45deg, #00f0ff, #00b0ff);
     --button-clear-bg: linear-gradient(45deg, #ff4d4d, #ff8c8c);
-    --button-whatsapp-bg: linear-gradient(45deg, #25D366, #128C7E); /* Variabel ini sudah ada */
+    --button-whatsapp-bg: linear-gradient(45deg, #25D366, #128C7E);
     --button-manual-bg: linear-gradient(45deg, #8a2be2, #4b0082);
     --input-border-color: #00f0ff;
     --input-bg: rgba(255, 255, 255, 0.1);
     --table-header-bg: rgba(255, 255, 255, 0.1);
     --danger-color: #dc3545;
-    --success-color: #28a745; /* Warna sukses */
-    --text-color: #e0e0e0; /* Warna teks umum */
-    --btn-qris-bg: linear-gradient(45deg, #007bff, #00b0ff); /* Biru untuk QRIS */
-    --btn-tunai-bg: linear-gradient(45deg, #ffc107, #e0a800); /* Kuning untuk Tunai */
-    --btn-print-green-bg: linear-gradient(45deg, #28a745, #1e7e34); /* Hijau untuk cetak */
+    --success-color: #28a745;
+    --text-color: #e0e0e0;
+    --btn-qris-bg: linear-gradient(45deg, #007bff, #00b0ff);
+    --btn-tunai-bg: linear-gradient(45deg, #ffc107, #e0a800);
+    --btn-print-green-bg: linear-gradient(45deg, #28a745, #1e7e34);
 
     --border-radius: 8px;
 }
 
 /* ====== Global ====== */
-/* Mengembalikan font-size html ke nilai default browser (biasanya 16px) */
 html {
     /* Font-size default browser akan digunakan (biasanya 16px) */
-    /* Hapus semua @media query yang mengubah html font-size dari versi sebelumnya */
 }
 
 body {
@@ -116,7 +114,7 @@ footer {
     justify-content: center;
     align-items: center;
     z-index: 10000;
-    background-image: url('citung.webp'); /* Background gambar untuk login page */
+    background-image: url('citung.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -136,7 +134,6 @@ footer {
     overflow: hidden;
 }
 
-/* Efek glow tambahan */
 .popup-content::before {
     content: '';
     position: absolute;
@@ -155,11 +152,10 @@ footer {
     to { transform: rotate(360deg); }
 }
 
-
 .login-title {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    font-size: 2.2em; /* Ukuran font diperkecil */
+    font-size: 2.2em;
     margin-bottom: 30px;
     color: var(--text-accent-color);
     text-shadow: 0 0 20px var(--shadow-neon-color), 0 0 30px rgba(0, 240, 255, 0.7);
@@ -168,7 +164,6 @@ footer {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-
 
 .button-group {
     margin-bottom: 30px;
@@ -189,7 +184,7 @@ footer {
     position: relative;
     overflow: hidden;
     text-align: center;
-    display: flex; /* Untuk memusatkan konten jika ada ikon/teks */
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -296,7 +291,7 @@ footer {
 
 /* ===== Payment Options Styling ===== */
 .payment-options {
-    display: flex; 
+    display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 1.5em;
@@ -351,16 +346,15 @@ footer {
 
 /* Gaya spesifik untuk tombol WhatsApp */
 #pesan-whatsapp-pelanggan.btn-whatsapp {
-    background: var(--button-whatsapp-bg); /* Menggunakan variabel warna hijau WhatsApp */
-    color: white; /* Pastikan teksnya putih agar kontras */
+    background: var(--button-whatsapp-bg);
+    color: white;
 }
 
 #pesan-whatsapp-pelanggan.btn-whatsapp:hover {
-    background: linear-gradient(45deg, #128C7E, #25D366); /* Sedikit perubahan warna saat hover */
+    background: linear-gradient(45deg, #128C7E, #25D366);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
-
 
 /* ====== Keterangan Section Styling ====== */
 #keterangan-section {
@@ -396,24 +390,21 @@ footer {
 }
 
 /* ====== Gaya untuk Tombol Cetak Struk (Hijau) ====== */
-/* Menggunakan kelas 'btn-action' dan 'btn-print-green' */
 .btn-action.btn-print-green {
-    background: var(--btn-print-green-bg); /* Menggunakan variabel warna hijau */
+    background: var(--btn-print-green-bg);
     color: white;
-    /* Properti lain seperti padding, border-radius, font-size sudah diwarisi dari .btn-action */
 }
 
 .btn-action.btn-print-green:hover {
-    background: linear-gradient(45deg, #218838, #155724); /* Warna hijau yang sedikit lebih gelap saat hover */
+    background: linear-gradient(45deg, #218838, #155724);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-
 /* ====== Katalog Produk ====== */
 #produk-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Default 3 kolom */
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5em;
     align-content: start;
     flex-grow: 1;
@@ -450,65 +441,53 @@ footer {
 }
 .produk-item h3 {
     color: var(--text-accent-color);
-    margin-bottom: 0.2em; /* Kembali ke em */
-    font-size: 1em; /* Kembali ke em */
+    margin-bottom: 0.2em;
+    font-size: 1em;
     font-weight: 600;
     white-space: normal;
     overflow-wrap: break-word;
     line-height: 1.2;
 }
 .produk-item p {
-    font-size: 0.9em; /* Kembali ke em */
+    font-size: 0.9em;
     font-weight: bold;
     color: var(--text-price-color);
-    margin-top: 0.2em; /* Kembali ke em */
+    margin-top: 0.2em;
     white-space: normal;
     overflow-wrap: break-word;
     line-height: 1.2;
 }
-
-/* Mengembalikan gaya .edit-price-wrapper untuk tampilan default (pelanggan & kasir sekarang) */
 .produk-item .edit-price-wrapper {
     display: flex;
-    align-items: center; /* Sejajar secara horizontal */
+    align-items: center;
     justify-content: center;
     gap: 5px;
-    margin-top: 0.2em; /* Kembali ke em */
-    font-size: 0.9em; /* Ukuran font sesuai V1.6.0 */
+    margin-top: 0.2em;
+    font-size: 0.9em;
     font-weight: bold;
     color: var(--text-price-color);
 }
-
-/* Menghapus gaya .kasir-price-edit-group yang menyebabkan tata letak tidak beraturan */
-/* karena strukturnya di JS akan diubah dan mengandalkan .edit-price-wrapper untuk kasir juga */
-/* body.kasir-mode .produk-item .kasir-price-edit-group { ... } styling dihapus */
-/* body.kasir-mode .produk-item .kasir-price-edit-group .price-label { ... } styling dihapus */
-
-
 .produk-item .product-price-input {
-    width: 80px; /* Kembali ke px */
+    width: 80px;
     padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--input-border-color);
     background: var(--input-bg);
     color: var(--text-primary-color);
-    font-size: 1em; /* Kembali ke em */
+    font-size: 1em;
     text-align: right;
     -moz-appearance: textfield;
 }
-
 .produk-item .product-price-input::-webkit-outer-spin-button,
 .produk-item .product-price-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
 .produk-item .product-price-input:focus {
     outline: none;
     border-color: var(--border-neon-color);
     box-shadow: 0 0 10px var(--shadow-neon-color);
 }
-
 
 /* ====== Qty Control di Katalog ====== */
 .produk-controls {
@@ -772,20 +751,16 @@ footer {
     transform: scale(1.1) translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
-
-/* Gaya untuk FAB Share (Merah) */
 #kasir-fabs .fab-share {
-    bottom: 310px; /* Sesuaikan posisi agar tidak tumpang tindih dengan FAB lain */
+    bottom: 310px;
     right: 30px;
-    background: linear-gradient(45deg, #dc3545, #c82333); /* Merah */
+    background: linear-gradient(45deg, #dc3545, #c82333);
 }
 #kasir-fabs .fab-share:hover {
     background: linear-gradient(45deg, #c82333, #dc3545);
 }
-
-/* Posisi FAB di dalam div #kasir-fabs */
 #kasir-fabs .fab-manual {
-    bottom: 240px; /* Dulu 170px, naik karena barcode fab hilang */
+    bottom: 240px;
     right: 30px;
     background: var(--button-manual-bg);
 }
@@ -793,7 +768,7 @@ footer {
     background: linear-gradient(45deg, #4b0082, #8a2be2);
 }
 #kasir-fabs .fab-clear {
-    bottom: 170px; /* Dulu 100px, naik */
+    bottom: 170px;
     right: 30px;
     background: var(--button-clear-bg);
 }
@@ -801,11 +776,10 @@ footer {
     background: linear-gradient(45deg, #c0392b, #ff4d4d);
 }
 #kasir-fabs .fab-print {
-    bottom: 100px; /* Dulu 30px, naik */
+    bottom: 100px;
     right: 30px;
     background: var(--button-default-bg);
 }
-
 
 /* ====== Modal ====== */
 .modal {
@@ -884,64 +858,46 @@ footer {
     margin-bottom: 20px;
     text-align: center;
 }
-
 .search-barcode-input input {
-    width: calc(100% - 20px); /* Kurangi padding */
+    width: calc(100% - 20px);
     padding: 12px 10px;
-    border: 1px solid var(--input-border-color); /* Menggunakan variabel border input */
-    border-radius: var(--border-radius); /* Menggunakan variabel border-radius */
-    background: var(--input-bg); /* Menggunakan variabel background input */
-    color: var(--text-primary-color); /* Menggunakan variabel warna teks utama */
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-primary-color);
     font-size: 1em;
-    box-sizing: border-box; /* Penting untuk perhitungan lebar */
+    box-sizing: border-box;
     margin-bottom: 5px;
 }
-
 .search-barcode-input input:focus {
-    border-color: var(--border-neon-color); /* Menggunakan variabel neon */
+    border-color: var(--border-neon-color);
     outline: none;
-    box-shadow: 0 0 10px var(--shadow-neon-color); /* Menggunakan variabel shadow neon */
+    box-shadow: 0 0 10px var(--shadow-neon-color);
 }
-
 .feedback-message {
     display: block;
     font-size: 0.85em;
-    min-height: 1.2em; /* Untuk mencegah layout bergeser */
+    min-height: 1.2em;
     text-align: center;
 }
-
-/* Warna feedback */
 .feedback-message.success-color {
     color: var(--success-color);
 }
-
 .feedback-message.danger-color {
     color: var(--danger-color);
 }
 
-
 /* ====== RESPONSIVE GRID PRODUK & LAYOUT ====== */
-
-/* Mengembalikan html font-size ke nilai default browser (biasanya 16px) */
-/* Hapus semua @media query yang mengubah html font-size dari versi sebelumnya */
-html {
-    /* Font-size default browser akan digunakan (biasanya 16px) */
-}
-
-/* Mengembalikan konfigurasi media query seperti di V1.6.0 */
-@media (max-width: 1024px) { /* Untuk tablet besar dan desktop kecil */
+@media (max-width: 1024px) {
     .main-layout {
-        grid-template-columns: 2fr 1fr; /* Kembali ke 2 kolom utama */
+        grid-template-columns: 2fr 1fr;
         gap: 1em;
     }
     #produk-list {
-        grid-template-columns: repeat(3, 1fr); /* KEMBALI KE 3 KOLOM UNTUK TABLET/PC KECIL */
+        grid-template-columns: repeat(3, 1fr);
     }
-    /* Menghapus atau mengembalikan gaya kasir-mode yang mengubah layout product item */
-    /* body.kasir-mode .produk-item .kasir-price-edit-group dan children-nya dihapus/dikomentari */
 }
-
-@media (max-width: 768px) { /* Untuk tablet kecil dan ponsel besar */
+@media (max-width: 768px) {
     .main-layout {
         display: block;
         padding: 0.5em;
@@ -951,7 +907,7 @@ html {
         margin-bottom: 1em;
     }
     #produk-list {
-        grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom untuk ponsel */
+        grid-template-columns: repeat(2, 1fr);
         gap: 0.8em;
     }
     .produk-item img {
@@ -963,16 +919,14 @@ html {
         height: 45px;
         font-size: 1em;
     }
-    /* Posisi FAB di dalam div #kasir-fabs pada ukuran sangat kecil */
-    #kasir-fabs .fab-share { bottom: 185px; right: 10px; } 
-    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; } 
+    #kasir-fabs .fab-share { bottom: 185px; right: 10px; }
+    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; }
     #kasir-fabs .fab-clear  { bottom: 100px; right: 10px; }
     #kasir-fabs .fab-print  { bottom: 55px; right: 10px; }
 }
-
-@media (max-width: 480px) { /* Untuk ponsel kecil */
+@media (max-width: 480px) {
     #produk-list {
-        grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom produk */
+        grid-template-columns: repeat(2, 1fr);
         gap: 0.4em;
     }
     .produk-item {
@@ -987,75 +941,11 @@ html {
         height: 36px;
         font-size: 0.8em;
     }
-    /* Posisi FAB di dalam div #kasir-fabs pada ukuran ekstra kecil */
-    #kasir-fabs .fab-share { bottom: 148px; right: 7px; } 
-    #kasir-fabs .fab-manual { bottom: 113px; right: 7px; } 
+    #kasir-fabs .fab-share { bottom: 148px; right: 7px; }
+    #kasir-fabs .fab-manual { bottom: 113px; right: 7px; }
     #kasir-fabs .fab-clear  { bottom: 78px; right: 7px; }
     #kasir-fabs .fab-print  { bottom: 43px;  right: 7px; }
 }
-
-/* Mengembalikan ukuran font dan posisi input harga kasir ke V1.6.0 */
-.produk-item h3 {
-    color: var(--text-accent-color);
-    margin-bottom: 0.2em; /* Kembali ke em */
-    font-size: 1em; /* Kembali ke em */
-    font-weight: 600;
-    white-space: normal;
-    overflow-wrap: break-word;
-    line-height: 1.2;
-}
-.produk-item p {
-    font-size: 0.9em; /* Kembali ke em */
-    font-weight: bold;
-    color: var(--text-price-color);
-    margin-top: 0.2em; /* Kembali ke em */
-    white-space: normal;
-    overflow-wrap: break-word;
-    line-height: 1.2;
-}
-
-/* Mengembalikan gaya .edit-price-wrapper untuk tampilan default (pelanggan & kasir sekarang) */
-.produk-item .edit-price-wrapper {
-    display: flex;
-    align-items: center; /* Sejajar secara horizontal */
-    justify-content: center;
-    gap: 5px;
-    margin-top: 0.2em; /* Kembali ke em */
-    font-size: 0.9em; /* Ukuran font sesuai V1.6.0 */
-    font-weight: bold;
-    color: var(--text-price-color);
-}
-
-/* Menghapus gaya .kasir-price-edit-group yang menyebabkan tata letak tidak beraturan */
-/* karena strukturnya di JS akan diubah dan mengandalkan .edit-price-wrapper untuk kasir juga */
-/* body.kasir-mode .produk-item .kasir-price-edit-group { ... } styling dihapus */
-/* body.kasir-mode .produk-item .kasir-price-edit-group .price-label { ... } styling dihapus */
-
-
-.produk-item .product-price-input {
-    width: 80px; /* Kembali ke px */
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid var(--input-border-color);
-    background: var(--input-bg);
-    color: var(--text-primary-color);
-    font-size: 1em; /* Kembali ke em */
-    text-align: right;
-    -moz-appearance: textfield;
-}
-
-.produk-item .product-price-input::-webkit-outer-spin-button,
-.produk-item .product-price-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.produk-item .product-price-input:focus {
-    outline: none;
-    border-color: var(--border-neon-color);
-    box-shadow: 0 0 10px var(--shadow-neon-color);
-}
-
 
 /* ====== PRINT STRUK ====== */
 @media print {
@@ -1069,9 +959,9 @@ html {
         visibility: visible !important;
         color: #000 !important;
         font-family: 'Poppins', sans-serif !important;
-        font-weight: 700 !important;
-        font-size: 10px !important; /* KEMBALI KE 10px */
+        font-size: 10px !important;
         line-height: 1.2 !important;
+        font-weight: normal !important;
     }
     #print-area {
         position: absolute !important;
@@ -1089,22 +979,19 @@ html {
         border-bottom: 1px dashed #000 !important;
         padding-bottom: 5px !important;
     }
-    /* Style untuk nama toko di header cetak */
     .print-header .shop-name-print {
         margin: 0 !important;
-        font-size: 1.5em !important; 
-        font-weight: 900 !important;
+        font-size: 1.5em !important;
         line-height: 1.2 !important;
+        font-weight: normal !important;
     }
-    /* Style untuk alamat dan telepon di header cetak */
     .print-header .shop-address-print,
     .print-header .shop-phone-print {
         margin: 0 !important;
-        font-size: 1.1em !important; 
+        font-size: 1.1em !important;
         line-height: 1.2 !important;
-        font-weight: 700 !important;
+        font-weight: normal !important;
     }
-
     .print-info {
         text-align: left !important;
         margin-top: 5px !important;
@@ -1112,15 +999,15 @@ html {
     }
     .print-info p {
         margin: 0 !important;
-        font-size: 1em !important; 
+        font-size: 1em !important;
         line-height: 1.2 !important;
-        font-weight: 700 !important;
+        font-weight: normal !important;
     }
     .print-notes {
         margin-top: 5px !important;
         margin-bottom: 10px !important;
-        font-size: 1em !important; 
-        font-weight: 700 !important;
+        font-size: 1em !important;
+        font-weight: normal !important;
         padding-top: 5px !important;
     }
     hr {
@@ -1134,21 +1021,22 @@ html {
     table td {
         padding: 1px 0 !important;
         text-align: left !important;
-        font-size: 1em !important; 
+        font-size: 1em !important;
+        font-weight: normal !important;
     }
     table td:nth-child(1) {
         width: 70% !important;
         word-wrap: break-word !important;
-        font-weight: 800 !important;
+        font-weight: normal !important;
     }
     table td:nth-child(2) {
         width: 30% !important;
         text-align: right !important;
-        font-weight: 700 !important;
+        font-weight: normal !important;
     }
     .total-row {
-        font-size: 1.1em !important; 
-        font-weight: 900 !important;
+        font-size: 1.1em !important;
+        font-weight: normal !important;
         text-align: right !important;
         margin-top: 5px !important;
         padding-top: 5px !important;
@@ -1156,8 +1044,8 @@ html {
     }
     .total-row span { float: left !important; }
     .print-payment-info {
-        font-size: 1em !important; 
-        font-weight: 700 !important;
+        font-size: 1em !important;
+        font-weight: normal !important;
         text-align: right !important;
         margin: 2px 0 !important;
     }
@@ -1165,9 +1053,9 @@ html {
     .thank-you {
         text-align: center !important;
         margin-top: 15px !important;
-        font-size: 1em !important; 
+        font-size: 1em !important;
         line-height: 1.4 !important;
-        font-weight: 700 !important;
+        font-weight: normal !important;
     }
     #print-area img {
         max-width: 100% !important;

@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.innerHTML = `
                     <td>${item.nama}</td>
                     <td><input type="number" value="${item.qty}" min="1" onchange="updateCartItemQty(${index}, this.value)"></td>
-                    <td>${formatRupiah(item.harga)}</td>
+                    <td>${formatRupiah(subtotal)}</td>
                     <td><button onclick="removeFromCart(${index})" class="btn-remove-item"><i class="fas fa-trash-alt"></i></button></td>
                 `;
                 keranjangItems.appendChild(row);
