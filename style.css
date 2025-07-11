@@ -328,6 +328,42 @@ footer {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
+/* ... bagian atas tetap ... */
+
+/* ===== Payment Options Styling ===== */
+/* ... bagian lama tetap ... */
+
+/* ====== Diskon Section Styling ====== */
+.diskon-section-inline {
+    padding-top: 1em;
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+.diskon-section-inline label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: var(--text-accent-color);
+}
+.diskon-section-inline input[type="number"], .diskon-section-inline input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--input-border-color);
+    background: var(--input-bg);
+    color: var(--text-primary-color);
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+.diskon-section-inline input[type="number"]:focus, .diskon-section-inline input[type="text"]:focus {
+    outline: none;
+    border-color: var(--border-neon-color);
+    box-shadow: 0 0 10px var(--shadow-neon-color);
+}
+
+/* ... bagian bawah tetap ... */
+
 .btn-tunai {
     background: var(--btn-tunai-bg);
 }

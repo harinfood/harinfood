@@ -85,6 +85,13 @@
                     <input type="number" id="nominal-pembayaran" min="0" value="0">
                     <p>Kembalian: <span id="kembalian-display">Rp 0</span></p>
                 </div>
+                <!-- Diskon hanya kasir -->
+                <div class="diskon-section-inline" id="diskon-section" style="display:none;">
+                    <label for="nama-diskon">Nama Diskon:</label>
+                    <input type="text" id="nama-diskon" placeholder="Contoh: Promo Juli" value="">
+                    <label for="nilai-diskon">Nilai Diskon:</label>
+                    <input type="number" id="nilai-diskon" min="0" value="0">
+                </div>
                 <div id="keterangan-section">
                     <label for="keterangan-pesanan">Keterangan Pesanan (Opsional):</label>
                     <textarea id="keterangan-pesanan" rows="2"></textarea>
