@@ -397,13 +397,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // FAB Share
+// ... kode lain tetap ...
+    // FAB Share
     shareOrderFab.addEventListener('click', async () => {
         const shareResult = generateShareMessage('Tunai');
         if (!shareResult.success) {
             alert(shareResult.message);
             return;
         }
-        const messageToShare = shareResult.message;
+        const messageToShare = shareResult.message +
+            "\n\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk";
         const totalBelanja = shareResult.total;
         const nominalPembayaran = shareResult.nominal;
         if (totalBelanja === 0) {
@@ -451,6 +454,91 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.value = '';
         productSearchBarcodeInput.focus();
     });
+
+    // QRIS & WhatsApp Button
+    btnBayarQris.addEventListener('click', () => {
+        if (keranjang.length === 0) {
+            alert('Keranjang belanja kosong. Harap tambahkan produk.');
+            return;
+        }
+        kirimWhatsappMessage('QRIS');
+    });
+    pesanWhatsappPelangganBtn.addEventListener('click', () => {
+        if (keranjang.length === 0) {
+            alert('Keranjang belanja kosong. Harap tambahkan produk.');
+            return;
+        }
+        kirimWhatsappMessage('Tunai'); 
+    });
+
+    function generateShareMessage(paymentMethod) {
+        const namaPemesan = namaPemesanInput.value.trim();
+        const alamatPemesan = alamatPemesanInput.value.trim();
+        const keteranganPesanan = keteranganPesananInput.value.trim();
+        const kasirName = localStorage.getItem('namaKasir') || '-';
+        const currentUserRole = localStorage.getItem('userRole');
+        const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+        const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
+        const kembalian = nominalPembayaran - totalBelanja;
+        if (keranjang.length === 0) {
+            return { success: false, message: 'Keranjang belanja masih kosong!' };
+        }
+        let message = 
+            `*STRUK TRANSAKSI HARINFOOD*\n` +
+            `----------------------------\n` +
+            `Nama: ${namaPemesan || '-'}\n` +
+            `Alamat: ${alamatPemesan || '-'}\n` +
+            (currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
+            `Tanggal: ${new Date().toLocaleDateString('id-ID')}\n` +
+            `Jam: ${new Date().toLocaleTimeString('id-ID')}\n`;
+        if (keteranganPesanan) {
+            message += `Catatan: ${keteranganPesanan}\n`;
+        }
+        message += `----------------------------\n`;
+        keranjang.forEach(item => {
+            message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
+        });
+        message += `----------------------------\n`;
+        message += `TOTAL: ${formatRupiah(totalBelanja)}\n`;
+        message += `Metode: ${paymentMethod}\n`;
+        message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
+        message += `Kembalian: ${formatRupiah(kembalian)}\n`;
+        return {
+            success: true,
+            message,
+            total: totalBelanja,
+            nominal: nominalPembayaran
+        };
+    }
+
+    function kirimWhatsappMessage(paymentMethod) {
+        const shareResult = generateShareMessage(paymentMethod);
+        if (!shareResult.success) {
+            alert(shareResult.message);
+            return;
+        }
+        let messageToSend = shareResult.message;
+        if (paymentMethod === 'QRIS') {
+            messageToSend += 
+                "\n\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk";
+        }
+        const encodedMessage = encodeURIComponent(messageToSend);
+        const whatsappURL = `https://wa.me/6281235368643?text=${encodedMessage}`;
+        window.open(whatsappURL, '_blank');
+        keranjang = [];
+        resetHargaProdukKeDefault();
+        updateKeranjang();
+        updateProdukControls();
+        namaPemesanInput.value = '';
+        alamatPemesanInput.value = '';
+        keteranganPesananInput.value = '';
+        nominalPembayaranInput.value = 0;
+        hitungKembalian();
+        updateActionButtonVisibility();
+        productSearchBarcodeInput.value = '';
+        productSearchBarcodeInput.focus();
+    }
+// ... kode lain tetap ...
 
     // Print Struk
     function printStruk(paymentMethod) {
@@ -564,13 +652,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         kirimWhatsappMessage('QRIS');
     });
-    pesanWhatsappPelangganBtn.addEventListener('click', () => {
-        if (keranjang.length === 0) {
-            alert('Keranjang belanja kosong. Harap tambahkan produk.');
-            return;
-        }
-        kirimWhatsappMessage('Tunai'); 
+pesanWhatsappPelangganBtn.addEventListener('click', () => {
+    if (keranjang.length === 0) {
+        alert('Keranjang belanja kosong. Harap tambahkan produk.');
+        return;
+    }
+    // Ambil data transaksi
+    const namaPemesan = namaPemesanInput.value.trim();
+    const alamatPemesan = alamatPemesanInput.value.trim();
+    const keteranganPesanan = keteranganPesananInput.value.trim();
+    const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+    const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
+    const kembalian = nominalPembayaran - totalBelanja;
+    let message =
+        `*STRUK TRANSAKSI HARINFOOD*\n` +
+        `----------------------------\n` +
+        `Nama: ${namaPemesan || '-'}\n` +
+        `Alamat: ${alamatPemesan || '-'}\n` +
+        `Tanggal: ${new Date().toLocaleDateString('id-ID')}\n` +
+        `Jam: ${new Date().toLocaleTimeString('id-ID')}\n`;
+    if (keteranganPesanan) {
+        message += `Catatan: ${keteranganPesanan}\n`;
+    }
+    message += `----------------------------\n`;
+    keranjang.forEach(item => {
+        message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
     });
+    message += `----------------------------\n`;
+    message += `TOTAL: ${formatRupiah(totalBelanja)}\n`;
+    message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
+    message += `Kembalian: ${formatRupiah(kembalian)}\n`;
+    message += `\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappURL = `https://wa.me/6281235368643?text=${encodedMessage}`;
+    window.open(whatsappURL, '_blank');
+    // Reset keranjang setelah pengiriman
+    keranjang = [];
+    resetHargaProdukKeDefault();
+    updateKeranjang();
+    updateProdukControls();
+    namaPemesanInput.value = '';
+    alamatPemesanInput.value = '';
+    keteranganPesananInput.value = '';
+    nominalPembayaranInput.value = 0;
+    hitungKembalian();
+    updateActionButtonVisibility();
+    productSearchBarcodeInput.value = '';
+    productSearchBarcodeInput.focus();
+});
     function kirimWhatsappMessage(paymentMethod) {
         // ... isi tetap, seperti di script asli ...
     }
