@@ -780,7 +780,57 @@ footer {
     right: 30px;
     background: var(--button-default-bg);
 }
-
+/* style.css - gunakan file asli, pastikan bagian FAB dan gambar produk ini ada: */
+.fab-button {
+    position: fixed;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8em;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+.fab-button:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+#kasir-fabs .fab-print { bottom: 380px; right: 30px; background: var(--btn-print-green-bg); }
+#kasir-fabs .fab-share { bottom: 310px; right: 30px; background: linear-gradient(45deg, #dc3545, #c82333); }
+#kasir-fabs .fab-manual { bottom: 240px; right: 30px; background: var(--button-manual-bg); }
+#kasir-fabs .fab-clear { bottom: 170px; right: 30px; background: var(--button-clear-bg); }
+.produk-item img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1em;
+    border: 2px solid var(--border-neon-color);
+    background: #111;
+    display: block;
+    max-width: 100%;
+    min-height: 0;
+}
+/* responsive FAB */
+@media (max-width: 768px) {
+    #kasir-fabs .fab-print  { bottom: 225px; right: 10px; }
+    #kasir-fabs .fab-share { bottom: 185px; right: 10px; }
+    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; }
+    #kasir-fabs .fab-clear  { bottom: 100px; right: 10px; }
+}
+@media (max-width: 480px) {
+    #kasir-fabs .fab-print  { bottom: 118px; right: 7px; }
+    #kasir-fabs .fab-share { bottom: 78px; right: 7px; }
+    #kasir-fabs .fab-manual { bottom: 43px; right: 7px; }
+    #kasir-fabs .fab-clear  { bottom: 7px;  right: 7px; }
+}
+/* ... sisanya biarkan seperti style asli anda ... */
 /* ====== Modal ====== */
 .modal {
     display: none;
