@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnBayarQris = document.getElementById('btn-bayar-qris');
     const shareOrderFab = document.getElementById('share-order-fab');
 
+
     // Referensi ke pop-up pilihan cetak
     const printOptionsPopup = document.getElementById('print-options-popup');
     const btnPrintTunai = document.getElementById('btn-print-tunai');
@@ -290,7 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- FUNGSI UNTUK MENANGANI PERUBAHAN HARGA ---
-    // UPDATE: sinkronisasi harga produk dan keranjang
     window.handlePriceChange = function(inputElement, produkId) {
         let newPrice = parseFloat(inputElement.value);
         if (isNaN(newPrice) || newPrice < 0) {
@@ -299,7 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const produk = produkData.find(p => p.id === produkId);
         if (produk) {
             produk.harga = newPrice;
-            // Sinkronisasi harga produk dan keranjang
             keranjang.forEach(item => {
                 if (!item.isManual && item.id === produkId) {
                     item.harga = newPrice;
@@ -315,6 +314,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isNaN(value)) value = 0;
         inputElement.value = value;
     };
+
+    // --- HARGA PRODUK EDITABLE: Kosong saat ditekan, Enter untuk simpan harga baru ---
+    produkList.addEventListener('focusin', function(e) {
+        const input = e.target;
+        if (input.classList.contains('product-price-input')) {
+            input.value = '';
+        }
+    });
+
+    produkList.addEventListener('keydown', function(e) {
+        const input = e.target;
+        if (input.classList.contains('product-price-input') && e.key === 'Enter') {
+            e.preventDefault();
+            const produkId = parseInt(input.dataset.id);
+            window.handlePriceChange(input, produkId);
+            input.blur();
+        }
+    });
 
     // --- EVENT QTY CONTROL DI MENU (DELEGASI) ---
     produkList.addEventListener('click', function(e) {
@@ -716,6 +733,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         printOptionsPopup.style.display = 'flex';
     });
+
+    // --- Event Listener untuk FAB PRINT (Tombol Cetak Mengambang) ---
+    if (printFab) {
+        printFab.addEventListener('click', () => {
+            if (keranjang.length === 0) {
+                alert('Keranjang belanja kosong. Tidak ada yang bisa dicetak.');
+                return;
+            }
+            printOptionsPopup.style.display = 'flex';
+        });
+    }
 
     // --- Event Listener untuk pilihan di pop-up Cetak Struk ---
     btnPrintTunai.addEventListener('click', () => {
