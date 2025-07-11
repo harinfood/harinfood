@@ -290,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- FUNGSI UNTUK MENANGANI PERUBAHAN HARGA ---
+    // UPDATE: sinkronisasi harga produk dan keranjang
     window.handlePriceChange = function(inputElement, produkId) {
         let newPrice = parseFloat(inputElement.value);
         if (isNaN(newPrice) || newPrice < 0) {
@@ -298,6 +299,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const produk = produkData.find(p => p.id === produkId);
         if (produk) {
             produk.harga = newPrice;
+            // Sinkronisasi harga produk dan keranjang
+            keranjang.forEach(item => {
+                if (!item.isManual && item.id === produkId) {
+                    item.harga = newPrice;
+                }
+            });
             saveHargaProdukToLocalStorage();
             updateKeranjang();
         }
