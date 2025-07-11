@@ -398,7 +398,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.nama}</td>
-                    <td><input type="number" value="${item.qty}" min="1" onchange="updateCartItemQty(${index}, this.value)"></td>
+                    <td>
+                        <input type="number" value="${item.qty}" min="1"
+                            onchange="updateCartItemQty(${index}, this.value)"
+                            onfocus="clearQtyOnFocus(this, ${index})"
+                        >
+                    </td>
                     <td>${formatRupiah(subtotal)}</td>
                     <td><button onclick="removeFromCart(${index})" class="btn-remove-item"><i class="fas fa-trash-alt"></i></button></td>
                 `;
@@ -421,6 +426,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         hitungKembalian();
     }
+
+    // --- FUNGSI BARU: QTY KOSONG SAAT DITEKAN ---
+    window.clearQtyOnFocus = function(inputElement, index) {
+        inputElement.value = '';
+    };
 
     window.updateCartItemQty = function(index, newQty) {
         let quantity = parseInt(newQty);
