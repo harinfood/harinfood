@@ -1037,118 +1037,123 @@ footer {
 @media print {
     body * {
         visibility: hidden !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        box-shadow: none !important;
         background: none !important;
     }
     #print-area, #print-area * {
         visibility: visible !important;
         color: #000 !important;
-        font-family: 'Poppins', sans-serif !important;
-        font-size: 10px !important;
-        line-height: 1.2 !important;
-        font-weight: normal !important;
+        background: none !important;
+        font-family: 'Arial', 'Poppins', sans-serif !important;
+        font-size: 15px !important;         /* Ukuran font diperbesar, tetap proporsional */
+        line-height: 1.35 !important;
+        font-weight: bold !important;       /* Semua diperbesar dan tebal */
     }
     #print-area {
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;
         width: 58mm !important;
-        padding: 5mm !important;
-        box-sizing: border-box !important;
-        background: white !important;
+        min-width: 58mm !important;
+        max-width: 58mm !important;
+        padding: 2mm 2mm 0 2mm !important;
+        background: #fff !important;
         margin: 0 !important;
     }
     .print-header {
         text-align: center !important;
-        margin-bottom: 5px !important;
+        margin-bottom: 3px !important;
         border-bottom: 1px dashed #000 !important;
-        padding-bottom: 5px !important;
+        padding-bottom: 3px !important;
+        font-size: 1.25em !important;
+        font-weight: bold !important;
     }
     .print-header .shop-name-print {
-        margin: 0 !important;
-        font-size: 1.5em !important;
-        line-height: 1.2 !important;
-        font-weight: normal !important;
+        font-size: 1.3em !important;
+        font-weight: bold !important;
+        letter-spacing: 1px !important;
     }
     .print-header .shop-address-print,
     .print-header .shop-phone-print {
-        margin: 0 !important;
-        font-size: 1.1em !important;
-        line-height: 1.2 !important;
-        font-weight: normal !important;
-    }
-    .print-info {
-        text-align: left !important;
-        margin-top: 5px !important;
-        margin-bottom: 5px !important;
+        font-size: 1em !important;
+        font-weight: bold !important;
     }
     .print-info p {
         margin: 0 !important;
         font-size: 1em !important;
-        line-height: 1.2 !important;
-        font-weight: normal !important;
+        font-weight: bold !important;
     }
     .print-notes {
         margin-top: 5px !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 8px !important;
         font-size: 1em !important;
-        font-weight: normal !important;
+        font-weight: bold !important;
         padding-top: 5px !important;
     }
     hr {
-        border: 0.5px dashed #000 !important;
+        border: none !important;
+        border-bottom: 1.5px dashed #000 !important;
         height: 0 !important;
-        margin: 8px 0 !important;
+        margin: 5px 0 !important;
     }
-    table { width: 100% !important; border-collapse: collapse !important; margin: 5px 0 !important; }
-    table thead { display: none !important; }
-    table tbody tr { page-break-inside: avoid !important; }
-    table td {
-        padding: 1px 0 !important;
-        text-align: left !important;
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
         font-size: 1em !important;
-        font-weight: normal !important;
+        font-weight: bold !important;
+    }
+    table thead { display: none !important; }
+    table tr { page-break-inside: avoid !important; }
+    table td {
+        padding: 2px 0 !important;
+        font-size: 1em !important;
+        vertical-align: top !important;
+        font-weight: bold !important;
     }
     table td:nth-child(1) {
-        width: 70% !important;
-        word-wrap: break-word !important;
-        font-weight: normal !important;
+        width: 60% !important;
+        text-align: left !important;
+        font-weight: bold !important;
+        word-break: break-word !important;
     }
     table td:nth-child(2) {
-        width: 30% !important;
+        width: 40% !important;
         text-align: right !important;
-        font-weight: normal !important;
+        font-weight: bold !important;
     }
     .total-row {
-        font-size: 1.1em !important;
-        font-weight: normal !important;
+        font-size: 1.15em !important;
+        font-weight: bold !important;
         text-align: right !important;
         margin-top: 5px !important;
+        border-top: 1.5px solid #000 !important;
         padding-top: 5px !important;
-        padding-bottom: 5px !important;
     }
-    .total-row span { float: left !important; }
+    .total-row span {
+        float: left !important;
+        font-weight: bold !important;
+    }
     .print-payment-info {
         font-size: 1em !important;
-        font-weight: normal !important;
+        font-weight: bold !important;
         text-align: right !important;
         margin: 2px 0 !important;
     }
-    .print-payment-info span { float: left !important; }
+    .print-payment-info span {
+        float: left !important;
+        font-weight: bold !important;
+    }
     .thank-you {
         text-align: center !important;
-        margin-top: 15px !important;
+        margin-top: 8px !important;
         font-size: 1em !important;
-        line-height: 1.4 !important;
-        font-weight: normal !important;
+        font-style: italic !important;
+        font-weight: bold !important;
     }
     #print-area img {
-        max-width: 100% !important;
-        width: 45mm !important;
-        height: auto !important;
         display: block !important;
-        margin: 0 auto !important;
-        padding-bottom: 5px !important;
+        margin: 0 auto 4px auto !important;
+        max-width: 40mm !important;
+        height: auto !important;
     }
 }
