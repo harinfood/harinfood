@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         message += `----------------------------\n`;
         message += `TOTAL: ${formatRupiah(totalSetelahDiskon)}\n`;
-        message += `Metode: ${paymentMethod}\n`;
+        /*message += `Metode: ${paymentMethod}\n`;*/
         message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
         message += `Kembalian: ${formatRupiah(kembalian)}\n`;
         return {
