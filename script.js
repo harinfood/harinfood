@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return { success: false, message: 'Keranjang belanja masih kosong!' };
         }
         let message =
-`*KEDAI HARINFOOD*\n` +
+`*KEDAI HARINFOOD*\n` + // <--- JUDUL INI HANYA UNTUK WHATSAPP, AKAN DIHAPUS DI CETAK!
 `Nama: ${namaPemesan || '-'}\n` +
 `Alamat: ${alamatPemesan || '-'}\n` +
 (currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
@@ -554,9 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰";
         const qrisImagePath = "qris.webp";
-        // Hapus baris STRUK TRANSAKSI HARINFOOD di hasil cetak
-        // dan hapus juga footer text terakhir jika sudah ada, agar tidak dobel
-        let isiTanpaHeader = shareResult.message.replace(/^\*STRUK TRANSAKSI HARINFOOD\*\n/, '');
+        // Hapus baris KEDAI HARINFOOD di hasil cetak dan juga footer terakhir jika sudah ada
+        let isiTanpaHeader = shareResult.message.replace(/^\*KEDAI HARINFOOD\*\n/, ''); // Ganti di sini!
         isiTanpaHeader = isiTanpaHeader.replace(/----------------------------\nTerima kasih sehat selalu ya [^\n]+$/g, '');
         let printContent = `
             <html>
