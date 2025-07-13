@@ -542,6 +542,11 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.focus();
     });
 
+    // Pembaruan: QRIS BUTTON selalu buka link QRIS
+    btnBayarQris.addEventListener('click', () => {
+        window.open('https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk', '_blank');
+    });
+
     function printStruk(paymentMethod) {
         const shareResult = generateStrukText(paymentMethod);
         if (!shareResult.success) {
