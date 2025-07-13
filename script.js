@@ -122,6 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
         namaPemesanModal.style.display = 'none';
         autofillNamaPemesanForm();
     };
+    inputNamaPemesan.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('btnSimpanNamaPemesan').click();
+        }
+    });
+
     function autofillNamaPemesanForm() {
         const nama = localStorage.getItem('namaPemesan') || '';
         const alamat = localStorage.getItem('alamatPelanggan') || '';
@@ -151,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         paymentChoiceButtons.style.display = 'flex';
     }
 
-    // --- Produk dan Keranjang (fungsi2 tetap seperti skrip sebelumnya) ---
+    // --- Produk dan Keranjang ---
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
@@ -225,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             input.blur();
         }
     });
+
     produkList.addEventListener('click', function(e) {
         const btn = e.target.closest('button');
         if (!btn) return;
@@ -422,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return { success: false, message: 'Keranjang belanja masih kosong!' };
         }
         let message =
-`*KEDAI HARINFOOD*\n` + // <--- JUDUL INI HANYA UNTUK WHATSAPP, AKAN DIHAPUS DI CETAK!
+`*KEDAI HARINFOOD*\n` +
 `Nama: ${namaPemesan || '-'}\n` +
 `Alamat: ${alamatPemesan || '-'}\n` +
 (currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
@@ -554,8 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰";
         const qrisImagePath = "qris.webp";
-        // Hapus baris KEDAI HARINFOOD di hasil cetak dan juga footer terakhir jika sudah ada
-        let isiTanpaHeader = shareResult.message.replace(/^\*KEDAI HARINFOOD\*\n/, ''); // Ganti di sini!
+        let isiTanpaHeader = shareResult.message.replace(/^\*KEDAI HARINFOOD\*\n/, '');
         isiTanpaHeader = isiTanpaHeader.replace(/----------------------------\nTerima kasih sehat selalu ya [^\n]+$/g, '');
         let printContent = `
             <html>
@@ -682,13 +689,31 @@ document.addEventListener('DOMContentLoaded', () => {
         printOptionsPopup.style.display = 'none';
     });
 
-    // ... sisanya (manual order, barcode, reset, dsb) sama seperti sebelumnya ...
+    // === Modal manual order dengan ENTER "Tab" ke field selanjutnya ===
     addManualOrderFab.addEventListener('click', () => {
         manualOrderModal.style.display = 'flex';
         manualProductNameInput.value = '';
         manualProductPriceInput.value = '';
         manualProductQtyInput.value = '1';
         manualProductNameInput.focus();
+    });
+    manualProductNameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            manualProductPriceInput.focus();
+        }
+    });
+    manualProductPriceInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            manualProductQtyInput.focus();
+        }
+    });
+    manualProductQtyInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            window.addManualOrderItem();
+        }
     });
     window.closeManualOrderModal = function() {
         manualOrderModal.style.display = 'none';
@@ -714,8 +739,8 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.focus(); 
     };
 
-    productSearchBarcodeInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
+    productSearchBarcodeInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
             e.preventDefault(); 
             const query = productSearchBarcodeInput.value.trim();
             if (query) {
@@ -754,6 +779,42 @@ document.addEventListener('DOMContentLoaded', () => {
             if (printFab) printFab.style.display = 'flex';
         }
     }
+
+    // === SHORTCUT KEYBOARD KASIR (F1, F2, F3, F4) ===
+    // F1: Cetak Struk, F2: Share, F3: Tambah Pesanan Manual, F4: Hapus Keranjang
+    document.addEventListener('keydown', function(e) {
+        const currentUserRole = localStorage.getItem('userRole');
+        const manualOrderOpen = manualOrderModal && manualOrderModal.style.display === 'flex';
+        if (currentUserRole !== 'kasir' || manualOrderOpen) return;
+
+        // F1 -> Cetak Struk
+        if (e.key === 'F1') {
+            e.preventDefault();
+            if (keranjang.length > 0 && printFab) {
+                printFab.click();
+            }
+        }
+
+        // F2 -> Share WhatsApp
+        if (e.key === 'F2') {
+            e.preventDefault();
+            if (keranjang.length > 0 && shareOrderFab) {
+                shareOrderFab.click();
+            }
+        }
+
+        // F3 -> Tambah Pesanan Manual
+        if (e.key === 'F3') {
+            e.preventDefault();
+            if (addManualOrderFab) addManualOrderFab.click();
+        }
+
+        // F4 -> Hapus Keranjang
+        if (e.key === 'F4') {
+            e.preventDefault();
+            if (clearCartFab) clearCartFab.click();
+        }
+    });
 
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
