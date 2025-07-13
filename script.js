@@ -542,7 +542,6 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.focus();
     });
 
-    // Pembaruan: QRIS BUTTON selalu buka link QRIS
     btnBayarQris.addEventListener('click', () => {
         window.open('https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk', '_blank');
     });
@@ -556,7 +555,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰";
         const qrisImagePath = "qris.webp";
         // Hapus baris STRUK TRANSAKSI HARINFOOD di hasil cetak
-        const isiTanpaHeader = shareResult.message.replace(/^\*STRUK TRANSAKSI HARINFOOD\*\n/, ''); 
+        // dan hapus juga footer text terakhir jika sudah ada, agar tidak dobel
+        let isiTanpaHeader = shareResult.message.replace(/^\*STRUK TRANSAKSI HARINFOOD\*\n/, '');
+        isiTanpaHeader = isiTanpaHeader.replace(/----------------------------\nTerima kasih sehat selalu ya [^\n]+$/g, '');
         let printContent = `
             <html>
             <head>
@@ -594,12 +595,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 </style>
                 <script>
-                    window.onload = function() {
-                        window.print();
-                    };
-                    window.onpageshow = function(event) {
-                        if (event.persisted) window.print();
-                    };
                     function shareWhatsApp() {
                         var msg = encodeURIComponent(\`${shareResult.message}\`);
                         window.open('https://wa.me/?text=' + msg, '_blank');
@@ -630,8 +625,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         printContent += `
             <div class="print-actions">
+                <button onclick="cetakUlang()">Cetak Struk</button>
                 <button onclick="shareWhatsApp()">Bagikan via WhatsApp</button>
-                <button onclick="cetakUlang()">Cetak Ulang</button>
             </div>
         `;
         printContent += `</div></body></html>`;
