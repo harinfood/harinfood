@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Semua deklarasi variabel DOM ---
     const loginPopup = document.getElementById('login-popup');
     const btnPelanggan = document.getElementById('btn-pelanggan');
     const btnKasir = document.getElementById('btn-kasir');
@@ -39,12 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchBarcodeFeedback = document.getElementById('search-barcode-feedback');
     const namaPemesanModal = document.getElementById('namaPemesanModal');
     const inputNamaPemesan = document.getElementById('inputNamaPemesan');
-    // Diskon hanya untuk kasir
     const diskonSection = document.getElementById('diskon-section');
     const namaDiskonInput = document.getElementById('nama-diskon');
     const nilaiDiskonInput = document.getElementById('nilai-diskon');
 
-    // Data Produk
+    // --- Data Produk ---
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "0674448829853" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextManualItemId = 1000;
     let isNominalInputFocused = false;
 
-    // RESET HARGA PRODUK KE DEFAULT
     function resetHargaProdukKeDefault() {
         produkDefaultHarga.forEach(def => {
             const produk = produkData.find(p => p.id === def.id);
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('produkHarga');
     }
 
-    // LOGIN LOGIC
+    // --- Login & App Init ---
     btnPelanggan.addEventListener('click', () => {
         formPelanggan.style.display = 'flex';
         formKasir.style.display = 'none';
@@ -115,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Modal Nama Pemesan
     document.getElementById('btnSimpanNamaPemesan').onclick = function() {
         var nama = inputNamaPemesan.value.trim();
         if (nama.length < 2) { return; }
@@ -130,8 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (namaPemesanInput) namaPemesanInput.value = nama;
         if (alamatPemesanInput) alamatPemesanInput.value = alamat;
     }
-
-    // Inisialisasi aplikasi
     function initializeApp() {
         const currentUserRole = localStorage.getItem('userRole');
         if (currentUserRole === 'kasir') {
@@ -155,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         paymentChoiceButtons.style.display = 'flex';
     }
 
-    // Produk
+    // --- Produk dan Keranjang (fungsi2 tetap seperti skrip sebelumnya) ---
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
@@ -311,7 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 keranjangItems.appendChild(row);
             });
         }
-        // Diskon hanya untuk kasir
         let totalSetelahDiskon = total;
         if (localStorage.getItem('userRole') === 'kasir') {
             let diskon = parseFloat(nilaiDiskonInput.value) || 0;
@@ -320,7 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         keranjangTotal.textContent = formatRupiah(totalSetelahDiskon);
 
-        // Autofill nominal pembayaran sesuai total setelah diskon
         const totalBelanjaNumeric = totalSetelahDiskon;
         if (!isNominalInputFocused) {
             const currentNominalValueNumeric = parseFloat(nominalPembayaranInput.value) || 0;
@@ -336,13 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         hitungKembalian();
     }
-    nilaiDiskonInput.addEventListener('input', () => {
-        updateKeranjang();
-    });
-    namaDiskonInput.addEventListener('input', () => {
-        // Optional: jika mau update preview di keranjang/struk
-    });
 
+    nilaiDiskonInput.addEventListener('input', updateKeranjang);
     window.clearQtyOnFocus = function(inputElement, index) { inputElement.value = ''; };
     window.updateCartItemQty = function(index, newQty) {
         let quantity = parseInt(newQty);
@@ -413,20 +402,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }).format(number);
     }
 
-    // FAB Print
-    if (printFab) {
-        printFab.addEventListener('click', () => {
-            if (keranjang.length === 0) {
-                alert('Keranjang belanja kosong. Tidak ada yang bisa dicetak.');
-                return;
-            }
-            printOptionsPopup.style.display = 'flex';
+    // == FUNGSI STRUK, CETAK & SHARE ==
+    function generateStrukText(paymentMethod) {
+        const namaPemesan = namaPemesanInput.value.trim();
+        const alamatPemesan = alamatPemesanInput.value.trim();
+        const keteranganPesanan = keteranganPesananInput.value.trim();
+        const kasirName = localStorage.getItem('namaKasir') || '-';
+        const currentUserRole = localStorage.getItem('userRole');
+        const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+        let diskonNama = '', diskonNilai = 0;
+        if (currentUserRole === 'kasir') {
+            diskonNama = namaDiskonInput.value.trim() || '-';
+            diskonNilai = parseFloat(nilaiDiskonInput.value) || 0;
+        }
+        const totalSetelahDiskon = Math.max(totalBelanja - diskonNilai, 0);
+        const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
+        const kembalian = nominalPembayaran - totalSetelahDiskon;
+        if (keranjang.length === 0) {
+            return { success: false, message: 'Keranjang belanja masih kosong!' };
+        }
+        let message =
+`*STRUK TRANSAKSI HARINFOOD*\n` +
+`Nama: ${namaPemesan || '-'}\n` +
+`Alamat: ${alamatPemesan || '-'}\n` +
+(currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
+`Tanggal: ${new Date().toLocaleDateString('id-ID')}\n` +
+`Jam: ${new Date().toLocaleTimeString('id-ID')}\n`;
+        if (keteranganPesanan) {
+            message += `Catatan: ${keteranganPesanan}\n`;
+        }
+        message += `----------------------------\n`;
+        keranjang.forEach(item => {
+            message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
         });
+        if (currentUserRole === 'kasir' && diskonNilai > 0) {
+            message += `----------------------------\n`;
+            message += `Diskon (${diskonNama}): -${formatRupiah(diskonNilai)}\n`;
+        }
+        message += `----------------------------\n`;
+        message += `TOTAL: ${formatRupiah(totalSetelahDiskon)}\n`;
+        message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
+        message += `Kembalian: ${formatRupiah(kembalian)}\n`;
+        message += `----------------------------\nTerima kasih sehat selalu ya 🤲 🙏🥰`;
+        return {
+            success: true,
+            message,
+            total: totalSetelahDiskon,
+            nominal: nominalPembayaran
+        };
     }
 
-    // FAB Share
     shareOrderFab.addEventListener('click', async () => {
-        const shareResult = generateShareMessage('Tunai');
+        const shareResult = generateStrukText('Tunai');
         if (!shareResult.success) {
             alert(shareResult.message);
             return;
@@ -485,18 +512,12 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.focus();
     });
 
-    // QRIS Button - langsung buka link QRIS
-    btnBayarQris.addEventListener('click', () => {
-        window.open('https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk', '_blank');
-    });
-
-    // WhatsApp Button tetap seperti semula
     pesanWhatsappPelangganBtn.addEventListener('click', () => {
         if (keranjang.length === 0) {
             alert('Keranjang belanja kosong. Harap tambahkan produk.');
             return;
         }
-        const shareResult = generateShareMessage('Tunai');
+        const shareResult = generateStrukText('Tunai');
         if (!shareResult.success) {
             alert(shareResult.message);
             return;
@@ -521,144 +542,93 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.focus();
     });
 
-    function generateShareMessage(paymentMethod) {
-        const namaPemesan = namaPemesanInput.value.trim();
-        const alamatPemesan = alamatPemesanInput.value.trim();
-        const keteranganPesanan = keteranganPesananInput.value.trim();
-        const kasirName = localStorage.getItem('namaKasir') || '-';
-        const currentUserRole = localStorage.getItem('userRole');
-        const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
-        let diskonNama = '', diskonNilai = 0;
-        if (currentUserRole === 'kasir') {
-            diskonNama = namaDiskonInput.value.trim() || '-';
-            diskonNilai = parseFloat(nilaiDiskonInput.value) || 0;
-        }
-        const totalSetelahDiskon = Math.max(totalBelanja - diskonNilai, 0);
-        const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
-        const kembalian = nominalPembayaran - totalSetelahDiskon;
-        if (keranjang.length === 0) {
-            return { success: false, message: 'Keranjang belanja masih kosong!' };
-        }
-        let message =
-            `*STRUK TRANSAKSI HARINFOOD*\n` +
-            `----------------------------\n` +
-            `Nama: ${namaPemesan || '-'}\n` +
-            `Alamat: ${alamatPemesan || '-'}\n` +
-            (currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
-            `Tanggal: ${new Date().toLocaleDateString('id-ID')}\n` +
-            `Jam: ${new Date().toLocaleTimeString('id-ID')}\n`;
-        if (keteranganPesanan) {
-            message += `Catatan: ${keteranganPesanan}\n`;
-        }
-        message += `----------------------------\n`;
-        keranjang.forEach(item => {
-            message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
-        });
-        if (currentUserRole === 'kasir' && diskonNilai > 0) {
-            message += `----------------------------\n`;
-            message += `Diskon (${diskonNama}): -${formatRupiah(diskonNilai)}\n`;
-        }
-        message += `----------------------------\n`;
-        message += `TOTAL: ${formatRupiah(totalSetelahDiskon)}\n`;
-        /*message += `Metode: ${paymentMethod}\n`;*/
-        message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
-        message += `Kembalian: ${formatRupiah(kembalian)}\n`;
-        return {
-            success: true,
-            message,
-            total: totalSetelahDiskon,
-            nominal: nominalPembayaran
-        };
-    }
-
     function printStruk(paymentMethod) {
-        const namaPemesan = namaPemesanInput.value.trim();
-        const alamatPemesan = alamatPemesanInput.value.trim();
-        const keteranganPesanan = keteranganPesananInput.value.trim();
-        const kasirName = localStorage.getItem('namaKasir') || '-';
-        const currentUserRole = localStorage.getItem('userRole');
-        const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
-        let diskonNama = '', diskonNilai = 0;
-        if (currentUserRole === 'kasir') {
-            diskonNama = namaDiskonInput.value.trim() || '-';
-            diskonNilai = parseFloat(nilaiDiskonInput.value) || 0;
-        }
-        const totalSetelahDiskon = Math.max(totalBelanja - diskonNilai, 0);
-        const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
-        const kembalian = nominalPembayaran - totalSetelahDiskon;
-        if (keranjang.length === 0) {
-            alert('Keranjang belanja masih kosong!');
+        const shareResult = generateStrukText(paymentMethod);
+        if (!shareResult.success) {
+            alert(shareResult.message);
             return false;
         }
-        if (nominalPembayaran < totalSetelahDiskon && paymentMethod === 'Tunai') {
-            alert('Nominal pembayaran kurang dari total belanja.');
-            return false;
-        }
-        const defaultShopName = "HARINFOOD";
-        const displayPhoneNumber = "081235368643";
-        const defaultAddress = "Jl Ender Rakit - Gedongan";
         const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰";
         const qrisImagePath = "qris.webp";
-        const tanggalWaktu = new Date();
-        const formattedDate = tanggalWaktu.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const formattedTime = tanggalWaktu.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        // Hapus baris STRUK TRANSAKSI HARINFOOD di hasil cetak
+        const isiTanpaHeader = shareResult.message.replace(/^\*STRUK TRANSAKSI HARINFOOD\*\n/, ''); 
         let printContent = `
             <html>
             <head>
                 <title>Struk Belanja</title>
+                <meta name="viewport" content="width=58mm, initial-scale=1">
                 <link rel="stylesheet" href="style.css">
+                <style>
+                    @media print {
+                        .print-actions { display: none !important; }
+                    }
+                    .print-actions {
+                        text-align: center;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                    }
+                    .print-actions button {
+                        padding: 10px 16px;
+                        font-size: 1.1em;
+                        border-radius: 8px;
+                        margin: 0 4px;
+                        background: #00b0ff;
+                        color: #fff;
+                        border: none;
+                        cursor: pointer;
+                    }
+                    .print-actions button:active {
+                        background: #0072a3;
+                    }
+                    .print-header {
+                        text-align: center !important;
+                        margin-bottom: 10px;
+                    }
+                    .print-header p {
+                        margin: 0;
+                    }
+                </style>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                    };
+                    window.onpageshow = function(event) {
+                        if (event.persisted) window.print();
+                    };
+                    function shareWhatsApp() {
+                        var msg = encodeURIComponent(\`${shareResult.message}\`);
+                        window.open('https://wa.me/?text=' + msg, '_blank');
+                    }
+                    function cetakUlang() {
+                        window.print();
+                    }
+                <\/script>
             </head>
             <body>
                 <div id="print-area">
                     <div class="print-header">
-                        <p class="shop-name-print">${defaultShopName}</p>
-                        <p class="shop-address-print">${defaultAddress}</p>
-                        <p class="shop-phone-print">${displayPhoneNumber}</p>
+                        <p class="shop-name-print"><b>HARINFOOD</b></p>
+                        <p class="shop-address-print">Jl Ender Rakit - Gedongan</p>
+                        <p class="shop-phone-print">081235368643</p>
                     </div>
-                    <div class="print-info">
-                        ${currentUserRole === 'kasir' ? `<p>Kasir: ${kasirName}</p>` : ''}
-                        <p>Pelanggan: ${namaPemesan || '-'}</p>
-                        <p>Alamat: ${alamatPemesan || '-'}</p>
-                        <p>Tanggal: ${formattedDate}</p>
-                        <p>Jam: ${formattedTime}</p>
-                    </div>
-        `;
-        if (keteranganPesanan) {
-            printContent += `
-                    <div class="print-notes">
-                        <p>Catatan: ${keteranganPesanan}</p>
-                    </div>
-            `;
-        }
-        printContent += `
-                    <hr>
-                    <table><tbody>
-        `;
-        keranjang.forEach(item => {
-            const subtotal = item.harga * item.qty;
-            printContent += `<tr><td>${item.nama} (${item.qty}x)</td><td style="text-align:right;">${formatRupiah(subtotal)}</td></tr>`;
-        });
-        if (currentUserRole === 'kasir' && diskonNilai > 0) {
-            printContent += `<tr><td>Diskon (${diskonNama})</td><td style="text-align:right;">-${formatRupiah(diskonNilai)}</td></tr>`;
-        }
-        printContent += `
-                    </tbody></table>
-                    <hr>
-                    <p class="total-row"><span>TOTAL:</span> ${formatRupiah(totalSetelahDiskon)}</p>
-
-                    <p class="print-payment-info"><span>BAYAR:</span> ${formatRupiah(nominalPembayaran)}</p>
-                    <p class="print-payment-info"><span>KEMBALIAN:</span> ${formatRupiah(kembalian)}</p>
+                    <pre style="font-family:inherit;font-size:inherit;white-space:pre-wrap;">${isiTanpaHeader}</pre>
         `;
         if (paymentMethod === 'QRIS') {
             printContent += `
-                    <div style="text-align: center; margin-top: 10px; margin-bottom: 5px;">
-                        <img src="${qrisImagePath}" alt="QRIS Code" style="width: 45mm; height: auto; display: block; margin: 0 auto; padding-bottom: 5px;">
-                    </div>
+                <div style="text-align: center; margin-top: 10px; margin-bottom: 5px;">
+                    <img src="${qrisImagePath}" alt="QRIS Code" style="width: 45mm; height: auto; display: block; margin: 0 auto; padding-bottom: 5px;">
+                </div>
+                <p class="thank-you">${defaultFooterText} - Scan QRIS Untuk Pembayaran</p>
             `;
-            printContent += `<p class="thank-you">${defaultFooterText} - Scan QRIS Untuk Pembayaran</p>`;
         } else {
             printContent += `<p class="thank-you">${defaultFooterText}</p>`;
         }
+        printContent += `
+            <div class="print-actions">
+                <button onclick="shareWhatsApp()">Bagikan via WhatsApp</button>
+                <button onclick="cetakUlang()">Cetak Ulang</button>
+            </div>
+        `;
         printContent += `</div></body></html>`;
         const printWindow = window.open('', '_blank');
         printWindow.document.write(printContent);
@@ -685,6 +655,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
+    if (printFab) {
+        printFab.addEventListener('click', () => {
+            if (keranjang.length === 0) {
+                alert('Keranjang belanja kosong. Tidak ada yang bisa dicetak.');
+                return;
+            }
+            printOptionsPopup.style.display = 'flex';
+        });
+    }
     cetakStrukButton.addEventListener('click', () => {
         if (keranjang.length === 0) {
             alert('Keranjang belanja kosong. Tidak ada yang bisa dicetak.');
@@ -704,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
         printOptionsPopup.style.display = 'none';
     });
 
-    // FAB Manual Order Modal
+    // ... sisanya (manual order, barcode, reset, dsb) sama seperti sebelumnya ...
     addManualOrderFab.addEventListener('click', () => {
         manualOrderModal.style.display = 'flex';
         manualProductNameInput.value = '';
@@ -736,7 +715,6 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.focus(); 
     };
 
-    // Barcode Scan
     productSearchBarcodeInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault(); 
@@ -765,7 +743,6 @@ document.addEventListener('DOMContentLoaded', () => {
         searchBarcodeFeedback.textContent = '';
     });
 
-    // Visibilitas tombol (FAB Print khusus kasir)
     function updateActionButtonVisibility() {
         const currentUserRole = localStorage.getItem('userRole');
         if (currentUserRole === 'pelanggan') {
@@ -779,7 +756,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Inisialisasi awal
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
         loginPopup.style.display = 'none';
