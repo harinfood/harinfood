@@ -1035,19 +1035,47 @@ footer {
 
 /* ====== PRINT STRUK ====== */
 @media print {
+.print-header {
+        text-align: center !important;
+        margin-bottom: 1px !important;
+        border-bottom: 1px dashed #000 !important;
+        padding-bottom: 2px !important;
+        font-size: 1.25em !important;
+        font-weight: bold !important;
+        line-height: 1.05 !important; /* <-- Tambahkan/ubah baris ini */
+    }
+    .print-header .shop-name-print,
+    .print-header .shop-address-print,
+    .print-header .shop-phone-print {
+        font-size: 1.05em !important;
+        font-weight: bold !important;
+        margin: 0 !important;
+        line-height: 1.05 !important; /* <-- Tambahkan/ubah baris ini */
+        padding: 0 !important;
+    }
+    html, body {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
     body * {
         visibility: hidden !important;
         box-shadow: none !important;
         background: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     #print-area, #print-area * {
         visibility: visible !important;
         color: #000 !important;
         background: none !important;
         font-family: 'Arial', 'Poppins', sans-serif !important;
-        font-size: 15px !important;         /* Ukuran font diperbesar, tetap proporsional */
+        font-size: 15px !important;
         line-height: 1.35 !important;
-        font-weight: bold !important;       /* Semua diperbesar dan tebal */
+        font-weight: bold !important;
+        letter-spacing: 0.03em !important;
     }
     #print-area {
         position: absolute !important;
@@ -1059,6 +1087,15 @@ footer {
         padding: 2mm 2mm 0 2mm !important;
         background: #fff !important;
         margin: 0 !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        height: auto !important;
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        page-break-inside: avoid !important;
+        break-after: avoid-page !important;
+        break-before: avoid-page !important;
+        break-inside: avoid-page !important;
     }
     .print-header {
         text-align: center !important;
