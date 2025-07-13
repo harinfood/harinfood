@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return { success: false, message: 'Keranjang belanja masih kosong!' };
         }
         let message =
-`*STRUK TRANSAKSI HARINFOOD*\n` +
+`*KEDAI HARINFOOD*\n` +
 `Nama: ${namaPemesan || '-'}\n` +
 `Alamat: ${alamatPemesan || '-'}\n` +
 (currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
