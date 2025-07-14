@@ -1104,4 +1104,22 @@ const dapurFab = document.getElementById('dapur-fab');
             dapurStrukModal.style.display = 'none';
         }, 300);
     };
+// Tambahkan kode berikut di bagian paling bawah file script.js (atau setelah semua event 'DOMContentLoaded')
+
+document.addEventListener('keydown', function(e) {
+  // Pastikan user adalah kasir & modal manual tidak terbuka
+  const currentUserRole = localStorage.getItem('userRole');
+  const manualOrderModal = document.getElementById('manualOrderModal');
+  const manualOrderOpen = manualOrderModal && manualOrderModal.style.display === 'flex';
+  if (currentUserRole !== 'kasir' || manualOrderOpen) return;
+
+  // Tambahan: F12 untuk FAB Dapur
+  if (e.key === "F12") {
+    e.preventDefault();
+    const dapurFab = document.getElementById('dapur-fab');
+    if (dapurFab && dapurFab.style.display !== "none") {
+      dapurFab.click();
+    }
+  }
+})
 });
