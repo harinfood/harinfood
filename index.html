@@ -129,6 +129,10 @@
             <div class="fab-button fab-clear" id="clear-cart-fab" title="Bersihkan Keranjang">
                 <i class="fas fa-trash"></i>
             </div>
+            <!-- FAB Keranjang Belanjaan (Trolly/Wheel) -->
+            <div class="fab-button fab-cart" id="cart-fab" title="Keranjang Belanjaan">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
         </div>
         <!-- Modal Pesanan Manual -->
         <div id="manualOrderModal" class="modal">
@@ -142,6 +146,40 @@
                 <label for="manualProductQty">Kuantitas:</label>
                 <input type="number" id="manualProductQty" min="1" value="1" required>
                 <button onclick="addManualOrderItem()">Tambahkan ke Keranjang</button>
+            </div>
+        </div>
+        <!-- Popup Keranjang Belanjaan Floating (Trolly) -->
+        <div id="popup-keranjang" style="display:none;">
+            <div class="popup-keranjang-content">
+                <button id="close-popup-keranjang" title="Tutup" style="position:absolute;right:10px;top:10px;font-size:1.5em;background:none;border:none;cursor:pointer;">&times;</button>
+                <h2 style="margin-top:0;margin-bottom:10px;"><i class="fas fa-shopping-cart"></i> Keranjang Belanjaan</h2>
+                <div style="max-height:240px;overflow:auto;">
+                    <table class="popup-keranjang-table" style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Qty</th>
+                                <th>Subtotal</th>
+                                <th>Hapus</th>
+                            </tr>
+                        </thead>
+                        <tbody id="popup-keranjang-items"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top:10px;">
+                    <strong>Total: <span id="popup-keranjang-total">Rp0</span></strong>
+                </div>
+                <!-- Tambahan: Nominal pembayaran dan kembalian -->
+                <div class="pembayaran-section-inline" style="margin-top:10px;">
+                    <label for="popup-keranjang-nominal">Nominal Pembayaran:</label>
+                    <input type="number" id="popup-keranjang-nominal" min="0" value="0">
+                    <p>Kembalian: <span id="popup-kembalian-display">Rp0</span></p>
+                </div>
+                <div style="margin-top:10px;text-align:right;">
+                    <button id="popup-keranjang-print" style="background:#007bff;color:#fff;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;">
+                        <i class="fas fa-print"></i> Cetak Struk
+                    </button>
+                </div>
             </div>
         </div>
     </div>

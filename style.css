@@ -1,13 +1,8 @@
-/* Import font Poppins dan Robote Mono (sudah ada) */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
-
-/* Font untuk judul login */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700;900&display=swap');
 
-
-/* ====== Variabel Utama ====== */
 :root {
     --primary-bg-color: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     --secondary-bg-color: rgba(255, 255, 255, 0.08);
@@ -29,13 +24,7 @@
     --btn-qris-bg: linear-gradient(45deg, #007bff, #00b0ff);
     --btn-tunai-bg: linear-gradient(45deg, #ffc107, #e0a800);
     --btn-print-green-bg: linear-gradient(45deg, #28a745, #1e7e34);
-
     --border-radius: 8px;
-}
-
-/* ====== Global ====== */
-html {
-    /* Font-size default browser akan digunakan (biasanya 16px) */
 }
 
 body {
@@ -44,7 +33,6 @@ body {
     background: var(--primary-bg-color);
     color: var(--text-primary-color);
     line-height: 1.6;
-    scroll-behavior: smooth;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -68,8 +56,6 @@ footer {
     border-top: 3px solid var(--border-neon-color);
     box-shadow: 0 -4px 15px var(--shadow-neon-color);
 }
-
-/* ====== Layout ====== */
 .main-layout {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -79,7 +65,6 @@ footer {
     margin: 1em auto;
     flex-grow: 1;
 }
-
 #menu-produk-section,
 #keranjang-form-section {
     background: var(--secondary-bg-color);
@@ -93,7 +78,6 @@ footer {
     flex-direction: column;
     transition: all 0.3s ease;
 }
-
 .section-title {
     color: var(--text-accent-color);
     text-align: center;
@@ -102,24 +86,18 @@ footer {
     font-size: 2em;
 }
 
-/* ====== Gaya untuk Pop-up Login (Juga digunakan untuk Pop-up Cetak) ====== */
+/* Pop-up Login & Cetak */
 .popup-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; justify-content: center; align-items: center;
     z-index: 10000;
     background-image: url('citung.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
-
 .popup-content {
     background: radial-gradient(circle at top left, #1a1a2e, #16213e);
     padding: 40px 50px;
@@ -133,25 +111,18 @@ footer {
     position: relative;
     overflow: hidden;
 }
-
 .popup-content::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    top: -50%; left: -50%; width: 200%; height: 200%;
     background: conic-gradient(transparent, rgba(0, 240, 255, 0.1), transparent);
     animation: rotateGlow 15s linear infinite;
-    z-index: -1;
-    opacity: 0.8;
+    z-index: -1; opacity: 0.8;
 }
-
 @keyframes rotateGlow {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
-
 .login-title {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
@@ -164,14 +135,12 @@ footer {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-
 .button-group {
     margin-bottom: 30px;
     display: flex;
     justify-content: center;
     gap: 20px;
 }
-
 .login-choice-btn {
     padding: 15px 35px;
     border: none;
@@ -188,62 +157,24 @@ footer {
     justify-content: center;
     align-items: center;
 }
-
-.login-choice-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
-
+.login-choice-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
 .login-choice-btn::after {
     content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    transition: opacity 0.3s;
+    opacity: 0; transition: opacity 0.3s;
 }
-
-.login-choice-btn:hover::after {
-    opacity: 1;
-}
-
-#btn-pelanggan {
-    background: linear-gradient(45deg, #007bff, #0056b3);
-    color: white;
-}
-
-#btn-pelanggan:hover {
-    background: linear-gradient(45deg, #0056b3, #003d80);
-}
-
-#btn-kasir {
-    background: linear-gradient(45deg, #28a745, #1e7e34);
-    color: white;
-}
-
-#btn-kasir:hover {
-    background: linear-gradient(45deg, #1e7e34, #155724);
-}
-
+.login-choice-btn:hover::after { opacity: 1; }
+#btn-pelanggan { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
+#btn-pelanggan:hover { background: linear-gradient(45deg, #0056b3, #003d80); }
+#btn-kasir { background: linear-gradient(45deg, #28a745, #1e7e34); color: white; }
+#btn-kasir:hover { background: linear-gradient(45deg, #1e7e34, #155724); }
 .popup-content form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    margin-top: 20px;
+    display: flex; flex-direction: column; gap: 18px; margin-top: 20px;
 }
-
 .popup-content form label {
-    display: block;
-    text-align: left;
-    color: var(--text-accent-color);
-    font-weight: 600;
-    font-size: 1em;
-    text-shadow: 0 0 5px rgba(0, 240, 255, 0.2);
+    display: block; text-align: left; color: var(--text-accent-color); font-weight: 600; font-size: 1em; text-shadow: 0 0 5px rgba(0, 240, 255, 0.2);
 }
-
 .popup-content form input[type="text"],
 .popup-content form input[type="password"] {
     width: calc(100% - 28px);
@@ -257,14 +188,12 @@ footer {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     caret-color: var(--text-accent-color);
 }
-
 .popup-content form input[type="text"]:focus,
 .popup-content form input[type="password"]:focus {
     outline: none;
     border-color: #00ffff;
     box-shadow: 0 0 20px var(--shadow-neon-color), inset 0 2px 10px rgba(0, 0, 0, 0.4);
 }
-
 .submit-login-btn {
     background: linear-gradient(45deg, #6c757d, #5a6268);
     color: white;
@@ -282,14 +211,13 @@ footer {
     justify-content: center;
     align-items: center;
 }
-
 .submit-login-btn:hover {
     background: linear-gradient(45deg, #5a6268, #495057);
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(108, 117, 125, 0.5);
 }
 
-/* ===== Payment Options Styling ===== */
+/* Payment Options */
 .payment-options {
     display: flex;
     flex-wrap: wrap;
@@ -299,7 +227,6 @@ footer {
     padding-top: 1em;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 .btn-payment {
     flex: 1 1 calc(50% - 10px);
     max-width: 200px;
@@ -318,34 +245,27 @@ footer {
     gap: 8px;
     text-align: center;
 }
-
-.btn-payment i {
-    font-size: 1.2em;
+.btn-payment i { font-size: 1.2em; }
+.btn-payment:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.btn-tunai { background: var(--btn-tunai-bg); }
+.btn-tunai:hover { background: linear-gradient(45deg, #ffdc81, #fcc200); }
+.btn-qris { background: var(--btn-qris-bg); }
+.btn-qris:hover { background: linear-gradient(45deg, #00aaff, #007bff); }
+#pesan-whatsapp-pelanggan.btn-whatsapp {
+    background: var(--button-whatsapp-bg);
+    color: white;
+}
+#pesan-whatsapp-pelanggan.btn-whatsapp:hover {
+    background: linear-gradient(45deg, #128C7E, #25D366);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
-.btn-payment:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-/* ... bagian atas tetap ... */
-
-/* ===== Payment Options Styling ===== */
-/* ... bagian lama tetap ... */
-
-/* ====== Diskon Section Styling ====== */
+/* Diskon Section */
 .diskon-section-inline {
-    padding-top: 1em;
-    margin-top: 1em;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
+    padding-top: 1em; margin-top: 1em; display: flex; flex-direction: column; gap: 0.5em;
 }
-.diskon-section-inline label {
-    display: block;
-    margin-bottom: 0.5em;
-    color: var(--text-accent-color);
-}
+.diskon-section-inline label { display: block; margin-bottom: 0.5em; color: var(--text-accent-color); }
 .diskon-section-inline input[type="number"], .diskon-section-inline input[type="text"] {
     width: calc(100% - 20px);
     padding: 10px;
@@ -362,52 +282,11 @@ footer {
     box-shadow: 0 0 10px var(--shadow-neon-color);
 }
 
-/* ... bagian bawah tetap ... */
-
-.btn-tunai {
-    background: var(--btn-tunai-bg);
-}
-
-.btn-tunai:hover {
-    background: linear-gradient(45deg, #ffdc81, #fcc200);
-}
-
-.btn-qris {
-    background: var(--btn-qris-bg);
-}
-
-.btn-qris:hover {
-    background: linear-gradient(45deg, #00aaff, #007bff);
-}
-
-/* Gaya spesifik untuk tombol WhatsApp */
-#pesan-whatsapp-pelanggan.btn-whatsapp {
-    background: var(--button-whatsapp-bg);
-    color: white;
-}
-
-#pesan-whatsapp-pelanggan.btn-whatsapp:hover {
-    background: linear-gradient(45deg, #128C7E, #25D366);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-}
-
-/* ====== Keterangan Section Styling ====== */
+/* Keterangan Section */
 #keterangan-section {
-    padding-top: 1em;
-    margin-top: 1em;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
+    padding-top: 1em; margin-top: 1em; border-top: 1px solid rgba(255, 255, 255, 0.2); display: flex; flex-direction: column; gap: 0.5em;
 }
-
-#keterangan-section label {
-    display: block;
-    margin-bottom: 0.5em;
-    color: var(--text-accent-color);
-}
-
+#keterangan-section label { display: block; margin-bottom: 0.5em; color: var(--text-accent-color); }
 #keterangan-section textarea {
     width: calc(100% - 20px);
     padding: 10px;
@@ -418,26 +297,24 @@ footer {
     font-size: 1em;
     resize: vertical;
 }
-
 #keterangan-section textarea:focus {
     outline: none;
     border-color: var(--border-neon-color);
     box-shadow: 0 0 10px var(--shadow-neon-color);
 }
 
-/* ====== Gaya untuk Tombol Cetak Struk (Hijau) ====== */
+/* Tombol Cetak Hijau */
 .btn-action.btn-print-green {
     background: var(--btn-print-green-bg);
     color: white;
 }
-
 .btn-action.btn-print-green:hover {
     background: linear-gradient(45deg, #218838, #155724);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* ====== Katalog Produk ====== */
+/* Katalog Produk */
 #produk-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -457,11 +334,7 @@ footer {
     justify-content: space-between;
     overflow: hidden;
 }
-.produk-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px var(--shadow-neon-color);
-    background: rgba(255, 255, 255, 0.15);
-}
+.produk-item:hover { transform: translateY(-5px); box-shadow: 0 8px 25px var(--shadow-neon-color); background: rgba(255, 255, 255, 0.15); }
 .produk-item img {
     width: 100%;
     aspect-ratio: 1/1;
@@ -475,37 +348,11 @@ footer {
     max-width: 100%;
     min-height: 0;
 }
-.produk-item h3 {
-    color: var(--text-accent-color);
-    margin-bottom: 0.2em;
-    font-size: 1em;
-    font-weight: 600;
-    white-space: normal;
-    overflow-wrap: break-word;
-    line-height: 1.2;
-}
-.produk-item p {
-    font-size: 0.9em;
-    font-weight: bold;
-    color: var(--text-price-color);
-    margin-top: 0.2em;
-    white-space: normal;
-    overflow-wrap: break-word;
-    line-height: 1.2;
-}
-.produk-item .edit-price-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 0.2em;
-    font-size: 0.9em;
-    font-weight: bold;
-    color: var(--text-price-color);
-}
+.produk-item h3 { color: var(--text-accent-color); margin-bottom: 0.2em; font-size: 1em; font-weight: 600; white-space: normal; overflow-wrap: break-word; line-height: 1.2; }
+.produk-item p { font-size: 0.9em; font-weight: bold; color: var(--text-price-color); margin-top: 0.2em; white-space: normal; overflow-wrap: break-word; line-height: 1.2; }
+.produk-item .edit-price-wrapper { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 0.2em; font-size: 0.9em; font-weight: bold; color: var(--text-price-color);}
 .produk-item .product-price-input {
-    width: 80px;
-    padding: 5px;
+    width: 80px; padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--input-border-color);
     background: var(--input-bg);
@@ -515,25 +362,9 @@ footer {
     -moz-appearance: textfield;
 }
 .produk-item .product-price-input::-webkit-outer-spin-button,
-.produk-item .product-price-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-.produk-item .product-price-input:focus {
-    outline: none;
-    border-color: var(--border-neon-color);
-    box-shadow: 0 0 10px var(--shadow-neon-color);
-}
-
-/* ====== Qty Control di Katalog ====== */
-.produk-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1em;
-    gap: 5px;
-    width: 100%;
-}
+.produk-item .product-price-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.produk-item .product-price-input:focus { outline: none; border-color: var(--border-neon-color); box-shadow: 0 0 10px var(--shadow-neon-color);}
+.produk-controls { display: flex; justify-content: center; align-items: center; margin-top: 1em; gap: 5px; width: 100%; }
 .qty-btn {
     background: var(--button-default-bg);
     color: #fff;
@@ -549,15 +380,9 @@ footer {
     box-shadow: 0 2px 8px var(--shadow-neon-color);
     transition: background 0.2s, box-shadow 0.2s;
 }
-.qty-btn:active {
-    background: var(--button-clear-bg);
-}
-.minus-btn {
-    background: var(--button-clear-bg);
-}
-.minus-btn:hover {
-    background: linear-gradient(45deg, #c0392b, #e74c3c);
-}
+.qty-btn:active { background: var(--button-clear-bg); }
+.minus-btn { background: var(--button-clear-bg); }
+.minus-btn:hover { background: linear-gradient(45deg, #c0392b, #e74c3c); }
 .qty-value {
     width: 2.5em;
     text-align: center;
@@ -570,7 +395,7 @@ footer {
     pointer-events: none;
 }
 
-/* ====== Keranjang ====== */
+/* Keranjang */
 .keranjang-table {
     width: 100%;
     border-collapse: collapse;
@@ -588,40 +413,20 @@ footer {
     font-size: 0.9em;
     font-weight: 600;
 }
-#keranjang-items tr {
-    border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
-}
-#keranjang-items tr:last-child {
-    border-bottom: none;
-}
+#keranjang-items tr { border-bottom: 1px dotted rgba(255, 255, 255, 0.1);}
+#keranjang-items tr:last-child { border-bottom: none;}
 #keranjang-items td {
     padding: 0.6em 0.5em;
     vertical-align: middle;
     font-size: 0.9em;
     color: var(--text-primary-color);
 }
-#keranjang-items td:first-child {
-    width: 50%;
-    color: #fff;
-    font-weight: bold;
-}
-#keranjang-items td:nth-child(2) {
-    width: 15%;
-    text-align: center;
-}
-#keranjang-items td:nth-child(3) {
-    width: 25%;
-    text-align: right;
-    color: var(--text-price-color);
-}
-#keranjang-items td:last-child {
-    width: 10%;
-    text-align: right;
-}
+#keranjang-items td:first-child { width: 50%; color: #fff; font-weight: bold;}
+#keranjang-items td:nth-child(2) { width: 15%; text-align: center;}
+#keranjang-items td:nth-child(3) { width: 25%; text-align: right; color: var(--text-price-color);}
+#keranjang-items td:last-child { width: 10%; text-align: right;}
 #keranjang-items td input[type="number"] {
-    width: 40px;
-    padding: 3px;
-    border-radius: 3px;
+    width: 40px; padding: 3px; border-radius: 3px;
     border: 1px solid var(--input-border-color);
     background: var(--input-bg);
     color: var(--text-primary-color);
@@ -630,10 +435,7 @@ footer {
     -moz-appearance: textfield;
 }
 #keranjang-items td input[type="number"]::-webkit-outer-spin-button,
-#keranjang-items td input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+#keranjang-items td input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 #keranjang-items td button {
     background-color: var(--danger-color);
     color: white;
@@ -644,116 +446,36 @@ footer {
     font-size: 0.7em;
     transition: background-color 0.2s, transform 0.2s;
 }
-#keranjang-items td button:hover {
-    background-color: #d32f2f;
-    transform: translateY(-1px);
-}
-.empty-cart-message {
-    text-align: center;
-    font-style: italic;
-    color: rgba(255, 255, 255, 0.5);
-    padding: 1em;
-}
-.keranjang-total-display {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-top: 0.5em;
-    color: var(--text-accent-color);
-    text-align: right;
-}
-#keranjang-total {
-    color: var(--text-price-color);
-}
+#keranjang-items td button:hover { background-color: #d32f2f; transform: translateY(-1px);}
+.empty-cart-message { text-align: center; font-style: italic; color: rgba(255, 255, 255, 0.5); padding: 1em;}
+.keranjang-total-display { font-size: 1.2em; font-weight: bold; margin-top: 0.5em; color: var(--text-accent-color); text-align: right;}
+#keranjang-total { color: var(--text-price-color);}
 
-/* ====== Input & Form ====== */
+/* Input & Form */
 .pembayaran-section-inline {
-    padding-top: 1em;
-    margin-top: 1em;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
+    padding-top: 1em; margin-top: 1em; display: flex; flex-direction: column; gap: 0.5em;
 }
-.pembayaran-section-inline label {
-    display: block;
-    margin-bottom: 0.5em;
-    color: var(--text-accent-color);
-}
+.pembayaran-section-inline label { display: block; margin-bottom: 0.5em; color: var(--text-accent-color);}
 .pembayaran-section-inline input[type="number"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--input-border-color);
-    background: var(--input-bg);
-    color: var(--text-primary-color);
-    font-size: 1em;
-    margin-bottom: 0.5em;
+    width: calc(100% - 20px); padding: 10px; border-radius: 5px; border: 1px solid var(--input-border-color); background: var(--input-bg); color: var(--text-primary-color); font-size: 1em; margin-bottom: 0.5em;
 }
-.pembayaran-section-inline input[type="number"]:focus {
-    outline: none;
-    border-color: var(--border-neon-color);
-    box-shadow: 0 0 10px var(--shadow-neon-color);
-}
-.pembayaran-section-inline p {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: var(--text-accent-color);
-    text-align: right;
-    margin-top: 0.5em;
-}
-#kembalian-display {
-    color: var(--text-price-color);
-}
+.pembayaran-section-inline input[type="number"]:focus { outline: none; border-color: var(--border-neon-color); box-shadow: 0 0 10px var(--shadow-neon-color);}
+.pembayaran-section-inline p { font-size: 1.1em; font-weight: bold; color: var(--text-accent-color); text-align: right; margin-top: 0.5em;}
+#kembalian-display { color: var(--text-price-color);}
 .pemesanan-container {
-    padding-top: 1.5em;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    margin-top: 1em;
+    padding-top: 1.5em; border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: 1em;
 }
-.pemesanan-container .section-title {
-    font-size: 1.5em;
-    margin-bottom: 1em;
-    text-align: center;
-}
-.pemesanan-container label {
-    display: block;
-    margin-bottom: 0.5em;
-    color: var(--text-accent-color);
-}
+.pemesanan-container .section-title { font-size: 1.5em; margin-bottom: 1em; text-align: center;}
+.pemesanan-container label { display: block; margin-bottom: 0.5em; color: var(--text-accent-color);}
 .pemesanan-container input[type="text"],
-.pemesanan-container input[type="radio"],
 .pemesanan-container textarea {
-    margin-bottom: 1em;
-    width: calc(100% - 20px);
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--input-border-color);
-    background: var(--input-bg);
-    color: var(--text-primary-color);
-    font-size: 1em;
-    resize: vertical;
+    margin-bottom: 1em; width: calc(100% - 20px); padding: 10px; border-radius: 5px; border: 1px solid var(--input-border-color); background: var(--input-bg); color: var(--text-primary-color); font-size: 1em; resize: vertical;
 }
 .pemesanan-container input[type="text"]:focus,
-.pemesanan-container textarea:focus {
-    outline: none;
-    border-color: var(--border-neon-color);
-    box-shadow: 0 0 10px var(--shadow-neon-color);
-}
-.pemesanan-container input[type="radio"] {
-    accent-color: var(--text-accent-color);
-}
-.action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 1.5em;
-}
-.action-buttons .btn-whatsapp {
-    flex: 1 1 100%;
-    background: var(--button-whatsapp-bg);
-}
-.action-buttons .btn-whatsapp:hover {
-    background: linear-gradient(45deg, #1da851, #25D366);
-    transform: translateY(-2px);
-}
+.pemesanan-container textarea:focus { outline: none; border-color: var(--border-neon-color); box-shadow: 0 0 10px var(--shadow-neon-color);}
+.action-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.5em;}
+.action-buttons .btn-whatsapp { flex: 1 1 100%; background: var(--button-whatsapp-bg);}
+.action-buttons .btn-whatsapp:hover { background: linear-gradient(45deg, #1da851, #25D366); transform: translateY(-2px);}
 .btn-action {
     color: white;
     border: none;
@@ -767,120 +489,122 @@ footer {
     margin-top: 0.5em;
 }
 
-/* ====== Floating Action Buttons (FAB) ====== */
+/* Floating Action Buttons (FAB) */
 .fab-button {
     position: fixed;
     color: white;
-    width: 60px;
-    height: 60px;
+    width: 60px; height: 60px;
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; justify-content: center; align-items: center;
     font-size: 1.8em;
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
     z-index: 999;
 }
-.fab-button:hover {
-    transform: scale(1.1) translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-#kasir-fabs .fab-share {
-    bottom: 310px;
-    right: 30px;
-    background: linear-gradient(45deg, #dc3545, #c82333);
-}
-#kasir-fabs .fab-share:hover {
-    background: linear-gradient(45deg, #c82333, #dc3545);
-}
-#kasir-fabs .fab-manual {
-    bottom: 240px;
-    right: 30px;
-    background: var(--button-manual-bg);
-}
-#kasir-fabs .fab-manual:hover {
-    background: linear-gradient(45deg, #4b0082, #8a2be2);
-}
-#kasir-fabs .fab-clear {
-    bottom: 170px;
-    right: 30px;
-    background: var(--button-clear-bg);
-}
-#kasir-fabs .fab-clear:hover {
-    background: linear-gradient(45deg, #c0392b, #ff4d4d);
-}
-#kasir-fabs .fab-print {
-    bottom: 100px;
-    right: 30px;
-    background: var(--button-default-bg);
-}
-/* style.css - gunakan file asli, pastikan bagian FAB dan gambar produk ini ada: */
-.fab-button {
-    position: fixed;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.8em;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    z-index: 999;
-}
-.fab-button:hover {
-    transform: scale(1.1) translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
+.fab-button:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);}
 #kasir-fabs .fab-print { bottom: 380px; right: 30px; background: var(--btn-print-green-bg); }
-#kasir-fabs .fab-share { bottom: 310px; right: 30px; background: linear-gradient(45deg, #dc3545, #c82333); }
-#kasir-fabs .fab-manual { bottom: 240px; right: 30px; background: var(--button-manual-bg); }
-#kasir-fabs .fab-clear { bottom: 170px; right: 30px; background: var(--button-clear-bg); }
-.produk-item img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1em;
-    border: 2px solid var(--border-neon-color);
-    background: #111;
-    display: block;
-    max-width: 100%;
-    min-height: 0;
+#kasir-fabs .fab-share { bottom: 310px; right: 30px; background: linear-gradient(45deg, #dc3545, #c82333);}
+#kasir-fabs .fab-manual { bottom: 240px; right: 30px; background: var(--button-manual-bg);}
+#kasir-fabs .fab-clear { bottom: 170px; right: 30px; background: var(--button-clear-bg);}
+.fab-button.fab-cart { bottom: 45px; right: 30px; background: linear-gradient(45deg, #ff9800, #fbc02d); color: #fff;}
+.fab-button.fab-cart:hover { background: linear-gradient(45deg, #fbc02d, #ff9800);}
+
+/* Floating Action Buttons (FAB) */
+.fab-button {
+    position: fixed;
+    color: white;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 1.8em;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
 }
-/* responsive FAB */
+.fab-button:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);}
+#kasir-fabs .fab-print { bottom: 380px; right: 30px; background: var(--btn-print-green-bg); }
+#kasir-fabs .fab-share { bottom: 310px; right: 30px; background: linear-gradient(45deg, #dc3545, #c82333);}
+#kasir-fabs .fab-manual { bottom: 240px; right: 30px; background: var(--button-manual-bg);}
+#kasir-fabs .fab-clear { bottom: 170px; right: 30px; background: var(--button-clear-bg);}
+.fab-button.fab-cart { bottom: 100px; right: 30px; background: linear-gradient(45deg, #ff9800, #fbc02d); color: #fff;}
+.fab-button.fab-cart:hover { background: linear-gradient(45deg, #fbc02d, #ff9800);}
 @media (max-width: 768px) {
     #kasir-fabs .fab-print  { bottom: 225px; right: 10px; }
     #kasir-fabs .fab-share { bottom: 185px; right: 10px; }
     #kasir-fabs .fab-manual { bottom: 145px; right: 10px; }
     #kasir-fabs .fab-clear  { bottom: 100px; right: 10px; }
+    .fab-button.fab-cart { bottom: 55px; right: 10px;}
 }
 @media (max-width: 480px) {
     #kasir-fabs .fab-print  { bottom: 118px; right: 7px; }
     #kasir-fabs .fab-share { bottom: 78px; right: 7px; }
     #kasir-fabs .fab-manual { bottom: 43px; right: 7px; }
     #kasir-fabs .fab-clear  { bottom: 7px;  right: 7px; }
+    .fab-button.fab-cart { bottom: 7px; right: 7px;}
 }
-/* ... sisanya biarkan seperti style asli anda ... */
-/* ====== Modal ====== */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
+
+/* Popup Keranjang Belanjaan (F6 & FAB) */
+#popup-keranjang {
+    display:none;
+    position:fixed;z-index:99999;left:0;top:0;width:100vw;height:100vh;
+    background:rgba(0,0,0,0.25);
+    justify-content:center;align-items:center;
 }
+#popup-keranjang .popup-keranjang-content {
+    background:#fff;
+    min-width:320px;
+    max-width:98vw;
+    padding:24px 20px 18px 20px;
+    border-radius:12px;
+    box-shadow:0 6px 36px #0002;
+    position:relative;
+    font-size:1em;
+}
+#popup-keranjang .popup-keranjang-table th,#popup-keranjang .popup-keranjang-table td {
+    padding:4px 7px;
+    border-bottom:1px solid #eee;
+    font-size:1em;
+    text-align:left;
+}
+#popup-keranjang .popup-keranjang-table th {background:#f6f6f6;}
+#popup-keranjang .popup-keranjang-table input[type=number]::-webkit-inner-spin-button,
+#popup-keranjang .popup-keranjang-table input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#popup-keranjang .pembayaran-section-inline {
+    margin-top: 10px;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-shadow: 0 2px 8px #0001;
+}
+#popup-keranjang .pembayaran-section-inline label { color: #007bff; font-weight: bold;}
+#popup-keranjang .pembayaran-section-inline input[type="number"] {
+    width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #007bff; background: #fff; color: #333; font-size: 1em; margin-bottom: 4px;
+}
+#popup-keranjang .pembayaran-section-inline p { font-size: 1.05em; font-weight: bold; color: #007bff; text-align: right; margin-top: 2px;}
+#popup-kembalian-display { font-weight: bold; }
+
+@media (max-width: 768px) {
+    #kasir-fabs .fab-print  { bottom: 225px; right: 10px; }
+    #kasir-fabs .fab-share { bottom: 185px; right: 10px; }
+    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; }
+    #kasir-fabs .fab-clear  { bottom: 100px; right: 10px; }
+    .fab-button.fab-cart { bottom: 7px; right: 10px;}
+}
+@media (max-width: 480px) {
+    #kasir-fabs .fab-print  { bottom: 118px; right: 7px; }
+    #kasir-fabs .fab-share { bottom: 78px; right: 7px; }
+    #kasir-fabs .fab-manual { bottom: 43px; right: 7px; }
+    #kasir-fabs .fab-clear  { bottom: 7px;  right: 7px; }
+    .fab-button.fab-cart { bottom: 7px; right: 7px;}
+}
+
+/* Modal */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center;}
 .modal-content {
     background-color: #fefefe;
     margin: auto;
@@ -895,302 +619,116 @@ footer {
     transition: all 0.3s ease;
 }
 .close-button {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+    color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer;
 }
-.close-button:hover,
-.close-button:focus {
-    color: #000;
-    text-decoration: none;
-}
-.modal-content label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-}
-.modal-content input[type="number"],
-.modal-content input[type="text"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-    background-color: white;
-    color: #333;
+.close-button:hover, .close-button:focus { color: #000; text-decoration: none; }
+.modal-content label { display: block; margin-bottom: 8px; font-weight: 600; color: #333;}
+.modal-content input[type="number"], .modal-content input[type="text"] {
+    width: calc(100% - 20px); padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; background-color: white; color: #333;
 }
 .modal-content button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.2s;
+    background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; transition: background-color 0.2s;
 }
-.modal-content button:hover {
-    background-color: #218838;
-}
+.modal-content button:hover { background-color: #218838; }
 
-/* Gaya untuk input pencarian/barcode */
-.search-barcode-input {
-    margin-bottom: 20px;
-    text-align: center;
-}
+/* Input pencarian/barcode */
+.search-barcode-input { margin-bottom: 20px; text-align: center;}
 .search-barcode-input input {
-    width: calc(100% - 20px);
-    padding: 12px 10px;
-    border: 1px solid var(--input-border-color);
-    border-radius: var(--border-radius);
-    background: var(--input-bg);
-    color: var(--text-primary-color);
-    font-size: 1em;
-    box-sizing: border-box;
-    margin-bottom: 5px;
+    width: calc(100% - 20px); padding: 12px 10px; border: 1px solid var(--input-border-color); border-radius: var(--border-radius); background: var(--input-bg); color: var(--text-primary-color); font-size: 1em; box-sizing: border-box; margin-bottom: 5px;
 }
-.search-barcode-input input:focus {
-    border-color: var(--border-neon-color);
-    outline: none;
-    box-shadow: 0 0 10px var(--shadow-neon-color);
-}
-.feedback-message {
-    display: block;
-    font-size: 0.85em;
-    min-height: 1.2em;
-    text-align: center;
-}
-.feedback-message.success-color {
-    color: var(--success-color);
-}
-.feedback-message.danger-color {
-    color: var(--danger-color);
-}
+.search-barcode-input input:focus { border-color: var(--border-neon-color); outline: none; box-shadow: 0 0 10px var(--shadow-neon-color);}
+.feedback-message { display: block; font-size: 0.85em; min-height: 1.2em; text-align: center;}
+.feedback-message.success-color { color: var(--success-color);}
+.feedback-message.danger-color { color: var(--danger-color);}
 
-/* ====== RESPONSIVE GRID PRODUK & LAYOUT ====== */
+/* Responsive grid produk & layout */
 @media (max-width: 1024px) {
-    .main-layout {
-        grid-template-columns: 2fr 1fr;
-        gap: 1em;
-    }
-    #produk-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    .main-layout { grid-template-columns: 2fr 1fr; gap: 1em;}
+    #produk-list { grid-template-columns: repeat(3, 1fr);}
 }
 @media (max-width: 768px) {
-    .main-layout {
-        display: block;
-        padding: 0.5em;
-    }
-    #menu-produk-section, #keranjang-form-section {
-        padding: 0.8em;
-        margin-bottom: 1em;
-    }
-    #produk-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.8em;
-    }
-    .produk-item img {
-        height: auto;
-    }
-    .section-title { font-size: 1.1em; }
-    .fab-button {
-        width: 45px;
-        height: 45px;
-        font-size: 1em;
-    }
-    #kasir-fabs .fab-share { bottom: 185px; right: 10px; }
-    #kasir-fabs .fab-manual { bottom: 145px; right: 10px; }
-    #kasir-fabs .fab-clear  { bottom: 100px; right: 10px; }
-    #kasir-fabs .fab-print  { bottom: 55px; right: 10px; }
+    .main-layout { display: block; padding: 0.5em;}
+    #menu-produk-section, #keranjang-form-section { padding: 0.8em; margin-bottom: 1em;}
+    #produk-list { grid-template-columns: repeat(2, 1fr); gap: 0.8em;}
+    .produk-item img { height: auto;}
+    .section-title { font-size: 1.1em;}
+    .fab-button { width: 45px; height: 45px; font-size: 1em;}
 }
 @media (max-width: 480px) {
-    #produk-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.4em;
-    }
-    .produk-item {
-        padding: 0.4em;
-    }
-    .produk-item img {
-        height: auto;
-    }
-    .section-title { font-size: 1.1em; }
-    .fab-button {
-        width: 36px;
-        height: 36px;
-        font-size: 0.8em;
-    }
-    #kasir-fabs .fab-share { bottom: 148px; right: 7px; }
-    #kasir-fabs .fab-manual { bottom: 113px; right: 7px; }
-    #kasir-fabs .fab-clear  { bottom: 78px; right: 7px; }
-    #kasir-fabs .fab-print  { bottom: 43px;  right: 7px; }
+    #produk-list { grid-template-columns: repeat(2, 1fr); gap: 0.4em;}
+    .produk-item { padding: 0.4em;}
+    .produk-item img { height: auto;}
+    .section-title { font-size: 1.1em;}
+    .fab-button { width: 36px; height: 36px; font-size: 0.8em;}
 }
 
-/* ====== PRINT STRUK ====== */
+/* PRINT STRUK */
 @media print {
-.print-header {
-        text-align: center !important;
-        margin-bottom: 1px !important;
-        border-bottom: 1px dashed #000 !important;
-        padding-bottom: 2px !important;
-        font-size: 1.25em !important;
-        font-weight: bold !important;
-        line-height: 1.05 !important; /* <-- Tambahkan/ubah baris ini */
-    }
-    .print-header .shop-name-print,
-    .print-header .shop-address-print,
-    .print-header .shop-phone-print {
-        font-size: 1.05em !important;
-        font-weight: bold !important;
-        margin: 0 !important;
-        line-height: 1.05 !important; /* <-- Tambahkan/ubah baris ini */
-        padding: 0 !important;
-    }
-    html, body {
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    body * {
-        visibility: hidden !important;
-        box-shadow: none !important;
-        background: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    #print-area, #print-area * {
-        visibility: visible !important;
-        color: #000 !important;
-        background: none !important;
-        font-family: 'Arial', 'Poppins', sans-serif !important;
-        font-size: 15px !important;
-        line-height: 1.35 !important;
-        font-weight: bold !important;
-        letter-spacing: 0.03em !important;
-    }
-    #print-area {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 58mm !important;
-        min-width: 58mm !important;
-        max-width: 58mm !important;
-        padding: 2mm 2mm 0 2mm !important;
-        background: #fff !important;
-        margin: 0 !important;
-        min-height: 0 !important;
-        max-height: none !important;
-        height: auto !important;
-        page-break-after: avoid !important;
-        page-break-before: avoid !important;
-        page-break-inside: avoid !important;
-        break-after: avoid-page !important;
-        break-before: avoid-page !important;
-        break-inside: avoid-page !important;
-    }
-    .print-header {
-        text-align: center !important;
-        margin-bottom: 3px !important;
-        border-bottom: 1px dashed #000 !important;
-        padding-bottom: 3px !important;
-        font-size: 1.25em !important;
-        font-weight: bold !important;
-    }
-    .print-header .shop-name-print {
-        font-size: 1.3em !important;
-        font-weight: bold !important;
-        letter-spacing: 1px !important;
-    }
-    .print-header .shop-address-print,
-    .print-header .shop-phone-print {
-        font-size: 1em !important;
-        font-weight: bold !important;
-    }
-    .print-info p {
-        margin: 0 !important;
-        font-size: 1em !important;
-        font-weight: bold !important;
-    }
-    .print-notes {
-        margin-top: 5px !important;
-        margin-bottom: 8px !important;
-        font-size: 1em !important;
-        font-weight: bold !important;
-        padding-top: 5px !important;
-    }
-    hr {
-        border: none !important;
-        border-bottom: 1.5px dashed #000 !important;
-        height: 0 !important;
-        margin: 5px 0 !important;
-    }
-    table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        font-size: 1em !important;
-        font-weight: bold !important;
-    }
-    table thead { display: none !important; }
-    table tr { page-break-inside: avoid !important; }
-    table td {
-        padding: 2px 0 !important;
-        font-size: 1em !important;
-        vertical-align: top !important;
-        font-weight: bold !important;
-    }
-    table td:nth-child(1) {
-        width: 60% !important;
-        text-align: left !important;
-        font-weight: bold !important;
-        word-break: break-word !important;
-    }
-    table td:nth-child(2) {
-        width: 40% !important;
-        text-align: right !important;
-        font-weight: bold !important;
-    }
-    .total-row {
-        font-size: 1.15em !important;
-        font-weight: bold !important;
-        text-align: right !important;
-        margin-top: 5px !important;
-        border-top: 1.5px solid #000 !important;
-        padding-top: 5px !important;
-    }
-    .total-row span {
-        float: left !important;
-        font-weight: bold !important;
-    }
-    .print-payment-info {
-        font-size: 1em !important;
-        font-weight: bold !important;
-        text-align: right !important;
-        margin: 2px 0 !important;
-    }
-    .print-payment-info span {
-        float: left !important;
-        font-weight: bold !important;
-    }
-    .thank-you {
-        text-align: center !important;
-        margin-top: 8px !important;
-        font-size: 1em !important;
-        font-style: italic !important;
-        font-weight: bold !important;
-    }
-    #print-area img {
-        display: block !important;
-        margin: 0 auto 4px auto !important;
-        max-width: 40mm !important;
-        height: auto !important;
-    }
+.print-header { text-align: center !important; margin-bottom: 1px !important; border-bottom: 1px dashed #000 !important; padding-bottom: 2px !important; font-size: 1.25em !important; font-weight: bold !important; line-height: 1.05 !important; }
+    .print-header .shop-name-print, .print-header .shop-address-print, .print-header .shop-phone-print { font-size: 1.05em !important; font-weight: bold !important; margin: 0 !important; line-height: 1.05 !important; padding: 0 !important;}
+    html, body { height: auto !important; max-height: none !important; overflow: visible !important; margin: 0 !important; padding: 0 !important;}
+    body * { visibility: hidden !important; box-shadow: none !important; background: none !important; margin: 0 !important; padding: 0 !important;}
+    #print-area, #print-area * { visibility: visible !important; color: #000 !important; background: none !important; font-family: 'Arial', 'Poppins', sans-serif !important; font-size: 15px !important; line-height: 1.35 !important; font-weight: bold !important; letter-spacing: 0.03em !important;}
+    #print-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 58mm !important; min-width: 58mm !important; max-width: 58mm !important; padding: 2mm 2mm 0 2mm !important; background: #fff !important; margin: 0 !important; min-height: 0 !important; max-height: none !important; height: auto !important; page-break-after: avoid !important; page-break-before: avoid !important; page-break-inside: avoid !important; break-after: avoid-page !important; break-before: avoid-page !important; break-inside: avoid-page !important;}
+    .print-header { text-align: center !important; margin-bottom: 3px !important; border-bottom: 1px dashed #000 !important; padding-bottom: 3px !important; font-size: 1.25em !important; font-weight: bold !important;}
+    .print-header .shop-name-print { font-size: 1.3em !important; font-weight: bold !important; letter-spacing: 1px !important;}
+    .print-header .shop-address-print, .print-header .shop-phone-print { font-size: 1em !important; font-weight: bold !important;}
+    .print-info p { margin: 0 !important; font-size: 1em !important; font-weight: bold !important;}
+    .print-notes { margin-top: 5px !important; margin-bottom: 8px !important; font-size: 1em !important; font-weight: bold !important; padding-top: 5px !important;}
+    hr { border: none !important; border-bottom: 1.5px dashed #000 !important; height: 0 !important; margin: 5px 0 !important;}
+    table { width: 100% !important; border-collapse: collapse !important; font-size: 1em !important; font-weight: bold !important;}
+    table thead { display: none !important;}
+    table tr { page-break-inside: avoid !important;}
+    table td { padding: 2px 0 !important; font-size: 1em !important; vertical-align: top !important; font-weight: bold !important;}
+    table td:nth-child(1) { width: 60% !important; text-align: left !important; font-weight: bold !important; word-break: break-word !important;}
+    table td:nth-child(2) { width: 40% !important; text-align: right !important; font-weight: bold !important;}
+    .total-row { font-size: 1.15em !important; font-weight: bold !important; text-align: right !important; margin-top: 5px !important; border-top: 1.5px solid #000 !important; padding-top: 5px !important;}
+    .total-row span { float: left !important; font-weight: bold !important;}
+    .print-payment-info { font-size: 1em !important; font-weight: bold !important; text-align: right !important; margin: 2px 0 !important;}
+    .print-payment-info span { float: left !important; font-weight: bold !important;}
+    .thank-you { text-align: center !important; margin-top: 8px !important; font-size: 1em !important; font-style: italic !important; font-weight: bold !important;}
+    #print-area img { display: block !important; margin: 0 auto 4px auto !important; max-width: 40mm !important; height: auto !important;}
 }
+
+/* Popup Keranjang Belanjaan (F6 & FAB) */
+#popup-keranjang {
+    display:none;
+    position:fixed;z-index:99999;left:0;top:0;width:100vw;height:100vh;
+    background:rgba(0,0,0,0.25);
+    justify-content:center;align-items:center;
+}
+#popup-keranjang .popup-keranjang-content {
+    background:#fff;
+    min-width:320px;
+    max-width:98vw;
+    padding:24px 20px 18px 20px;
+    border-radius:12px;
+    box-shadow:0 6px 36px #0002;
+    position:relative;
+    font-size:1em;
+}
+#popup-keranjang .popup-keranjang-table th,#popup-keranjang .popup-keranjang-table td {
+    padding:4px 7px;
+    border-bottom:1px solid #eee;
+    font-size:1em;
+    text-align:left;
+}
+#popup-keranjang .popup-keranjang-table th {background:#f6f6f6;}
+#popup-keranjang .popup-keranjang-table input[type=number]::-webkit-inner-spin-button,
+#popup-keranjang .popup-keranjang-table input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#popup-keranjang .pembayaran-section-inline {
+    margin-top: 10px;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-shadow: 0 2px 8px #0001;
+}
+#popup-keranjang .pembayaran-section-inline label { color: #007bff; font-weight: bold;}
+#popup-keranjang .pembayaran-section-inline input[type="number"] {
+    width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #007bff; background: #fff; color: #333; font-size: 1em; margin-bottom: 4px;
+}
+#popup-keranjang .pembayaran-section-inline p { font-size: 1.05em; font-weight: bold; color: #007bff; text-align: right; margin-top: 2px;}
+#popup-kembalian-display { font-weight: bold; }
