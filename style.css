@@ -589,6 +589,52 @@ footer {
 #kasir-fabs .fab-share { bottom: 310px; right: 30px; background: linear-gradient(45deg, #dc3545, #c82333);}
 #kasir-fabs .fab-manual { bottom: 240px; right: 30px; background: var(--button-manual-bg);}
 #kasir-fabs .fab-clear { bottom: 170px; right: 30px; background: var(--button-clear-bg);}
+#kasir-fabs .fab-dapur { 
+    bottom: 7px; /* agar benar-benar di bawah, samakan dengan fab-cart pada layar mobile */
+    right: 30px; 
+    background: linear-gradient(45deg, #ff9800, #fbc02d); 
+}
+@media (max-width: 768px) {
+    #kasir-fabs .fab-dapur { bottom: 7px; right: 10px;}
+}
+@media (max-width: 480px) {
+    #kasir-fabs .fab-dapur { bottom: 7px; right: 7px;}
+}
+#kasir-fabs .fab-dapur {
+    position: fixed;
+    right: 30px;
+    background: linear-gradient(45deg, #ff9800, #fbc02d);
+    color: #fff;
+    z-index: 999;
+    /* Ubah posisi dari terbawah menjadi teratas */
+    /* Susunan baru: tertinggi */
+    bottom: 445px;
+}
+/* Susunan fab lain turun */
+#kasir-fabs .fab-print  { bottom: 380px; right: 30px; background: var(--btn-print-green-bg); }
+#kasir-fabs .fab-share  { bottom: 310px; right: 30px; background: linear-gradient(45deg, #dc3545, #c82333);}
+#kasir-fabs .fab-manual { bottom: 240px; right: 30px; background: var(--button-manual-bg);}
+#kasir-fabs .fab-clear  { bottom: 170px; right: 30px; background: var(--button-clear-bg);}
+#kasir-fabs .fab-cart   { bottom: 100px; right: 30px; background: linear-gradient(45deg, #ff9800, #fbc02d); color: #fff;}
+
+/* Mobile & Tablet: Atur posisi fab-dapur agar tetap di atas */
+@media (max-width: 768px) {
+    #kasir-fabs .fab-dapur { bottom: 262px; right: 10px;}
+    #kasir-fabs .fab-print  { bottom: 205px; right: 10px; }
+    #kasir-fabs .fab-share  { bottom: 145px; right: 10px; }
+    #kasir-fabs .fab-manual { bottom: 95px; right: 10px; }
+    #kasir-fabs .fab-clear  { bottom: 55px; right: 10px; }
+    .fab-button.fab-cart    { bottom: 15px; right: 10px;}
+}
+@media (max-width: 480px) {
+    #kasir-fabs .fab-dapur { bottom: 160px; right: 7px;}
+    #kasir-fabs .fab-print  { bottom: 118px; right: 7px; }
+    #kasir-fabs .fab-share  { bottom: 78px; right: 7px; }
+    #kasir-fabs .fab-manual { bottom: 43px; right: 7px; }
+    #kasir-fabs .fab-clear  { bottom: 7px;  right: 7px; }
+    .fab-button.fab-cart    { bottom: 7px; right: 7px;}
+}
+
 .fab-button.fab-cart { bottom: 100px; right: 30px; background: linear-gradient(45deg, #ff9800, #fbc02d); color: #fff;}
 .fab-button.fab-cart:hover { background: linear-gradient(45deg, #fbc02d, #ff9800);}
 @media (max-width: 768px) {
@@ -605,7 +651,19 @@ footer {
     #kasir-fabs .fab-clear  { bottom: 7px;  right: 7px; }
     .fab-button.fab-cart { bottom: 7px; right: 7px;}
 }
-
+.fab-button {
+    position: fixed;
+    color: white;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 1.8em;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+.fab-button:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);}
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center;}
 .modal-content {
     background-color: #fefefe;

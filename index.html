@@ -129,9 +129,12 @@
             <div class="fab-button fab-clear" id="clear-cart-fab" title="Bersihkan Keranjang">
                 <i class="fas fa-trash"></i>
             </div>
-            <!-- FAB Keranjang Belanjaan (Trolly/Wheel) -->
             <div class="fab-button fab-cart" id="cart-fab" title="Keranjang Belanjaan">
                 <i class="fas fa-shopping-cart"></i>
+            </div>
+            <!-- FAB Dapur paling bawah -->
+            <div class="fab-button fab-dapur" id="dapur-fab" title="Cetak Struk Dapur">
+                <i class="fas fa-utensils"></i>
             </div>
         </div>
         <!-- Modal Pesanan Manual -->
@@ -146,6 +149,16 @@
                 <label for="manualProductQty">Kuantitas:</label>
                 <input type="number" id="manualProductQty" min="1" value="1" required>
                 <button onclick="addManualOrderItem()">Tambahkan ke Keranjang</button>
+            </div>
+        </div>
+        <!-- Modal Struk Dapur -->
+        <div id="dapurStrukModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeDapurStrukModal()">&times;</span>
+                <h2 class="modal-title">Struk Pelanggan</h2>
+                <label for="dapurBodyInput">Isi Pesanan/Keterangan untuk di cetak ulang:</label>
+                <textarea id="dapurBodyInput" rows="7" style="width:100%;"></textarea>
+                <button onclick="printDapurStruk()">Cetak Struk Pelanggan</button>
             </div>
         </div>
         <!-- Popup Keranjang Belanjaan Floating (Trolly) -->

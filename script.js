@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupAlamatPelangganInput = null;
 
     const produkData = [
-        { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
+        { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "0674448829853" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
         { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
         { id: 4, nama: "Tteokbokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
@@ -433,62 +433,60 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = imgUrl;
     }
 
-    function generateStrukText(paymentMethod, qrisBase64 = null) {
-        let namaPemesan = namaPemesanInput.value.trim();
-        let alamatPemesan = alamatPemesanInput.value.trim();
-        if (popupNamaPelangganInput && popupAlamatPelangganInput) {
-            namaPemesan = popupNamaPelangganInput.value.trim();
-            alamatPemesan = popupAlamatPelangganInput.value.trim();
-        }
-        const keteranganPesanan = keteranganPesananInput.value.trim();
-        const kasirName = localStorage.getItem('namaKasir') || '-';
-        const currentUserRole = localStorage.getItem('userRole');
-        const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
-        let diskonNama = '', diskonNilai = 0;
-        if (currentUserRole === 'kasir') {
-            diskonNama = namaDiskonInput.value.trim() || '-';
-            diskonNilai = parseFloat(nilaiDiskonInput.value) || 0;
-        }
-        const totalSetelahDiskon = Math.max(totalBelanja - diskonNilai, 0);
-        let nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
-        if (popupKeranjangNominal) {
-            nominalPembayaran = parseFloat(popupKeranjangNominal.value) || nominalPembayaran;
-        }
-        const kembalian = nominalPembayaran - totalSetelahDiskon;
-        if (keranjang.length === 0) {
-            return { success: false, message: 'Keranjang belanja masih kosong!' };
-        }
-        let message =
-`*KEDAI HARINFOOD*\n` +
+function generateStrukText(paymentMethod, qrisBase64 = null) {
+    let namaPemesan = namaPemesanInput.value.trim();
+    let alamatPemesan = alamatPemesanInput.value.trim();
+    if (popupNamaPelangganInput && popupAlamatPelangganInput) {
+        namaPemesan = popupNamaPelangganInput.value.trim();
+        alamatPemesan = popupAlamatPelangganInput.value.trim();
+    }
+    const keteranganPesanan = keteranganPesananInput.value.trim();
+    const kasirName = localStorage.getItem('namaKasir') || '-';
+    const currentUserRole = localStorage.getItem('userRole');
+    const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+    let diskonNama = '', diskonNilai = 0;
+    if (currentUserRole === 'kasir') {
+        diskonNama = namaDiskonInput.value.trim() || '-';
+        diskonNilai = parseFloat(nilaiDiskonInput.value) || 0;
+    }
+    const totalSetelahDiskon = Math.max(totalBelanja - diskonNilai, 0);
+    let nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
+    if (popupKeranjangNominal) {
+        nominalPembayaran = parseFloat(popupKeranjangNominal.value) || nominalPembayaran;
+    }
+    const kembalian = nominalPembayaran - totalSetelahDiskon;
+    if (keranjang.length === 0) {
+        return { success: false, message: 'Keranjang belanja masih kosong!' };
+    }
+    let message =
 `Nama: ${namaPemesan || '-'}\n` +
 `Alamat: ${alamatPemesan || '-'}\n` +
 (currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
 `Tanggal: ${new Date().toLocaleDateString('id-ID')}\n` +
 `Jam: ${new Date().toLocaleTimeString('id-ID')}\n`;
-        if (keteranganPesanan) {
-            message += `Catatan: ${keteranganPesanan}\n`;
-        }
-        message += `----------------------------\n`;
-        keranjang.forEach(item => {
-            message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
-        });
-        if (currentUserRole === 'kasir' && diskonNilai > 0) {
-            message += `----------------------------\n`;
-            message += `Diskon (${diskonNama}): -${formatRupiah(diskonNilai)}\n`;
-        }
-        message += `----------------------------\n`;
-        message += `TOTAL: ${formatRupiah(totalSetelahDiskon)}\n`;
-        message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
-        message += `Kembalian: ${formatRupiah(kembalian)}\n`;
-        message += `----------------------------\nTerima kasih sehat selalu ya 🤲 🙏🥰`;
-        return {
-            success: true,
-            message,
-            total: totalSetelahDiskon,
-            nominal: nominalPembayaran,
-            qrisBase64: qrisBase64
-        };
+    if (keteranganPesanan) {
+        message += `Catatan: ${keteranganPesanan}\n`;
     }
+    message += `----------------------------\n`;
+    keranjang.forEach(item => {
+        message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
+    });
+    if (currentUserRole === 'kasir' && diskonNilai > 0) {
+        message += `----------------------------\n`;
+        message += `Diskon (${diskonNama}): -${formatRupiah(diskonNilai)}\n`;
+    }
+    message += `----------------------------\n`;
+    message += `TOTAL: ${formatRupiah(totalSetelahDiskon)}\n`;
+    message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
+    message += `Kembalian: ${formatRupiah(kembalian)}\n`;
+    return {
+        success: true,
+        message,
+        total: totalSetelahDiskon,
+        nominal: nominalPembayaran,
+        qrisBase64: qrisBase64
+    };
+}
 
     function printStruk(paymentMethod) {
         if (paymentMethod === 'QRIS') {
@@ -1044,4 +1042,66 @@ document.addEventListener('DOMContentLoaded', () => {
         if (printFab) printFab.style.display = 'none';
         if (cartFab) cartFab.style.display = 'none';
     }
+const dapurFab = document.getElementById('dapur-fab');
+    const dapurStrukModal = document.getElementById('dapurStrukModal');
+    const dapurBodyInput = document.getElementById('dapurBodyInput');
+
+    if (dapurFab) {
+        dapurFab.addEventListener('click', () => {
+            dapurBodyInput.value = '';
+            dapurStrukModal.style.display = 'flex';
+            dapurBodyInput.focus();
+        });
+    }
+    window.closeDapurStrukModal = function() {
+        dapurStrukModal.style.display = 'none';
+    };
+
+    window.printDapurStruk = function() {
+        const isi = dapurBodyInput.value.trim();
+        if (!isi) {
+            alert('Isi pesanan/keterangan tidak boleh kosong!');
+            return;
+        }
+        const headerHtml = `
+            <div class="print-header">
+                <p class="shop-name-print"><b>HARINFOOD</b></p>
+                <p class="shop-address-print">Jl Ender Rakit - Gedongan</p>
+                <p class="shop-phone-print">081235368643</p>
+            </div>
+        `;
+        const footerHtml = `<p class="thank-you">Terima kasih sehat selalu ya 🤲 🙏🥰</p>`;
+        const printContent = `
+            <html>
+            <head>
+                <title>Struk Dapur</title>
+                <meta name="viewport" content="width=58mm, initial-scale=1">
+                <link rel="stylesheet" href="style.css">
+                <style>
+                    @media print { .print-actions { display: none !important; } }
+                    .print-header { text-align: center !important; margin-bottom: 10px; }
+                    .thank-you { text-align: center; margin-top: 8px !important; font-size: 1em !important; font-style: italic !important; font-weight: bold !important;}
+                </style>
+            </head>
+            <body>
+                <div id="print-area">
+                    ${headerHtml}
+                    <pre style="font-family:inherit;font-size:inherit;white-space:pre-wrap;">${isi}</pre>
+                    ${footerHtml}
+                    <div class="print-actions">
+                        <button onclick="window.print();">Cetak Struk</button>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+            dapurStrukModal.style.display = 'none';
+        }, 300);
+    };
 });
