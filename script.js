@@ -938,19 +938,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (popupKeranjangNominal && !popupKeranjangNominal._eventsBound) {
             popupKeranjangNominal.addEventListener('focus', function() {
-                if (popupKeranjangNominal.dataset.autofilled === "true" || parseFloat(popupKeranjangNominal.value) === total) {
-                    popupKeranjangNominal.value = "";
-                    popupKeranjangNominal.dataset.autofilled = "false";
-                    hitungKembalianPopup();
-                }
+                popupKeranjangNominal.value = "";
+                popupKeranjangNominal.dataset.autofilled = "false";
+                hitungKembalianPopup();
             });
             popupKeranjangNominal.addEventListener('input', function() {
-                if (popupKeranjangNominal.value === "" || popupKeranjangNominal.value === "0") {
-                    popupKeranjangNominal.value = total;
-                    popupKeranjangNominal.dataset.autofilled = "true";
-                } else {
-                    popupKeranjangNominal.dataset.autofilled = "false";
-                }
                 hitungKembalianPopup();
             });
             popupKeranjangNominal.addEventListener('blur', function() {
@@ -959,6 +951,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     popupKeranjangNominal.dataset.autofilled = "true";
                 }
                 hitungKembalianPopup();
+            });
+            popupKeranjangNominal.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    e.preventDefault();
+                    namaPemesanInput.value = popupNamaPelangganInput.value;
+                    alamatPemesanInput.value = popupAlamatPelangganInput.value;
+                    nominalPembayaranInput.value = popupKeranjangNominal.value;
+                    hitungKembalian();
+                    hidePopupKeranjang();
+                    printStruk('Tunai');
+                }
             });
             popupKeranjangNominal._eventsBound = true;
         }

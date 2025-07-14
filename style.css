@@ -386,14 +386,15 @@ footer {
 
 .produk-item p { font-weight: bold; color: var(--text-price-color); margin-top: 0.2em; white-space: normal; overflow-wrap: break-word; line-height: 1.2; }
 
-/* Tombol plus minus simetris dan responsif */
+/* Tombol plus minus simetris dan responsif, elegan di semua perangkat */
 .produk-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     margin-top: 1em;
     width: 100%;
+    min-height: 44px;
 }
 .qty-btn,
 .qty-control-btn {
@@ -401,16 +402,18 @@ footer {
     color: #fff;
     border: none;
     border-radius: 50%;
-    width: 2.4em;
-    height: 2.4em;
+    width: 2.6em;
+    height: 2.6em;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3em;
+    font-size: 1.5em;
     cursor: pointer;
     box-shadow: 0 2px 8px var(--shadow-neon-color);
     transition: background 0.2s, box-shadow 0.2s;
     padding: 0;
+    min-width: 2.6em;
+    min-height: 2.6em;
 }
 .qty-btn:active,
 .qty-control-btn:active { background: var(--button-clear-bg); }
@@ -419,8 +422,9 @@ footer {
 .plus-btn { background: var(--button-default-bg); }
 .plus-btn:hover { background: linear-gradient(45deg, #00b0ff, #00f0ff); }
 .qty-value {
-    width: 2.1em;
-    min-width: 1.7em;
+    width: 2.3em;
+    min-width: 1.8em;
+    max-width: 2.5em;
     text-align: center;
     font-size: 1.1em;
     color: var(--text-accent-color);
@@ -435,20 +439,44 @@ footer {
     margin: 0 2px;
 }
 
-/* tombol di perangkat kecil */
-@media (max-width:600px) {
+/* Simetris dan responsif untuk mode tablet baik potret maupun landscape */
+@media (min-width: 600px) and (max-width: 1024px) {
     .produk-controls {
-        gap: 4px;
+        gap: 9px;
+        min-height: 40px;
     }
     .qty-btn,
     .qty-control-btn {
-        width: 2em;
-        height: 2em;
-        font-size: 1em;
+        width: 2.2em;
+        height: 2.2em;
+        font-size: 1.15em;
+        min-width: 2.2em;
+        min-height: 2.2em;
     }
     .qty-value {
-        width: 1.5em;
+        width: 1.7em;
+        min-width: 1.3em;
         font-size: 1em;
+    }
+}
+
+@media (max-width:600px) {
+    .produk-controls {
+        gap: 7px;
+        min-height: 34px;
+    }
+    .qty-btn,
+    .qty-control-btn {
+        width: 1.8em;
+        height: 1.8em;
+        font-size: 1em;
+        min-width: 1.8em;
+        min-height: 1.8em;
+    }
+    .qty-value {
+        width: 1.3em;
+        min-width: 1em;
+        font-size: 0.92em;
     }
 }
 
