@@ -813,3 +813,54 @@ footer {
 }
 #popup-keranjang .pembayaran-section-inline p { font-size: 1.05em; font-weight: bold; color: #007bff; text-align: right; margin-top: 2px;}
 #popup-kembalian-display { font-weight: bold; }
+/* Tambahan CSS untuk modal popup konfirmasi nama/alamat agar responsif */
+#confirmNamaAlamatModal {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+#confirmNamaAlamatModal > div {
+    background: #fff;
+    color: #222;
+    padding: 2em 2em 1em 2em;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px #000;
+    max-width: 98vw;
+    min-width: 320px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    #confirmNamaAlamatModal > div {
+        padding: 1em 0.8em 1em 0.8em;
+        max-width: 95vw;
+        min-width: 0;
+        border-radius: 8px;
+        font-size: 1em;
+    }
+    #confirmNamaAlamatModal h2 {
+        font-size: 1.1em;
+        margin-bottom: 0.5em;
+    }
+    #confirmNamaAlamatModal label {
+        font-size: 0.95em;
+        margin-bottom: 0.3em;
+    }
+    #confirmNamaInput,
+    #confirmAlamatInput {
+        font-size: 1em;
+        padding: 0.5em;
+        margin-bottom: 0.7em;
+    }
+    #confirmNamaAlamatModal button {
+        font-size: 1em;
+        padding: 0.7em 1.2em;
+    }
+}

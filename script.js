@@ -1153,4 +1153,63 @@ document.addEventListener('DOMContentLoaded', () => {
             dapurStrukModal.style.display = 'none';
         }, 300);
     };
+    // Tambahkan di bagian deklarasi variabel (di atas/bersama modal lainnya)
+const confirmNamaAlamatModal = document.getElementById('confirmNamaAlamatModal');
+const confirmNamaInput = document.getElementById('confirmNamaInput');
+const confirmAlamatInput = document.getElementById('confirmAlamatInput');
+const btnConfirmNamaAlamatOK = document.getElementById('btnConfirmNamaAlamatOK');
+const btnConfirmNamaAlamatCancel = document.getElementById('btnConfirmNamaAlamatCancel');
+
+// Fungsi untuk membuka popup konfirmasi nama/alamat
+function openConfirmNamaAlamatModal() {
+    // Isi input dengan data terakhir
+    confirmNamaInput.value = namaPemesanInput.value || localStorage.getItem('namaPemesan') || "";
+    confirmAlamatInput.value = alamatPemesanInput.value || localStorage.getItem('alamatPelanggan') || "";
+    confirmNamaAlamatModal.style.display = 'flex';
+    confirmNamaInput.focus();
+}
+
+// Fungsi untuk menutup popup konfirmasi
+function closeConfirmNamaAlamatModal() {
+    confirmNamaAlamatModal.style.display = 'none';
+}
+
+// Event tombol FAB WhatsApp diubah
+if (floatingPesanWhatsapp) {
+    floatingPesanWhatsapp.onclick = function() {
+        openConfirmNamaAlamatModal();
+    };
+}
+
+// Event tombol OK pada popup konfirmasi
+btnConfirmNamaAlamatOK.onclick = function() {
+    // Simpan ke input utama & localStorage
+    namaPemesanInput.value = confirmNamaInput.value.trim();
+    alamatPemesanInput.value = confirmAlamatInput.value.trim();
+    localStorage.setItem('namaPemesan', namaPemesanInput.value);
+    localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
+    closeConfirmNamaAlamatModal();
+
+    // Lanjut kirim WhatsApp
+    kirimPesanWhatsappPelanggan();
+};
+
+// Event tombol batal pada popup konfirmasi
+btnConfirmNamaAlamatCancel.onclick = function() {
+    closeConfirmNamaAlamatModal();
+};
+
+// Tambahkan event ENTER pada input di modal popup
+confirmNamaInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        confirmAlamatInput.focus();
+    }
+});
+confirmAlamatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        btnConfirmNamaAlamatOK.click();
+    }
+});
 });

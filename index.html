@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <!-- Popup Login -->
     <div id="login-popup" class="popup-overlay" style="display: flex;">
         <div class="popup-content">
             <h2 class="login-title">KATALOG HARINFOOD</h2>
@@ -32,7 +31,6 @@
             </form>
         </div>
     </div>
-    <!-- Modal Nama Pemesan -->
     <div id="namaPemesanModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
         <div style="background:#222; padding:2em 2em 1em 2em; border-radius:12px; box-shadow:0 8px 40px #000; max-width:90vw;">
             <h2>Isi Nama Anda</h2>
@@ -40,7 +38,6 @@
             <button id="btnSimpanNamaPemesan" style="margin-top:1em; padding:0.7em 2em; border-radius:8px; background:#00f0ff; color:#222; border:none; font-weight:bold;">Simpan</button>
         </div>
     </div>
-    <!-- Popup Pilihan Cetak -->
     <div id="print-options-popup" class="popup-overlay" style="display: none;">
         <div class="popup-content">
             <h2>Pilih Metode Pembayaran Cetak</h2>
@@ -54,16 +51,19 @@
     <div id="app-container" style="display: none;">
         <header></header>
         <div class="main-layout">
-            <!-- Produk -->
             <section id="menu-produk-section">
                 <h1 style="font-size:25px" class="section-title">DAFTAR MENU HARINFOOD</h1>
+                <div id="customer-info-display" class="customer-info-display" style="display:none;">
+                    <span id="customer-name-label"></span>
+                    <span> | </span>
+                    <span id="customer-address-label"></span>
+                </div>
                 <div class="search-barcode-input">
                     <input type="text" id="product-search-barcode" placeholder="Cari produk atau scan barcode..." autofocus>
                     <span id="search-barcode-feedback" class="feedback-message"></span>
                 </div>
                 <div id="produk-list" class="produk-grid"></div>
             </section>
-            <!-- Keranjang -->
             <section id="keranjang-form-section">
                 <h2 class="section-title">Keranjang Belanja</h2>
                 <table class="keranjang-table">
@@ -134,7 +134,7 @@
             </div>
         </div>
         <button id="floating-pesan-whatsapp" class="fab-pesan-whatsapp">
-<i class="fab fa-whatsapp" style="font-size: 24px;"></i> <span class="fab-pesan-text">TEKAN DISINI UNTUK MEMESAN</span>
+            <i class="fab fa-whatsapp" style="font-size: 24px;"></i> <span class="fab-pesan-text">TEKAN DISINI UNTUK MEMESAN</span>
         </button>
         <div id="manualOrderModal" class="modal">
             <div class="modal-content">
@@ -192,5 +192,19 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <!-- Tambahkan di bagian akhir sebelum </body> -->
+<div id="confirmNamaAlamatModal" style="display:none; position:fixed; z-index:99999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+    <div style="background:#fff; color:#222; padding:2em 2em 1em 2em; border-radius:12px; box-shadow:0 8px 40px #000; max-width:90vw; min-width:320px;">
+        <h2 style="color:#007bff;">Konfirmasi Data Pemesan</h2>
+        <label for="confirmNamaInput" style="font-weight:bold;color:#007bff;">Nama:</label>
+        <input type="text" id="confirmNamaInput" style="width:100%;padding:0.6em;font-size:1.1em;margin-bottom:1em;">
+        <label for="confirmAlamatInput" style="font-weight:bold;color:#007bff;">Alamat:</label>
+        <textarea id="confirmAlamatInput" rows="2" style="width:100%;padding:0.6em;font-size:1.1em;margin-bottom:1em;"></textarea>
+        <div style="text-align:right;">
+            <button id="btnConfirmNamaAlamatOK" style="margin-right:10px; padding:0.7em 2em; border-radius:8px; background:#00f0ff; color:#222; border:none; font-weight:bold;">OK</button>
+            <button id="btnConfirmNamaAlamatCancel" style="padding:0.7em 2em; border-radius:8px; background:#ddd; color:#222; border:none; font-weight:bold;">Batal</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
