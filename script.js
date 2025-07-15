@@ -42,9 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const namaDiskonInput = document.getElementById('nama-diskon');
     const nilaiDiskonInput = document.getElementById('nilai-diskon');
     const cartFab = document.getElementById('cart-fab');
-    const dapurFab = document.getElementById('dapur-fab');
-    const dapurStrukModal = document.getElementById('dapurStrukModal');
-    const dapurBodyInput = document.getElementById('dapurBodyInput');
+    const floatingPesanWhatsapp = document.getElementById('floating-pesan-whatsapp');
     let popupKeranjang = document.getElementById('popup-keranjang');
     let popupKeranjangNominal = document.getElementById('popup-keranjang-nominal');
     let popupKembalianDisplay = document.getElementById('popup-kembalian-display');
@@ -52,13 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
     let popupNamaPelangganInput = null;
     let popupAlamatPelangganInput = null;
-    let pesanWhatsappPelangganBtn;
-    // Support tombol WhatsApp pelanggan floating (FAB)
-    if (document.getElementById('floating-pesan-whatsapp')) {
-        pesanWhatsappPelangganBtn = document.getElementById('floating-pesan-whatsapp');
-    } else {
-        pesanWhatsappPelangganBtn = document.getElementById('pesan-whatsapp-pelanggan');
-    }
 
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "0674448829853" },
@@ -170,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         hitungKembalian();
         updateActionButtonVisibility();
         paymentChoiceButtons.style.display = 'flex';
-        updateFloatingPesanWhatsappVisibility();
     }
 
     function displayProduk() {
@@ -212,9 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             produkList.appendChild(produkDiv);
         });
     }
-    function updateProdukControls() {
-        displayProduk();
-    }
+    function updateProdukControls() { displayProduk(); }
     window.handlePriceChange = function(inputElement, produkId) {
         let newPrice = parseFloat(inputElement.value);
         if (isNaN(newPrice) || newPrice < 0) newPrice = 0;
@@ -305,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
         keranjang.push(productToAdd);
         updateKeranjang();
         updateProdukControls();
+        updateFloatingButtonVisibility(); // Trigger untuk pelanggan
     }
 
     function updateKeranjang() {
@@ -354,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         hitungKembalian();
-        updateFloatingPesanWhatsappVisibility();
+        updateFloatingButtonVisibility();
     }
 
     nilaiDiskonInput.addEventListener('input', updateKeranjang);
@@ -366,11 +355,13 @@ document.addEventListener('DOMContentLoaded', () => {
         else keranjang[index].qty = quantity;
         updateKeranjang();
         updateProdukControls();
+        updateFloatingButtonVisibility();
     };
     window.removeFromCart = function(index) {
         keranjang.splice(index, 1);
         updateKeranjang();
         updateProdukControls();
+        updateFloatingButtonVisibility();
     };
 
     clearCartFab.addEventListener('click', () => {
@@ -389,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActionButtonVisibility();
         productSearchBarcodeInput.value = '';
         productSearchBarcodeInput.focus();
-        updateFloatingPesanWhatsappVisibility();
+        updateFloatingButtonVisibility();
     });
 
     function hitungKembalian() {
@@ -614,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateActionButtonVisibility();
             productSearchBarcodeInput.value = '';
             productSearchBarcodeInput.focus();
-            updateFloatingPesanWhatsappVisibility();
+            updateFloatingButtonVisibility();
         }, 300);
         return true;
     }
@@ -657,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateActionButtonVisibility();
                 productSearchBarcodeInput.value = '';
                 productSearchBarcodeInput.focus();
-                updateFloatingPesanWhatsappVisibility();
+                updateFloatingButtonVisibility();
                 return;
             }
         } catch (error) {}
@@ -678,10 +669,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActionButtonVisibility();
         productSearchBarcodeInput.value = '';
         productSearchBarcodeInput.focus();
-        updateFloatingPesanWhatsappVisibility();
+        updateFloatingButtonVisibility();
     });
 
-    pesanWhatsappPelangganBtn.addEventListener('click', () => {
+    function kirimPesanWhatsappPelanggan() {
         if (keranjang.length === 0) {
             alert('Keranjang masih kosong, silakan pilih pesanan terlebih dahulu!');
             return;
@@ -709,8 +700,43 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActionButtonVisibility();
         productSearchBarcodeInput.value = '';
         productSearchBarcodeInput.focus();
-        updateFloatingPesanWhatsappVisibility();
-    });
+        updateFloatingButtonVisibility();
+    }
+
+    // Floating button WA animasi dan logika pelanggan
+    function updateFloatingButtonVisibility() {
+        const currentUserRole = localStorage.getItem('userRole');
+        if (!floatingPesanWhatsapp) return;
+        if (currentUserRole === 'pelanggan') {
+            if (keranjang.length > 0) {
+                floatingPesanWhatsapp.style.opacity = "1";
+                floatingPesanWhatsapp.style.pointerEvents = "auto";
+                floatingPesanWhatsapp.style.transform = "scale(1)";
+                floatingPesanWhatsapp.style.transition = "opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1)";
+            } else {
+                floatingPesanWhatsapp.style.opacity = "0";
+                floatingPesanWhatsapp.style.pointerEvents = "none";
+                floatingPesanWhatsapp.style.transform = "scale(0.7)";
+                floatingPesanWhatsapp.style.transition = "opacity 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.25s cubic-bezier(0.4,0,0.2,1)";
+            }
+        } else {
+            floatingPesanWhatsapp.style.opacity = "0";
+            floatingPesanWhatsapp.style.pointerEvents = "none";
+            floatingPesanWhatsapp.style.transform = "scale(0.7)";
+        }
+    }
+    if (floatingPesanWhatsapp) {
+        floatingPesanWhatsapp.onclick = kirimPesanWhatsappPelanggan;
+        updateFloatingButtonVisibility();
+    }
+
+    // Tombol kasir floating hanya aktif untuk kasir
+    function updateKasirFabVisibility() {
+        const currentUserRole = localStorage.getItem('userRole');
+        if (kasirFabs) {
+            kasirFabs.style.display = (currentUserRole === 'kasir') ? 'block' : 'none';
+        }
+    }
 
     btnBayarQris.addEventListener('click', () => {
         window.open('https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk', '_blank');
@@ -822,47 +848,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function updateActionButtonVisibility() {
-        const currentUserRole = localStorage.getItem('userRole');
-        if (currentUserRole === 'pelanggan') {
-            pesanWhatsappPelangganBtn.style.display = 'flex';
-            cetakStrukButton.style.display = 'none';
-            if (printFab) printFab.style.display = 'none';
-        } else {
-            pesanWhatsappPelangganBtn.style.display = 'none';
-            cetakStrukButton.style.display = 'none';
-            if (printFab) printFab.style.display = 'flex';
-        }
-        updateFloatingPesanWhatsappVisibility();
-    }
-
-    function updateFloatingPesanWhatsappVisibility() {
-        if (!pesanWhatsappPelangganBtn) return;
-        const currentUserRole = localStorage.getItem('userRole');
-        if (currentUserRole === 'pelanggan') {
-            pesanWhatsappPelangganBtn.style.opacity = keranjang.length > 0 ? '1' : '0';
-            pesanWhatsappPelangganBtn.style.pointerEvents = keranjang.length > 0 ? 'auto' : 'none';
-        } else {
-            pesanWhatsappPelangganBtn.style.opacity = '0';
-            pesanWhatsappPelangganBtn.style.pointerEvents = 'none';
-        }
+        updateKasirFabVisibility();
+        updateFloatingButtonVisibility();
     }
 
     document.addEventListener('keydown', function(e) {
         const currentUserRole = localStorage.getItem('userRole');
+        const manualOrderModal = document.getElementById('manualOrderModal');
         const manualOrderOpen = manualOrderModal && manualOrderModal.style.display === 'flex';
         if (currentUserRole !== 'kasir' || manualOrderOpen) return;
 
+        if (e.key === "F12") {
+            e.preventDefault();
+            const dapurFab = document.getElementById('dapur-fab');
+            if (dapurFab && dapurFab.style.display !== "none") {
+                dapurFab.click();
+            }
+        }
         if (e.key === 'F1') {
             e.preventDefault();
-            if (keranjang.length > 0 && printFab) {
-                printFab.click();
-            }
+            if (keranjang.length > 0 && printFab) printFab.click();
         }
         if (e.key === 'F2') {
             e.preventDefault();
-            if (keranjang.length > 0 && shareOrderFab) {
-                shareOrderFab.click();
-            }
+            if (keranjang.length > 0 && shareOrderFab) shareOrderFab.click();
         }
         if (e.key === 'F3') {
             e.preventDefault();
@@ -875,12 +884,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'F6') {
             e.preventDefault();
             showPopupKeranjang();
-        }
-        if (e.key === "F12") {
-            e.preventDefault();
-            if (dapurFab && dapurFab.style.display !== "none") {
-                dapurFab.click();
-            }
         }
     });
 
@@ -1022,11 +1025,13 @@ document.addEventListener('DOMContentLoaded', () => {
         else keranjang[idx].qty = quantity;
         updateKeranjang();
         updatePopupKeranjang(true);
+        updateFloatingButtonVisibility();
     };
     window.popupRemoveItem = function(idx) {
         keranjang.splice(idx, 1);
         updateKeranjang();
         updatePopupKeranjang(true);
+        updateFloatingButtonVisibility();
     };
 
     function hitungKembalianPopup() {
@@ -1057,8 +1062,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (storedRole) {
         loginPopup.style.display = 'none';
         appContainer.style.display = 'block';
+        updateKasirFabVisibility();
+        updateFloatingButtonVisibility();
         if (storedRole === 'kasir') {
-            kasirFabs.style.display = 'block';
             cetakStrukButton.style.display = 'none';
             pesanInfoLabel.style.display = 'none';
             shareOrderFab.style.display = 'flex';
@@ -1067,7 +1073,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (printFab) printFab.style.display = 'flex';
             if (cartFab) cartFab.style.display = 'flex';
         } else {
-            kasirFabs.style.display = 'none';
             cetakStrukButton.style.display = 'none';
             pesanInfoLabel.style.display = 'block';
             pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
@@ -1080,10 +1085,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         loginPopup.style.display = 'flex';
         appContainer.style.display = 'none';
+        updateKasirFabVisibility();
+        updateFloatingButtonVisibility();
         if (printFab) printFab.style.display = 'none';
         if (cartFab) cartFab.style.display = 'none';
-        updateFloatingPesanWhatsappVisibility();
     }
+
+    const dapurFab = document.getElementById('dapur-fab');
+    const dapurStrukModal = document.getElementById('dapurStrukModal');
+    const dapurBodyInput = document.getElementById('dapurBodyInput');
 
     if (dapurFab) {
         dapurFab.addEventListener('click', () => {
