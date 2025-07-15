@@ -83,7 +83,7 @@ footer {
     color: var(--text-accent-color);
     text-align: center;
     margin-top: 0;
-    margin-bottom: 0.1em; /* diperkecil dari 1.5em */
+    margin-bottom: 0.1em;
     font-size: 25px;
 }
 .popup-overlay {
@@ -779,88 +779,65 @@ footer {
     justify-content:center;align-items:center;
 }
 #popup-keranjang .popup-keranjang-content {
-    background:#fff;
-    min-width:320px;
-    max-width:98vw;
-    padding:24px 20px 18px 20px;
-    border-radius:12px;
-    box-shadow:0 6px 36px #0002;
-    position:relative;
-    font-size:1em;
+    background: #fff;
+    min-width: 320px;
+    max-width: 98vw;
+    padding: 24px 20px 18px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 36px #0002;
+    position: relative;
+    font-size: 1em;
+    color: #222;
 }
-#popup-keranjang .popup-keranjang-table th,#popup-keranjang .popup-keranjang-table td {
-    padding:4px 7px;
-    border-bottom:1px solid #eee;
-    font-size:1em;
-    text-align:left;
+#popup-keranjang .popup-keranjang-table th,
+#popup-keranjang .popup-keranjang-table td {
+    color: #222 !important;
 }
-#popup-keranjang .popup-keranjang-table th {background:#f6f6f6;}
-#popup-keranjang .popup-keranjang-table input[type=number]::-webkit-inner-spin-button,
-#popup-keranjang .popup-keranjang-table input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+#popup-keranjang .popup-keranjang-table tr td[colspan="4"] {
+    color: #222 !important;
+    font-weight: 500;
 }
-#popup-keranjang .pembayaran-section-inline {
-    margin-top: 10px;
+#popup-keranjang .popup-keranjang-content > div[style*="max-height"] {
+    max-height: 340px !important;
+    overflow-y: auto !important;
+    border: 1px solid #eee;
     background: #fafafa;
     border-radius: 8px;
-    padding: 8px 10px;
-    box-shadow: 0 2px 8px #0001;
-}
-#popup-keranjang .pembayaran-section-inline label { color: #007bff; font-weight: bold;}
-#popup-keranjang .pembayaran-section-inline input[type="number"] {
-    width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #007bff; background: #fff; color: #333; font-size: 1em; margin-bottom: 4px;
-}
-#popup-keranjang .pembayaran-section-inline p { font-size: 1.05em; font-weight: bold; color: #007bff; text-align: right; margin-top: 2px;}
-#popup-kembalian-display { font-weight: bold; }
-/* Tambahan CSS untuk modal popup konfirmasi nama/alamat agar responsif */
-#confirmNamaAlamatModal {
-    display: none;
-    position: fixed;
-    z-index: 99999;
-    left: 0; top: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
 }
 
-#confirmNamaAlamatModal > div {
+/* Sticky footer for both WhatsApp and Print buttons */
+#popup-keranjang .popup-sticky-footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background: #fff;
-    color: #222;
-    padding: 2em 2em 1em 2em;
-    border-radius: 12px;
-    box-shadow: 0 8px 40px #000;
-    max-width: 98vw;
-    min-width: 320px;
-    width: 100%;
-    box-sizing: border-box;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    box-shadow: 0 -2px 12px #0001;
 }
 
-@media (max-width: 600px) {
-    #confirmNamaAlamatModal > div {
-        padding: 1em 0.8em 1em 0.8em;
-        max-width: 95vw;
-        min-width: 0;
-        border-radius: 8px;
-        font-size: 1em;
-    }
-    #confirmNamaAlamatModal h2 {
-        font-size: 1.1em;
-        margin-bottom: 0.5em;
-    }
-    #confirmNamaAlamatModal label {
-        font-size: 0.95em;
-        margin-bottom: 0.3em;
-    }
-    #confirmNamaInput,
-    #confirmAlamatInput {
-        font-size: 1em;
-        padding: 0.5em;
-        margin-bottom: 0.7em;
-    }
-    #confirmNamaAlamatModal button {
-        font-size: 1em;
-        padding: 0.7em 1.2em;
-    }
+/* Hide kasir print button for pelanggan */
+body[data-role="pelanggan"] #popup-keranjang-print {
+    display: none !important;
+}
+#popup-keranjang-whatsapp {
+    background: linear-gradient(45deg, #25D366, #128C7E);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.08em;
+    margin-top: 10px;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+#popup-keranjang-whatsapp:hover {
+    background: linear-gradient(45deg, #128C7E, #25D366);
+    box-shadow: 0 4px 18px #25D36644;
 }

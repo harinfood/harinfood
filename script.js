@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
     let popupNamaPelangganInput = null;
     let popupAlamatPelangganInput = null;
+    let popupWhatsAppBtn = null;
 
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "0674448829853" },
@@ -293,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         keranjang.push(productToAdd);
         updateKeranjang();
         updateProdukControls();
-        updateFloatingButtonVisibility(); // Trigger untuk pelanggan
+        updateFloatingButtonVisibility();
     }
 
     function updateKeranjang() {
@@ -328,21 +329,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         keranjangTotal.textContent = formatRupiah(totalSetelahDiskon);
 
-        updatePopupKeranjang();
-        const totalBelanjaNumeric = totalSetelahDiskon;
         if (!isNominalInputFocused) {
-            const currentNominalValueNumeric = parseFloat(nominalPembayaranInput.value) || 0;
-            const isCurrentlyEmptyOrZero = nominalPembayaranInput.value === '' || currentNominalValueNumeric === 0;
-            if (isCurrentlyEmptyOrZero || nominalPembayaranInput.dataset.autofilled === 'true') {
-                nominalPembayaranInput.value = totalBelanjaNumeric;
-                if (totalBelanjaNumeric > 0) {
-                    nominalPembayaranInput.dataset.autofilled = 'true';
-                } else {
-                    delete nominalPembayaranInput.dataset.autofilled;
-                }
-            }
+            nominalPembayaranInput.value = totalSetelahDiskon > 0 ? totalSetelahDiskon : "";
+            nominalPembayaranInput.dataset.lastTotal = totalSetelahDiskon;
         }
         hitungKembalian();
+        updatePopupKeranjang();
         updateFloatingButtonVisibility();
     }
 
@@ -390,24 +382,32 @@ document.addEventListener('DOMContentLoaded', () => {
         kembalianDisplay.textContent = formatRupiah(kembalian);
         kembalianDisplay.style.color = kembalian < 0 ? '#dc3545' : '#ffcc00';
     }
-    nominalPembayaranInput.addEventListener('input', hitungKembalian);
     nominalPembayaranInput.addEventListener('focus', () => {
         isNominalInputFocused = true;
-        if (nominalPembayaranInput.dataset.autofilled === 'true' || parseFloat(nominalPembayaranInput.value) === 0) {
-            nominalPembayaranInput.value = '';
-            delete nominalPembayaranInput.dataset.autofilled;
-        }
+        nominalPembayaranInput.value = "";
     });
     nominalPembayaranInput.addEventListener('blur', () => {
         isNominalInputFocused = false;
-        const totalBelanjaNumeric = parseFloat(keranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
-        if (nominalPembayaranInput.value === '' && totalBelanjaNumeric > 0) {
-            nominalPembayaranInput.value = totalBelanjaNumeric;
-            nominalPembayaranInput.dataset.autofilled = 'true';
-            hitungKembalian();
-        } else if (nominalPembayaranInput.value === '' && totalBelanjaNumeric === 0) {
-            nominalPembayaranInput.value = 0;
-            delete nominalPembayaranInput.dataset.autofilled;
+        if (nominalPembayaranInput.value === "" || isNaN(parseFloat(nominalPembayaranInput.value))) {
+            let total = keranjangTotal.textContent.replace(/[^0-9,]/g, "").replace(",", ".");
+            total = parseFloat(total) || 0;
+            nominalPembayaranInput.value = total > 0 ? total : "";
+            nominalPembayaranInput.dataset.lastTotal = total;
+        }
+        hitungKembalian();
+    });
+    nominalPembayaranInput.addEventListener('input', () => {
+        if (nominalPembayaranInput.value === "" || isNaN(parseFloat(nominalPembayaranInput.value))) {
+            let total = keranjangTotal.textContent.replace(/[^0-9,]/g, "").replace(",", ".");
+            total = parseFloat(total) || 0;
+            nominalPembayaranInput.value = total > 0 ? total : "";
+            nominalPembayaranInput.dataset.lastTotal = total;
+        }
+        hitungKembalian();
+    });
+    nominalPembayaranInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
             hitungKembalian();
         }
     });
@@ -703,7 +703,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFloatingButtonVisibility();
     }
 
-    // Floating button WA animasi dan logika pelanggan
     function updateFloatingButtonVisibility() {
         const currentUserRole = localStorage.getItem('userRole');
         if (!floatingPesanWhatsapp) return;
@@ -725,23 +724,15 @@ document.addEventListener('DOMContentLoaded', () => {
             floatingPesanWhatsapp.style.transform = "scale(0.7)";
         }
     }
-    if (floatingPesanWhatsapp) {
-        floatingPesanWhatsapp.onclick = kirimPesanWhatsappPelanggan;
-        updateFloatingButtonVisibility();
-    }
-
-    // Tombol kasir floating hanya aktif untuk kasir
     function updateKasirFabVisibility() {
         const currentUserRole = localStorage.getItem('userRole');
         if (kasirFabs) {
             kasirFabs.style.display = (currentUserRole === 'kasir') ? 'block' : 'none';
         }
     }
-
     btnBayarQris.addEventListener('click', () => {
         window.open('https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk', '_blank');
     });
-
     if (printFab) {
         printFab.addEventListener('click', () => {
             if (keranjang.length === 0) {
@@ -904,6 +895,11 @@ document.addEventListener('DOMContentLoaded', () => {
             showPopupKeranjang();
         });
     }
+    if (floatingPesanWhatsapp) {
+        floatingPesanWhatsapp.onclick = function() {
+            showPopupKeranjang();
+        };
+    }
 
     function updatePopupKeranjang(forceShow = false) {
         if (popupKeranjang.style.display === "none" && !forceShow) return;
@@ -919,9 +915,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const namaAlamatDiv = document.createElement('div');
             namaAlamatDiv.style.marginBottom = "10px";
             namaAlamatDiv.innerHTML = `
-                <label style="font-weight:bold;color:#007bff;">Nama Pelanggan:</label>
+                <label style="font-weight:bold;color:#007bff;">Nama Pemesan:</label>
                 <input type="text" id="popup-nama-pelanggan" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;margin-bottom:8px;">
-                <label style="font-weight:bold;color:#007bff;">Alamat Pelanggan:</label>
+                <label style="font-weight:bold;color:#007bff;">Alamat Pemesan:</label>
                 <textarea id="popup-alamat-pelanggan" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;min-height:40px;"></textarea>
             `;
             popupKeranjang.firstElementChild.insertBefore(namaAlamatDiv, popupKeranjang.firstElementChild.children[2]);
@@ -948,19 +944,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let total = 0;
         tbody.innerHTML = '';
         if (keranjang.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#888;">Keranjang kosong.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#222;font-weight:500;">Keranjang kosong.</td></tr>`;
         } else {
             keranjang.forEach((item, idx) => {
                 const subtotal = item.harga * item.qty;
                 total += subtotal;
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${item.nama}</td>
+                    <td style="color:#222;">${item.nama}</td>
                     <td>
-                        <input type="number" value="${item.qty}" min="1" style="width:48px"
+                        <input type="number" value="${item.qty}" min="1" style="width:48px;color:#222;"
                             onchange="window.popupUpdateQty(${idx}, this.value)">
                     </td>
-                    <td>${formatRupiah(subtotal)}</td>
+                    <td style="color:#222;">${formatRupiah(subtotal)}</td>
                     <td>
                         <button onclick="window.popupRemoveItem(${idx})" style="background:none;border:none;color:#dc3545;font-size:1.2em;cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
                     </td>
@@ -971,52 +967,108 @@ document.addEventListener('DOMContentLoaded', () => {
         totalSpan.textContent = formatRupiah(total);
 
         if (popupKeranjangNominal) {
-            if (popupKeranjangNominal.dataset.autofilled !== "false") {
-                popupKeranjangNominal.value = total;
-                popupKeranjangNominal.dataset.autofilled = "true";
-            }
+            popupKeranjangNominal.value = total > 0 ? total : "";
+            popupKeranjangNominal.dataset.lastTotal = total;
+            popupKeranjangNominal.style.color = "#222";
             hitungKembalianPopup();
-        }
-
-        if (popupKeranjangNominal && !popupKeranjangNominal._eventsBound) {
             popupKeranjangNominal.addEventListener('focus', function() {
-                popupKeranjangNominal.value = "";
-                popupKeranjangNominal.dataset.autofilled = "false";
+                this.value = "";
+            });
+            popupKeranjangNominal.addEventListener('blur', function() {
+                if (this.value === "" || isNaN(parseFloat(this.value))) {
+                    this.value = total > 0 ? total : "";
+                    this.dataset.lastTotal = total;
+                }
                 hitungKembalianPopup();
             });
             popupKeranjangNominal.addEventListener('input', function() {
-                hitungKembalianPopup();
-            });
-            popupKeranjangNominal.addEventListener('blur', function() {
-                if (popupKeranjangNominal.value === "" || popupKeranjangNominal.value === "0") {
-                    popupKeranjangNominal.value = total;
-                    popupKeranjangNominal.dataset.autofilled = "true";
+                if (this.value === "" || isNaN(parseFloat(this.value))) {
+                    this.value = total > 0 ? total : "";
+                    this.dataset.lastTotal = total;
                 }
                 hitungKembalianPopup();
             });
-            popupKeranjangNominal.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.keyCode === 13) {
-                    e.preventDefault();
-                    namaPemesanInput.value = popupNamaPelangganInput.value;
-                    alamatPemesanInput.value = popupAlamatPelangganInput.value;
-                    nominalPembayaranInput.value = popupKeranjangNominal.value;
-                    hitungKembalian();
-                    hidePopupKeranjang();
-                    printStruk('Tunai');
-                }
-            });
-            popupKeranjangNominal._eventsBound = true;
         }
-        if (popupKeranjangPrintBtn) {
-            popupKeranjangPrintBtn.onclick = function() {
-                namaPemesanInput.value = popupNamaPelangganInput.value;
-                alamatPemesanInput.value = popupAlamatPelangganInput.value;
-                nominalPembayaranInput.value = popupKeranjangNominal.value;
-                hitungKembalian();
-                hidePopupKeranjang();
-                printStruk('Tunai');
-            };
+
+        const currentUserRole = localStorage.getItem('userRole');
+
+        // Sticky footer untuk tombol print & WhatsApp
+        const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
+        let stickyFooter = popupContent.querySelector('.popup-sticky-footer');
+        if (stickyFooter) stickyFooter.remove();
+
+        stickyFooter = document.createElement('div');
+        stickyFooter.className = 'popup-sticky-footer';
+        stickyFooter.style.position = 'sticky';
+        stickyFooter.style.bottom = '0';
+        stickyFooter.style.left = '0';
+        stickyFooter.style.right = '0';
+        stickyFooter.style.background = '#fff';
+        stickyFooter.style.zIndex = '20';
+        stickyFooter.style.display = 'flex';
+        stickyFooter.style.flexDirection = 'column';
+        stickyFooter.style.gap = '10px';
+        stickyFooter.style.paddingTop = '10px';
+        stickyFooter.style.boxShadow = '0 -2px 12px #0001';
+
+        if (!popupKeranjangPrintBtn) {
+            popupKeranjangPrintBtn = document.createElement('button');
+            popupKeranjangPrintBtn.id = 'popup-keranjang-print';
+            popupKeranjangPrintBtn.innerHTML = '<i class="fas fa-print"></i> Cetak Struk';
+            popupKeranjangPrintBtn.style.background = '#007bff';
+            popupKeranjangPrintBtn.style.color = '#fff';
+            popupKeranjangPrintBtn.style.border = 'none';
+            popupKeranjangPrintBtn.style.padding = '8px 16px';
+            popupKeranjangPrintBtn.style.borderRadius = '5px';
+            popupKeranjangPrintBtn.style.cursor = 'pointer';
+            popupKeranjangPrintBtn.style.fontWeight = 'bold';
+            popupKeranjangPrintBtn.style.fontSize = '1em';
+            popupKeranjangPrintBtn.style.width = '100%';
         }
+        popupKeranjangPrintBtn.style.display = (currentUserRole === 'kasir') ? 'block' : 'none';
+        popupKeranjangPrintBtn.onclick = function() {
+            namaPemesanInput.value = popupNamaPelangganInput.value;
+            alamatPemesanInput.value = popupAlamatPelangganInput.value;
+            nominalPembayaranInput.value = popupKeranjangNominal.value;
+            hitungKembalian();
+            hidePopupKeranjang();
+            printStruk('Tunai');
+        };
+
+        if (!popupWhatsAppBtn) {
+            popupWhatsAppBtn = document.createElement('button');
+            popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
+            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim Pesan via WhatsApp';
+            popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
+            popupWhatsAppBtn.style.color = '#fff';
+            popupWhatsAppBtn.style.border = 'none';
+            popupWhatsAppBtn.style.padding = '12px 18px';
+            popupWhatsAppBtn.style.borderRadius = '6px';
+            popupWhatsAppBtn.style.cursor = 'pointer';
+            popupWhatsAppBtn.style.fontSize = '1.08em';
+            popupWhatsAppBtn.style.width = '100%';
+            popupWhatsAppBtn.style.fontWeight = 'bold';
+            popupWhatsAppBtn.style.zIndex = 10;
+        }
+        popupWhatsAppBtn.style.display = (currentUserRole === 'pelanggan') ? 'block' : 'none';
+        popupWhatsAppBtn.onclick = function() {
+            namaPemesanInput.value = popupNamaPelangganInput.value.trim();
+            alamatPemesanInput.value = popupAlamatPelangganInput.value.trim();
+            localStorage.setItem('namaPemesan', namaPemesanInput.value);
+            localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
+            nominalPembayaranInput.value = popupKeranjangNominal.value;
+            hitungKembalian();
+            hidePopupKeranjang();
+            kirimPesanWhatsappPelanggan();
+        };
+
+        if(currentUserRole === 'kasir') {
+            stickyFooter.appendChild(popupKeranjangPrintBtn);
+        }
+        if(currentUserRole === 'pelanggan') {
+            stickyFooter.appendChild(popupWhatsAppBtn);
+        }
+        popupContent.appendChild(stickyFooter);
     }
     window.popupUpdateQty = function(idx, val) {
         let quantity = parseInt(val);
@@ -1060,6 +1112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
+        document.body.setAttribute("data-role", storedRole);
         loginPopup.style.display = 'none';
         appContainer.style.display = 'block';
         updateKasirFabVisibility();
@@ -1083,6 +1136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         initializeApp();
     } else {
+        document.body.removeAttribute("data-role");
         loginPopup.style.display = 'flex';
         appContainer.style.display = 'none';
         updateKasirFabVisibility();
@@ -1153,63 +1207,4 @@ document.addEventListener('DOMContentLoaded', () => {
             dapurStrukModal.style.display = 'none';
         }, 300);
     };
-    // Tambahkan di bagian deklarasi variabel (di atas/bersama modal lainnya)
-const confirmNamaAlamatModal = document.getElementById('confirmNamaAlamatModal');
-const confirmNamaInput = document.getElementById('confirmNamaInput');
-const confirmAlamatInput = document.getElementById('confirmAlamatInput');
-const btnConfirmNamaAlamatOK = document.getElementById('btnConfirmNamaAlamatOK');
-const btnConfirmNamaAlamatCancel = document.getElementById('btnConfirmNamaAlamatCancel');
-
-// Fungsi untuk membuka popup konfirmasi nama/alamat
-function openConfirmNamaAlamatModal() {
-    // Isi input dengan data terakhir
-    confirmNamaInput.value = namaPemesanInput.value || localStorage.getItem('namaPemesan') || "";
-    confirmAlamatInput.value = alamatPemesanInput.value || localStorage.getItem('alamatPelanggan') || "";
-    confirmNamaAlamatModal.style.display = 'flex';
-    confirmNamaInput.focus();
-}
-
-// Fungsi untuk menutup popup konfirmasi
-function closeConfirmNamaAlamatModal() {
-    confirmNamaAlamatModal.style.display = 'none';
-}
-
-// Event tombol FAB WhatsApp diubah
-if (floatingPesanWhatsapp) {
-    floatingPesanWhatsapp.onclick = function() {
-        openConfirmNamaAlamatModal();
-    };
-}
-
-// Event tombol OK pada popup konfirmasi
-btnConfirmNamaAlamatOK.onclick = function() {
-    // Simpan ke input utama & localStorage
-    namaPemesanInput.value = confirmNamaInput.value.trim();
-    alamatPemesanInput.value = confirmAlamatInput.value.trim();
-    localStorage.setItem('namaPemesan', namaPemesanInput.value);
-    localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
-    closeConfirmNamaAlamatModal();
-
-    // Lanjut kirim WhatsApp
-    kirimPesanWhatsappPelanggan();
-};
-
-// Event tombol batal pada popup konfirmasi
-btnConfirmNamaAlamatCancel.onclick = function() {
-    closeConfirmNamaAlamatModal();
-};
-
-// Tambahkan event ENTER pada input di modal popup
-confirmNamaInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        confirmAlamatInput.focus();
-    }
-});
-confirmAlamatInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        btnConfirmNamaAlamatOK.click();
-    }
-});
 });
