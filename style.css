@@ -552,14 +552,15 @@ footer {
 }
 .fab-pesan-whatsapp {
     position: fixed;
-    right: 18px;
-    bottom: 18px;
+    right: 100px;
+    left: 100px;
+    bottom: 10px;
     z-index: 10010;
     background: var(--button-whatsapp-bg);
     color: #fff;
     border: none;
     border-radius: 32px;
-    box-shadow: 0 4px 16px rgba(0,240,100,0.15);
+    box-shadow: 0 4px 16px rgba(255,255,255,0.36);
     font-size: 1.2em;
     font-weight: bold;
     padding: 0.8em 1.6em 0.8em 1.2em;
@@ -573,7 +574,7 @@ footer {
 }
 .fab-pesan-whatsapp i {
     font-size: 1.5em;
-    margin-right: 0.4em;
+    margin: 0.4em;
 }
 .fab-pesan-whatsapp .fab-pesan-text {
     font-size: 1.08em;
@@ -582,7 +583,7 @@ footer {
 }
 .fab-pesan-whatsapp:hover {
     background: linear-gradient(45deg, #128C7E, #25D366);
-    box-shadow: 0 8px 30px rgba(0,240,100,0.25);
+    box-shadow: 0 8px 30px rgb(255,255,255);
     transform: scale(1.06) translateY(-2px);
 }
 @media (max-width: 600px) {
@@ -620,7 +621,7 @@ footer {
 #kasir-fabs .fab-dapur   { bottom: calc(12px + 5*56px); background: linear-gradient(45deg, #ff9800, #fbc02d);}
 #kasir-fabs .fab-print   { bottom: calc(12px + 4*56px); background: linear-gradient(45deg, #28a745, #1e7e34);}
 #kasir-fabs .fab-manual  { bottom: calc(12px + 2*56px); background: linear-gradient(45deg, #8a2be2, #4b0082);}
-#kasir-fabs .fab-cart    { bottom: calc(12px + 1*56px); background: linear-gradient(45deg, #ff9800, #fbc02d);}
+#kasir-fabs .fab-cart    { bottom: calc(12px + 1*56px); background: linear-gradient(45deg, #ff9800, #359df3);}
 #kasir-fabs .fab-clear   { bottom: 12px;                background: linear-gradient(45deg, #ff4d4d, #ff8c8c);}
 #kasir-fabs .fab-button:not(:last-child) { margin-bottom: 8px; }
 #kasir-fabs .fab-button:hover { 
