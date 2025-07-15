@@ -83,8 +83,8 @@ footer {
     color: var(--text-accent-color);
     text-align: center;
     margin-top: 0;
-    margin-bottom: 1.5em;
-    font-size: 2em;
+    margin-bottom: 0.1em; /* diperkecil dari 1.5em */
+    font-size: 25px;
 }
 .popup-overlay {
     position: fixed;
@@ -511,7 +511,7 @@ footer {
     transition: background-color 0.2s, transform 0.2s;
 }
 #keranjang-items td button:hover { background-color: #d32f2f; transform: translateY(-1px);}
-.empty-cart-message { text-align: center; font-style: italic; color: rgba(255, 255, 255, 0.5); padding: 1em;}
+.empty-cart-message { text-align: center; font-style: italic; color: rgba(255,255,255,0); padding: 1em;}
 .keranjang-total-display { font-size: 1.2em; font-weight: bold; margin-top: 0.5em; color: var(--text-accent-color); text-align: right;}
 #keranjang-total { color: var(--text-price-color);}
 .pembayaran-section-inline {
@@ -525,7 +525,7 @@ footer {
 .pembayaran-section-inline p { font-size: 1.1em; font-weight: bold; color: var(--text-accent-color); text-align: right; margin-top: 0.5em;}
 #kembalian-display { color: var(--text-price-color);}
 .pemesanan-container {
-    padding-top: 1.5em; border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: 1em;
+    padding-top: 1.5em; border-top: 1px solid rgba(255,255,255,0); margin-top: 1em;
 }
 .pemesanan-container .section-title { font-size: 1.5em; margin-bottom: 1em; text-align: center;}
 .pemesanan-container label { display: block; margin-bottom: 0.5em; color: var(--text-accent-color);}
@@ -560,7 +560,7 @@ footer {
     color: #fff;
     border: none;
     border-radius: 32px;
-    box-shadow: 0 4px 16px rgba(255,255,255,0.36);
+    box-shadow: 0 4px 16px rgba(255,255,255,0);
     font-size: 1.2em;
     font-weight: bold;
     padding: 0.8em 1.6em 0.8em 1.2em;
@@ -617,12 +617,12 @@ footer {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     transition: all 0.2s;
 }
-#kasir-fabs .fab-share   { bottom: calc(12px + 3*56px); background: linear-gradient(45deg, #dc3545, #c82333);}
-#kasir-fabs .fab-dapur   { bottom: calc(12px + 5*56px); background: linear-gradient(45deg, #ff9800, #fbc02d);}
-#kasir-fabs .fab-print   { bottom: calc(12px + 4*56px); background: linear-gradient(45deg, #28a745, #1e7e34);}
-#kasir-fabs .fab-manual  { bottom: calc(12px + 2*56px); background: linear-gradient(45deg, #8a2be2, #4b0082);}
-#kasir-fabs .fab-cart    { bottom: calc(12px + 1*56px); background: linear-gradient(45deg, #ff9800, #359df3);}
-#kasir-fabs .fab-clear   { bottom: 12px;                background: linear-gradient(45deg, #ff4d4d, #ff8c8c);}
+#kasir-fabs .fab-share   { bottom: calc(12px + 3*56px); background: linear-gradient(45deg, #3ec0f2, #3ec0f2);}
+#kasir-fabs .fab-dapur   { bottom: calc(12px + 5*56px); background: linear-gradient(45deg, #000000, #000000);}
+#kasir-fabs .fab-print   { bottom: calc(12px + 4*56px); background: linear-gradient(45deg, #211ae5, #211ae5);}
+#kasir-fabs .fab-manual  { bottom: calc(12px + 2*56px); background: linear-gradient(45deg, #4b0082, #4b0082);}
+#kasir-fabs .fab-cart    { bottom: calc(12px + 1*56px); background: linear-gradient(45deg, #ff9800, #ff9800);}
+#kasir-fabs .fab-clear   { bottom: 12px;                background: linear-gradient(45deg, #de0909, #de0909);}
 #kasir-fabs .fab-button:not(:last-child) { margin-bottom: 8px; }
 #kasir-fabs .fab-button:hover { 
     transform: scale(1.12) translateY(-2px); 
@@ -669,7 +669,7 @@ footer {
     background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; transition: background-color 0.2s;
 }
 .modal-content button:hover { background-color: #218838; }
-.search-barcode-input { margin-bottom: 20px; text-align: center;}
+.search-barcode-input { margin-bottom: 0.1em; margin-right:5px; margin-left:20px; text-align: center;}
 .search-barcode-input input {
     width: calc(100% - 20px); padding: 12px 10px; border: 1px solid var(--input-border-color); border-radius: var(--border-radius); background: var(--input-bg); color: var(--text-primary-color); font-size: 1em; box-sizing: border-box; margin-bottom: 5px;
 }
