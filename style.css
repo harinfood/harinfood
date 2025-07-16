@@ -841,3 +841,34 @@ body[data-role="pelanggan"] #popup-keranjang-print {
     background: linear-gradient(45deg, #128C7E, #25D366);
     box-shadow: 0 4px 18px #25D36644;
 }
+/* Tambahkan di akhir file style.css */
+
+#kembalian-modal {
+    display: none;
+    position: fixed;
+    z-index: 100011;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.54);
+    justify-content: center;
+    align-items: center;
+}
+.kembalian-modal-content {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 40px #28a74533;
+    padding: 38px 32px 28px 32px;
+    min-width: 300px;
+    max-width: 94vw;
+    position: relative;
+    text-align: center;
+    animation: popKembalian 0.25s cubic-bezier(.18,.89,.32,1.28);
+}
+@keyframes popKembalian {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+#kembalian-modal-value {
+    font-size: 2.8em;
+    font-weight: bold;
+}

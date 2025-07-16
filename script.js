@@ -47,10 +47,66 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupKeranjangNominal = document.getElementById('popup-keranjang-nominal');
     let popupKembalianDisplay = document.getElementById('popup-kembalian-display');
     let popupKeranjangTotal = document.getElementById('popup-keranjang-total');
-    let popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
+    let popupKeranjangPrintBtn = null;
     let popupNamaPelangganInput = null;
     let popupAlamatPelangganInput = null;
     let popupWhatsAppBtn = null;
+    let kembalianModal;
+
+    function formatNumberWithDots(n) {
+        if (typeof n === "string") n = n.replace(/\./g, '');
+        let x = n.toString().replace(/[^0-9]/g, '');
+        if (x === "") return "";
+        return x.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    function parseNumberFromDots(str) {
+        return parseInt((str || "").toString().replace(/\./g, "")) || 0;
+    }
+
+    function createKembalianModal() {
+        if (document.getElementById('kembalian-modal')) return;
+        kembalianModal = document.createElement('div');
+        kembalianModal.id = "kembalian-modal";
+        kembalianModal.style.display = "none";
+        kembalianModal.innerHTML = `
+            <div class="kembalian-modal-content">
+                <span id="close-kembalian-modal" style="position:absolute;right:20px;top:10px;font-size:2em;cursor:pointer;color:#333;">&times;</span>
+                <h2 style="text-align:center;color:#28a745;margin-bottom: 1em;">Kembalian</h2>
+                <div id="kembalian-modal-value" style="font-size:2.5em;font-weight:bold;text-align:center;color:#28a745;letter-spacing: 2px; margin-bottom: 20px;">Rp 0</div>
+            </div>
+        `;
+        document.body.appendChild(kembalianModal);
+        document.getElementById('close-kembalian-modal').onclick = () => {
+            kembalianModal.style.display = "none";
+        };
+    }
+    createKembalianModal();
+
+    function setPopupKeranjangClosed(val) {
+        localStorage.setItem('popupKeranjangClosed', val ? '1' : '');
+    }
+    function isPopupKeranjangClosed() {
+        return localStorage.getItem('popupKeranjangClosed') === '1';
+    }
+    function showPopupKeranjang(forceShow = false) {
+        if (!forceShow) {
+            if (isPopupKeranjangClosed()) return;
+            if (keranjang.length === 0) return;
+        }
+        updatePopupKeranjang(true);
+        popupKeranjang.style.display = "flex";
+        setPopupKeranjangClosed(false);
+        document.body.style.overflow = "hidden";
+        setTimeout(() => {
+            document.getElementById('close-popup-keranjang').focus();
+        }, 100);
+    }
+    function hidePopupKeranjang() {
+        popupKeranjang.style.display = "none";
+        setPopupKeranjangClosed(true);
+        document.body.style.overflow = "";
+    }
+    document.getElementById('close-popup-keranjang').onclick = hidePopupKeranjang;
 
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
@@ -65,6 +121,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let keranjang = [];
     let nextManualItemId = 1000;
     let isNominalInputFocused = false;
+
+    function saveKeranjangToStorage() {
+        localStorage.setItem('keranjang', JSON.stringify(keranjang));
+    }
+    function loadKeranjangFromStorage() {
+        try {
+            const data = localStorage.getItem('keranjang');
+            keranjang = data ? JSON.parse(data) : [];
+        } catch (e) {
+            keranjang = [];
+        }
+    }
 
     function resetHargaProdukKeDefault() {
         produkDefaultHarga.forEach(def => {
@@ -157,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         autofillNamaPemesanForm();
         displayProduk();
+        loadKeranjangFromStorage();
         updateKeranjang();
         hitungKembalian();
         updateActionButtonVisibility();
@@ -279,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 existingItem.qty += (produkSumber.qty || 1);
                 updateKeranjang();
                 updateProdukControls();
+                saveKeranjangToStorage();
                 return;
             } else {
                 productToAdd = { ...produkSumber, qty: produkSumber.qty || 1 };
@@ -294,6 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateKeranjang();
         updateProdukControls();
         updateFloatingButtonVisibility();
+        saveKeranjangToStorage();
     }
 
     function updateKeranjang() {
@@ -335,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hitungKembalian();
         updatePopupKeranjang();
         updateFloatingButtonVisibility();
+        saveKeranjangToStorage();
     }
 
     nilaiDiskonInput.addEventListener('input', updateKeranjang);
@@ -347,12 +419,14 @@ document.addEventListener('DOMContentLoaded', () => {
         updateKeranjang();
         updateProdukControls();
         updateFloatingButtonVisibility();
+        saveKeranjangToStorage();
     };
     window.removeFromCart = function(index) {
         keranjang.splice(index, 1);
         updateKeranjang();
         updateProdukControls();
         updateFloatingButtonVisibility();
+        saveKeranjangToStorage();
     };
 
     clearCartFab.addEventListener('click', () => {
@@ -372,6 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productSearchBarcodeInput.value = '';
         productSearchBarcodeInput.focus();
         updateFloatingButtonVisibility();
+        saveKeranjangToStorage();
     });
 
     function hitungKembalian() {
@@ -460,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalSetelahDiskon = Math.max(totalBelanja - diskonNilai, 0);
         let nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
         if (popupKeranjangNominal) {
-            nominalPembayaran = parseFloat(popupKeranjangNominal.value) || nominalPembayaran;
+            nominalPembayaran = parseNumberFromDots(popupKeranjangNominal.value) || nominalPembayaran;
         }
         const kembalian = nominalPembayaran - totalSetelahDiskon;
         if (keranjang.length === 0) {
@@ -471,19 +546,19 @@ document.addEventListener('DOMContentLoaded', () => {
 Alamat: ${alamatPemesan || '-'}
 ${currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : ''}Tanggal: ${new Date().toLocaleDateString('id-ID')}
 Jam: ${new Date().toLocaleTimeString('id-ID')}
-${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}----------------------------
+${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-----------------------------
 `;
         keranjang.forEach(item => {
-            message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
+            message += `${item.nama} (${item.qty}x)  ${formatRupiah(item.harga * item.qty)}\n`;
         });
         if (currentUserRole === 'kasir' && diskonNilai > 0) {
-            message += `----------------------------\n`;
-            message += `Diskon (${diskonNama}): -${formatRupiah(diskonNilai)}\n`;
+            message += `-----------------------------\n`;
+            message += `Diskon (${diskonNama}) : -${formatRupiah(diskonNilai)}\n`;
         }
-        message += `----------------------------\n`;
-        message += `TOTAL: ${formatRupiah(totalSetelahDiskon)}\n`;
-        message += `Bayar: ${formatRupiah(nominalPembayaran)}\n`;
-        message += `Kembalian: ${formatRupiah(kembalian)}\n`;
+        message += `-----------------------------\n`;
+        message += `TOTAL     : ${formatRupiah(totalSetelahDiskon)}\n`;
+        message += `Bayar     : ${formatRupiah(nominalPembayaran)}\n`;
+        message += `Kembalian : ${formatRupiah(kembalian)}\n`;
         return {
             success: true,
             message,
@@ -514,8 +589,8 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         keranjang.forEach(item => {
             printTableProduk += `
                 <tr>
-                    <td style="text-align:left;word-break:break-word;">${item.nama} (${item.qty}x)</td>
-                    <td style="text-align:right;">${formatRupiah(item.harga * item.qty)}</td>
+                    <td class="print-item" style="text-align:left;word-break:break-word;font-size:11px;padding:0.5px 0;line-height:1.05;">${item.nama} (${item.qty}x)</td>
+                    <td class="print-item" style="text-align:right;font-size:11px;padding:0.5px 0;line-height:1.05;">${formatRupiah(item.harga * item.qty)}</td>
                 </tr>
             `;
         });
@@ -524,8 +599,8 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         if (localStorage.getItem('userRole') === 'kasir' && (parseFloat(nilaiDiskonInput.value) || 0) > 0) {
             diskonTr = `
             <tr>
-                <td style="text-align:left;">Diskon (${namaDiskonInput.value || '-'})</td>
-                <td style="text-align:right;">-${formatRupiah(parseFloat(nilaiDiskonInput.value) || 0)}</td>
+                <td style="text-align:left;font-size:11px;padding:0.5px 0;">Diskon (${namaDiskonInput.value || '-'})</td>
+                <td style="text-align:right;font-size:11px;padding:0.5px 0;">-${formatRupiah(parseFloat(nilaiDiskonInput.value) || 0)}</td>
             </tr>`;
         }
 
@@ -537,11 +612,15 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                 <link rel="stylesheet" href="style.css">
                 <style>
                     @media print { .print-actions { display: none !important; } }
-                    table { width:100%; border-collapse: collapse; font-size:1em;}
-                    td { padding:2px 0; font-weight:bold; }
-                    .total-row td { border-top:1.5px solid #000; font-size:1.15em;}
-                    .print-actions {text-align:center; margin:10px 0;}
-                    .print-header { text-align: center !important; margin-bottom: 10px;}
+                    body, #print-area { font-family:'Arial', 'Poppins', sans-serif !important; font-size:11px !important; line-height:1.05 !important; font-weight:bold !important; margin:0 !important; padding:0 !important;}
+                    #print-area { width:58mm !important; max-width:58mm !important; padding:2mm 2mm 0 2mm !important; }
+                    table { width:100%; border-collapse: collapse; font-size:11px;}
+                    td { padding:0.5px 0; font-weight:bold; font-size:11px;}
+                    .total-row td { border-top:1.5px solid #000; font-size:12px;}
+                    .print-header { text-align:center!important;margin-bottom:4px!important;font-size:14px!important;font-weight:bold!important;line-height:1.05!important;letter-spacing:0.02em!important;}
+                    .print-header .shop-address-print, .print-header .shop-phone-print { font-size:11px!important;font-weight:bold!important;margin:0!important;line-height:1.05!important;}
+                    .print-info p { margin:0!important;font-size:11px!important;font-weight:bold!important; }
+                    .thank-you { text-align:center;margin-top:8px!important;font-size:11px!important;font-style:italic!important;font-weight:bold!important;}
                 </style>
                 <script>
                     function shareWhatsApp() {
@@ -556,7 +635,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             <body>
                 <div id="print-area">
                     <div class="print-header">
-                        <p class="shop-name-print"><b>HARINFOOD</b></p>
+                        <p class="shop-name-print" style="font-size:14px;margin-bottom:1px;"><b>HARINFOOD</b></p>
                         <p class="shop-address-print">Jl Ender Rakit - Gedongan</p>
                         <p class="shop-phone-print">081235368643</p>
                     </div>
@@ -573,15 +652,15 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                             return catatan ? `<p>Catatan: ${catatan}</p>` : '';
                         })()}
                     </div>
-                    <hr>
+                    <hr style="margin:2px 0;">
                     <table>
                         ${printTableProduk}
                         ${diskonTr}
-                        <tr class="total-row"><td style="text-align:left;">TOTAL</td><td style="text-align:right;">${formatRupiah(shareResult.total)}</td></tr>
-                        <tr><td style="text-align:left;">Bayar</td><td style="text-align:right;">${formatRupiah(shareResult.nominal)}</td></tr>
-                        <tr><td style="text-align:left;">Kembalian</td><td style="text-align:right;">${formatRupiah(shareResult.nominal - shareResult.total)}</td></tr>
+                        <tr class="total-row"><td style="text-align:left;font-size:11px;">TOTAL</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.total)}</td></tr>
+                        <tr><td style="text-align:left;font-size:11px;">Bayar</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.nominal)}</td></tr>
+                        <tr><td style="text-align:left;font-size:11px;">Kembalian</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.nominal - shareResult.total)}</td></tr>
                     </table>
-                    <hr>
+                    <hr style="margin:2px 0;">
         `;
 
         if (paymentMethod === 'QRIS') {
@@ -606,8 +685,8 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         printWindow.document.close();
         printWindow.focus();
         setTimeout(() => {
-            printWindow.print();
             keranjang = [];
+            saveKeranjangToStorage();
             resetHargaProdukKeDefault();
             updateKeranjang();
             updateProdukControls();
@@ -627,7 +706,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         return true;
     }
 
-    shareOrderFab.addEventListener('click', async () => {
+    shareOrderFab && shareOrderFab.addEventListener('click', async () => {
         const shareResult = generateStrukText('Tunai');
         if (!shareResult.success) {
             alert(shareResult.message);
@@ -652,6 +731,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                     text: messageToShare
                 });
                 keranjang = [];
+                saveKeranjangToStorage();
                 resetHargaProdukKeDefault();
                 updateKeranjang();
                 updateProdukControls();
@@ -673,6 +753,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         const whatsappURL = `https://wa.me/6281235368643?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
         keranjang = [];
+        saveKeranjangToStorage();
         resetHargaProdukKeDefault();
         updateKeranjang();
         updateProdukControls();
@@ -704,6 +785,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         const whatsappURL = `https://wa.me/6281235368643?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
         keranjang = [];
+        saveKeranjangToStorage();
         resetHargaProdukKeDefault();
         updateKeranjang();
         updateProdukControls();
@@ -891,30 +973,18 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         }
         if (e.key === 'F6') {
             e.preventDefault();
-            showPopupKeranjang();
+            showPopupKeranjang(true);
         }
     });
 
-    function showPopupKeranjang() {
-        updatePopupKeranjang(true);
-        popupKeranjang.style.display = "flex";
-        setTimeout(() => {
-            document.getElementById('close-popup-keranjang').focus();
-        }, 100);
-    }
-    function hidePopupKeranjang() {
-        popupKeranjang.style.display = "none";
-    }
-    document.getElementById('close-popup-keranjang').onclick = hidePopupKeranjang;
-
     if (cartFab) {
         cartFab.addEventListener('click', function() {
-            showPopupKeranjang();
+            showPopupKeranjang(true);
         });
     }
     if (floatingPesanWhatsapp) {
         floatingPesanWhatsapp.onclick = function() {
-            showPopupKeranjang();
+            showPopupKeranjang(true);
         };
     }
 
@@ -925,6 +995,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         popupKeranjangNominal = document.getElementById('popup-keranjang-nominal');
         popupKembalianDisplay = document.getElementById('popup-kembalian-display');
         popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
+        popupWhatsAppBtn = document.getElementById('popup-keranjang-whatsapp');
         let namaPelangganPopup = document.getElementById('popup-nama-pelanggan');
         let alamatPelangganPopup = document.getElementById('popup-alamat-pelanggan');
         let popupCatatanInput = document.getElementById('popup-catatan-belanja');
@@ -1004,31 +1075,44 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         totalSpan.textContent = formatRupiah(total);
 
         if (popupKeranjangNominal) {
-            popupKeranjangNominal.value = total > 0 ? total : "";
-            popupKeranjangNominal.dataset.lastTotal = total;
+            if (!popupKeranjangNominal._formatted) {
+                popupKeranjangNominal.value = total > 0 ? formatNumberWithDots(total) : "";
+                popupKeranjangNominal.dataset.lastTotal = total;
+                popupKeranjangNominal._formatted = true;
+            }
             popupKeranjangNominal.style.color = "#222";
             hitungKembalianPopup();
+
+            popupKeranjangNominal.addEventListener('input', function(e) {
+                let cursor = popupKeranjangNominal.selectionStart;
+                let before = popupKeranjangNominal.value.length;
+                let clean = formatNumberWithDots(popupKeranjangNominal.value);
+                popupKeranjangNominal.value = clean;
+                let after = clean.length;
+                popupKeranjangNominal.setSelectionRange(cursor + (after - before), cursor + (after - before));
+                hitungKembalianPopup();
+            });
+
             popupKeranjangNominal.addEventListener('focus', function() {
                 this.value = "";
             });
             popupKeranjangNominal.addEventListener('blur', function() {
-                if (this.value === "" || isNaN(parseFloat(this.value))) {
-                    this.value = total > 0 ? total : "";
+                if (this.value === "" || isNaN(parseNumberFromDots(this.value))) {
+                    this.value = total > 0 ? formatNumberWithDots(total) : "";
                     this.dataset.lastTotal = total;
                 }
                 hitungKembalianPopup();
             });
-            popupKeranjangNominal.addEventListener('input', function() {
-                if (this.value === "" || isNaN(parseFloat(this.value))) {
-                    this.value = total > 0 ? total : "";
-                    this.dataset.lastTotal = total;
+            popupKeranjangNominal.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    e.preventDefault();
+                    hitungKembalianPopup();
+                    showKembalianModalPopupKeranjang();
                 }
-                hitungKembalianPopup();
             });
         }
 
         const currentUserRole = localStorage.getItem('userRole');
-
         const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
         let stickyFooter = popupContent.querySelector('.popup-sticky-footer');
         if (stickyFooter) stickyFooter.remove();
@@ -1065,10 +1149,11 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         popupKeranjangPrintBtn.onclick = function() {
             namaPemesanInput.value = popupNamaPelangganInput.value;
             alamatPemesanInput.value = popupAlamatPelangganInput.value;
-            nominalPembayaranInput.value = popupKeranjangNominal.value;
+            nominalPembayaranInput.value = parseNumberFromDots(popupKeranjangNominal.value);
             hitungKembalian();
             hidePopupKeranjang();
             printStruk('Tunai');
+            setPopupKeranjangClosed(true);
         };
 
         if (!popupWhatsAppBtn) {
@@ -1092,10 +1177,11 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             alamatPemesanInput.value = popupAlamatPelangganInput.value.trim();
             localStorage.setItem('namaPemesan', namaPemesanInput.value);
             localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
-            nominalPembayaranInput.value = popupKeranjangNominal.value;
+            nominalPembayaranInput.value = parseNumberFromDots(popupKeranjangNominal.value);
             hitungKembalian();
             hidePopupKeranjang();
             kirimPesanWhatsappPelanggan();
+            setPopupKeranjangClosed(true);
         };
 
         if(currentUserRole === 'kasir') {
@@ -1105,6 +1191,8 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             stickyFooter.appendChild(popupWhatsAppBtn);
         }
         popupContent.appendChild(stickyFooter);
+
+        if (popupKembalianDisplay) popupKembalianDisplay.textContent = '';
     }
     window.popupUpdateQty = function(idx, val) {
         let quantity = parseInt(val);
@@ -1114,31 +1202,38 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         updateKeranjang();
         updatePopupKeranjang(true);
         updateFloatingButtonVisibility();
+        saveKeranjangToStorage();
     };
     window.popupRemoveItem = function(idx) {
         keranjang.splice(idx, 1);
         updateKeranjang();
         updatePopupKeranjang(true);
         updateFloatingButtonVisibility();
+        saveKeranjangToStorage();
     };
 
-    function hitungKembalianPopup() {
-        if (!popupKeranjangNominal || !popupKembalianDisplay || !popupKeranjangTotal) return;
+    function showKembalianModalPopupKeranjang() {
+        if (!popupKeranjangNominal || !popupKeranjangTotal) return;
         const totalBelanja = parseFloat(popupKeranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
-        const nominalPembayaran = parseFloat(popupKeranjangNominal.value) || 0;
+        const nominalPembayaran = parseNumberFromDots(popupKeranjangNominal.value);
         const kembalian = nominalPembayaran - totalBelanja;
-        popupKembalianDisplay.textContent = formatRupiah(kembalian);
-        popupKembalianDisplay.style.color = kembalian < 0 ? '#dc3545' : '#007bff';
+        createKembalianModal();
+        const valDiv = document.getElementById('kembalian-modal-value');
+        if (nominalPembayaran < totalBelanja) {
+            valDiv.style.color = '#dc3545';
+            valDiv.innerHTML = 'Nominal pembayaran harus lebih dari total belanjaan!';
+        } else {
+            valDiv.style.color = '#28a745';
+            valDiv.innerHTML = formatRupiah(kembalian);
+        }
+        kembalianModal.style.display = 'flex';
+        kembalianModal.style.justifyContent = 'center';
+        kembalianModal.style.alignItems = 'center';
     }
 
-    document.getElementById('popup-keranjang-print').onclick = function() {
-        namaPemesanInput.value = popupNamaPelangganInput.value;
-        alamatPemesanInput.value = popupAlamatPelangganInput.value;
-        nominalPembayaranInput.value = popupKeranjangNominal.value;
-        hitungKembalian();
-        hidePopupKeranjang();
-        printStruk('Tunai');
-    };
+    function hitungKembalianPopup() {
+        if (popupKembalianDisplay) popupKembalianDisplay.textContent = '';
+    }
 
     popupKeranjang.addEventListener('click', function(e) {
         if (e.target === popupKeranjang) {
