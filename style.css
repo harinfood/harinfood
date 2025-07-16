@@ -841,6 +841,55 @@ body[data-role="pelanggan"] #popup-keranjang-print {
     background: linear-gradient(45deg, #128C7E, #25D366);
     box-shadow: 0 4px 18px #25D36644;
 }
+
+/*======= CUSTOM POPUP KERANJANG EDIT =======*/
+
+/* Jarak baris total dan nominal pembayaran popup keranjang lebih dekat */
+#popup-keranjang-total,
+#popup-keranjang-nominal {
+    margin-top: 0.2em !important;
+    margin-bottom: 0.2em !important;
+}
+
+/* Label Nominal Pembayaran warna #00f0ff dan menempel input */
+#popup-keranjang .pembayaran-section-inline label {
+    display: block;
+    margin-bottom: -6px;
+    color: #00f0ff !important;
+    font-weight: 700;
+    font-size: 1em;
+    letter-spacing: 0.03em;
+    padding-left: 2px;
+    padding-bottom: 0;
+}
+
+#popup-keranjang .pembayaran-section-inline input[type="number"] {
+    width: calc(100% - 10px);
+    padding: 10px 8px;
+    border-radius: 5px;
+    border: 2px solid #00f0ff;
+    background: var(--input-bg, #f8f8f8);
+    color: #222;
+    font-size: 1.05em;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+#popup-keranjang .pembayaran-section-inline input[type="number"]:focus {
+    outline: none;
+    border-color: #00f0ff;
+    box-shadow: 0 0 10px var(--shadow-neon-color, #00f0ff44);
+}
+
+/* Hilangkan tulisan kembalian di popup keranjang */
+#popup-keranjang .pembayaran-section-inline p,
+#popup-kembalian-display {
+    display: none !important;
+}
+
+/*===========================================*/
+
 /* Tambahkan di akhir file style.css */
 
 #kembalian-modal {

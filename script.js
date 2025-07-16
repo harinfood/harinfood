@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
-        { id: 5, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
         { id: 4, nama: "Tteokbokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki.webp", barcode: "toppoki10" },
         { id: 9, nama: "Es Teh Jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" },
@@ -173,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     formKasir.addEventListener('submit', (event) => {
         event.preventDefault();
         const namaKasir = namaKasirLoginInput.value.trim();
-        const passwordKasir = passwordKasirLoginInput.value.trim();
-        if (namaKasir === 'Harry' && passwordKasir === '313121') {
+        const passwordKasirLoginInput = document.getElementById('password-kasir-login');
+        if (namaKasir === 'Harry' && passwordKasirLoginInput.value.trim() === '313121') {
             localStorage.setItem('userRole', 'kasir');
             localStorage.setItem('namaKasir', namaKasir);
             loginPopup.style.display = 'none';
@@ -992,7 +991,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
     function updatePopupKeranjang(forceShow = false) {
         if (popupKeranjang.style.display === "none" && !forceShow) return;
         const tbody = document.getElementById('popup-keranjang-items');
-        const totalSpan = document.getElementById('popup-keranjang-total');
+        popupKeranjangTotal = document.getElementById('popup-keranjang-total');
         popupKeranjangNominal = document.getElementById('popup-keranjang-nominal');
         popupKembalianDisplay = document.getElementById('popup-kembalian-display');
         popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
@@ -1073,45 +1072,110 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                 tbody.appendChild(row);
             });
         }
-        totalSpan.textContent = formatRupiah(total);
 
-        if (popupKeranjangNominal) {
-            if (!popupKeranjangNominal._formatted) {
-                popupKeranjangNominal.value = total > 0 ? formatNumberWithDots(total) : "";
-                popupKeranjangNominal.dataset.lastTotal = total;
-                popupKeranjangNominal._formatted = true;
-            }
-            popupKeranjangNominal.style.color = "#222";
-            hitungKembalianPopup();
-
-            popupKeranjangNominal.addEventListener('input', function(e) {
-                let cursor = popupKeranjangNominal.selectionStart;
-                let before = popupKeranjangNominal.value.length;
-                let clean = formatNumberWithDots(popupKeranjangNominal.value);
-                popupKeranjangNominal.value = clean;
-                let after = clean.length;
-                popupKeranjangNominal.setSelectionRange(cursor + (after - before), cursor + (after - before));
-                hitungKembalianPopup();
-            });
-
-            popupKeranjangNominal.addEventListener('focus', function() {
-                this.value = "";
-            });
-            popupKeranjangNominal.addEventListener('blur', function() {
-                if (this.value === "" || isNaN(parseNumberFromDots(this.value))) {
-                    this.value = total > 0 ? formatNumberWithDots(total) : "";
-                    this.dataset.lastTotal = total;
-                }
-                hitungKembalianPopup();
-            });
-            popupKeranjangNominal.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.keyCode === 13) {
-                    e.preventDefault();
-                    hitungKembalianPopup();
-                    showKembalianModalPopupKeranjang();
-                }
-            });
+        let pembayaranInline = popupKeranjang.querySelector('.pembayaran-section-inline');
+        if (pembayaranInline && pembayaranInline.parentElement) {
+            pembayaranInline.parentElement.removeChild(pembayaranInline);
         }
+        pembayaranInline = document.createElement('div');
+        pembayaranInline.className = 'pembayaran-section-inline';
+        pembayaranInline.style.position = 'sticky';
+        pembayaranInline.style.bottom = '62px';
+        pembayaranInline.style.background = '#fff';
+        pembayaranInline.style.zIndex = '22';
+        pembayaranInline.style.padding = '6px 0 6px 0';
+        pembayaranInline.style.margin = '0 -20px 0 -20px';
+        pembayaranInline.style.borderTop = '1px solid #eee';
+        pembayaranInline.style.display = 'flex';
+        pembayaranInline.style.alignItems = 'center';
+        pembayaranInline.style.justifyContent = 'space-between';
+        pembayaranInline.style.gap = '8px';
+
+        let leftDiv = document.createElement('div');
+        leftDiv.style.display = 'flex';
+        leftDiv.style.alignItems = 'center';
+        let labelTotal = document.createElement('span');
+        labelTotal.textContent = 'Total:';
+        labelTotal.style.fontWeight = 'bold';
+        labelTotal.style.color = '#222';
+        labelTotal.style.fontSize = '1em';
+        labelTotal.style.marginRight = '4px';
+        let spanTotal = document.createElement('span');
+        spanTotal.id = 'popup-keranjang-total';
+        spanTotal.textContent = formatRupiah(total);
+        spanTotal.style.fontWeight = 'bold';
+        spanTotal.style.color = '#ff9800';
+        spanTotal.style.fontSize = '1em';
+        leftDiv.appendChild(labelTotal);
+        leftDiv.appendChild(spanTotal);
+
+        let rightDiv = document.createElement('div');
+        rightDiv.style.display = 'flex';
+        rightDiv.style.alignItems = 'center';
+        let labelNominal = document.createElement('span');
+        labelNominal.textContent = 'Bayar:';
+        labelNominal.style.color = '#00f0ff';
+        labelNominal.style.fontWeight = '700';
+        labelNominal.style.fontSize = '1em';
+        labelNominal.style.marginRight = '3px';
+        let inputNominal = document.createElement('input');
+        inputNominal.type = 'number';
+        inputNominal.id = 'popup-keranjang-nominal';
+        inputNominal.min = '0';
+        inputNominal.value = total > 0 ? formatNumberWithDots(total) : "";
+        inputNominal.style.width = '90px';
+        inputNominal.style.padding = '6px';
+        inputNominal.style.borderRadius = '4px';
+        inputNominal.style.border = '2px solid #00f0ff';
+        inputNominal.style.color = '#222';
+        inputNominal.style.fontWeight = 'bold';
+        inputNominal.style.background = '#f8f8f8';
+        rightDiv.appendChild(labelNominal);
+        rightDiv.appendChild(inputNominal);
+
+        pembayaranInline.appendChild(leftDiv);
+        pembayaranInline.appendChild(rightDiv);
+
+        popupKeranjang.firstElementChild.appendChild(pembayaranInline);
+
+        popupKeranjangTotal = pembayaranInline.querySelector('#popup-keranjang-total');
+        popupKeranjangNominal = pembayaranInline.querySelector('#popup-keranjang-nominal');
+
+        if (!popupKeranjangNominal._formatted) {
+            popupKeranjangNominal.value = total > 0 ? formatNumberWithDots(total) : "";
+            popupKeranjangNominal.dataset.lastTotal = total;
+            popupKeranjangNominal._formatted = true;
+        }
+        popupKeranjangNominal.style.color = "#222";
+        hitungKembalianPopup();
+
+        popupKeranjangNominal.addEventListener('input', function(e) {
+            let cursor = popupKeranjangNominal.selectionStart;
+            let before = popupKeranjangNominal.value.length;
+            let clean = formatNumberWithDots(popupKeranjangNominal.value);
+            popupKeranjangNominal.value = clean;
+            let after = clean.length;
+            popupKeranjangNominal.setSelectionRange(cursor + (after - before), cursor + (after - before));
+            hitungKembalianPopup();
+        });
+
+        popupKeranjangNominal.addEventListener('focus', function() {
+            this.value = "";
+        });
+        popupKeranjangNominal.addEventListener('blur', function() {
+            if (this.value === "" || isNaN(parseNumberFromDots(this.value))) {
+                this.value = total > 0 ? formatNumberWithDots(total) : "";
+                this.dataset.lastTotal = total;
+            }
+            hitungKembalianPopup();
+        });
+        popupKeranjangNominal.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();
+                hitungKembalianPopup();
+                showKembalianModalPopupKeranjang();
+            }
+        });
 
         const currentUserRole = localStorage.getItem('userRole');
         const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
@@ -1192,8 +1256,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             stickyFooter.appendChild(popupWhatsAppBtn);
         }
         popupContent.appendChild(stickyFooter);
-
-        if (popupKembalianDisplay) popupKembalianDisplay.textContent = '';
     }
     window.popupUpdateQty = function(idx, val) {
         let quantity = parseInt(val);
@@ -1233,7 +1295,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
     }
 
     function hitungKembalianPopup() {
-        if (popupKembalianDisplay) popupKembalianDisplay.textContent = '';
     }
 
     popupKeranjang.addEventListener('click', function(e) {
