@@ -444,7 +444,13 @@ document.addEventListener('DOMContentLoaded', () => {
             namaPemesan = popupNamaPelangganInput.value.trim();
             alamatPemesan = popupAlamatPelangganInput.value.trim();
         }
-        const keteranganPesanan = keteranganPesananInput.value.trim();
+        // Ambil keterangan dari popup jika ada, jika tidak dari textarea utama
+        let keteranganPesanan = keteranganPesananInput.value.trim();
+        let popupCatatanInput = document.getElementById('popup-catatan-belanja');
+        if (popupCatatanInput && popupCatatanInput.value.trim() !== "") {
+            keteranganPesanan = popupCatatanInput.value.trim();
+        }
+
         const kasirName = localStorage.getItem('namaKasir') || '-';
         const currentUserRole = localStorage.getItem('userRole');
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
@@ -909,6 +915,30 @@ document.addEventListener('DOMContentLoaded', () => {
         popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
         let namaPelangganPopup = document.getElementById('popup-nama-pelanggan');
         let alamatPelangganPopup = document.getElementById('popup-alamat-pelanggan');
+        let popupCatatanInput = document.getElementById('popup-catatan-belanja');
+
+        // Tambah form keterangan/catatan jika belum ada
+        if (!popupCatatanInput) {
+            const catatanDiv = document.createElement('div');
+            catatanDiv.style.marginBottom = "10px";
+            catatanDiv.innerHTML = `
+                <label style="font-weight:bold;color:#007bff;">Catatan/Keterangan Pesanan:</label>
+                <textarea id="popup-catatan-belanja" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;min-height:40px;"></textarea>
+            `;
+            // Tambahkan setelah alamat
+            if (popupKeranjang.firstElementChild && popupKeranjang.firstElementChild.children.length >= 3) {
+                popupKeranjang.firstElementChild.insertBefore(catatanDiv, popupKeranjang.firstElementChild.children[3]);
+            }
+            popupCatatanInput = document.getElementById('popup-catatan-belanja');
+        }
+
+        // Sinkronisasi antara popup catatan dan textarea utama
+        if (popupCatatanInput) {
+            popupCatatanInput.value = keteranganPesananInput.value;
+            popupCatatanInput.oninput = function() {
+                keteranganPesananInput.value = popupCatatanInput.value;
+            };
+        }
 
         if (!namaPelangganPopup || !alamatPelangganPopup) {
             const namaAlamatDiv = document.createElement('div');
