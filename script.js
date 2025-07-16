@@ -1073,6 +1073,28 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             });
         }
 
+        // --- REMOVE/Hide the "Total: Rp0" text if total==0 (the old static total above the sticky footer) ---
+        // Find and hide/remove the old static total if total == 0
+        // Cari elemen yang berisi tulisan "Total: Rp0"
+        let staticTotalNode = null;
+        const staticNodes = popupKeranjang.querySelectorAll('strong, span, div');
+        staticNodes.forEach(node => {
+            if (
+                node.textContent && 
+                typeof node.textContent === "string" &&
+                node.textContent.trim().match(/^Total:\s*Rp0$/i)
+            ) {
+                staticTotalNode = node;
+            }
+        });
+        if (staticTotalNode) {
+            if (total === 0) {
+                staticTotalNode.style.display = "none";
+            } else {
+                staticTotalNode.style.display = "";
+            }
+        }
+
         let pembayaranInline = popupKeranjang.querySelector('.pembayaran-section-inline');
         if (pembayaranInline && pembayaranInline.parentElement) {
             pembayaranInline.parentElement.removeChild(pembayaranInline);
