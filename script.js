@@ -1073,27 +1073,22 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             });
         }
 
-        // --- REMOVE/Hide the "Total: Rp0" text if total==0 (the old static total above the sticky footer) ---
-        // Find and hide/remove the old static total if total == 0
-        // Cari elemen yang berisi tulisan "Total: Rp0"
-        let staticTotalNode = null;
-        const staticNodes = popupKeranjang.querySelectorAll('strong, span, div');
+        // Hapus elemen static total (Total: Rp0 atau Total: Rp...) jika ditemukan
+        const staticNodes = popupKeranjang.querySelectorAll('div, strong, span');
         staticNodes.forEach(node => {
             if (
-                node.textContent && 
+                node.textContent &&
                 typeof node.textContent === "string" &&
-                node.textContent.trim().match(/^Total:\s*Rp0$/i)
+                node.textContent.trim().match(/^Total:\s*Rp[\d\.]+$/i)
             ) {
-                staticTotalNode = node;
+                // Cari parent terdekat yang mengandung strong Total: ... (biasanya <div>), hapus dari DOM
+                if (node.parentElement && node.parentElement.parentElement === popupKeranjang.firstElementChild) {
+                    node.parentElement.remove();
+                } else if (node.parentElement === popupKeranjang.firstElementChild) {
+                    node.remove();
+                }
             }
         });
-        if (staticTotalNode) {
-            if (total === 0) {
-                staticTotalNode.style.display = "none";
-            } else {
-                staticTotalNode.style.display = "";
-            }
-        }
 
         let pembayaranInline = popupKeranjang.querySelector('.pembayaran-section-inline');
         if (pembayaranInline && pembayaranInline.parentElement) {
