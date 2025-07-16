@@ -444,13 +444,11 @@ document.addEventListener('DOMContentLoaded', () => {
             namaPemesan = popupNamaPelangganInput.value.trim();
             alamatPemesan = popupAlamatPelangganInput.value.trim();
         }
-        // Ambil keterangan dari popup jika ada, jika tidak dari textarea utama
         let keteranganPesanan = keteranganPesananInput.value.trim();
         let popupCatatanInput = document.getElementById('popup-catatan-belanja');
         if (popupCatatanInput && popupCatatanInput.value.trim() !== "") {
             keteranganPesanan = popupCatatanInput.value.trim();
         }
-
         const kasirName = localStorage.getItem('namaKasir') || '-';
         const currentUserRole = localStorage.getItem('userRole');
         const totalBelanja = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
@@ -469,15 +467,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return { success: false, message: 'Keranjang belanja masih kosong!' };
         }
         let message =
-`Nama: ${namaPemesan || '-'}\n` +
-`Alamat: ${alamatPemesan || '-'}\n` +
-(currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : '') +
-`Tanggal: ${new Date().toLocaleDateString('id-ID')}\n` +
-`Jam: ${new Date().toLocaleTimeString('id-ID')}\n`;
-        if (keteranganPesanan) {
-            message += `Catatan: ${keteranganPesanan}\n`;
-        }
-        message += `----------------------------\n`;
+`Nama: ${namaPemesan || '-'}
+Alamat: ${alamatPemesan || '-'}
+${currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : ''}Tanggal: ${new Date().toLocaleDateString('id-ID')}
+Jam: ${new Date().toLocaleTimeString('id-ID')}
+${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}----------------------------
+`;
         keranjang.forEach(item => {
             message += `${item.nama} (${item.qty}x): ${formatRupiah(item.harga * item.qty)}\n`;
         });
@@ -515,8 +510,25 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
         const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰";
-        let isiTanpaHeader = shareResult.message.replace(/^\*KEDAI HARINFOOD\*\n/, '');
-        isiTanpaHeader = isiTanpaHeader.replace(/----------------------------\nTerima kasih sehat selalu ya [^\n]+$/g, '');
+        let printTableProduk = '';
+        keranjang.forEach(item => {
+            printTableProduk += `
+                <tr>
+                    <td style="text-align:left;word-break:break-word;">${item.nama} (${item.qty}x)</td>
+                    <td style="text-align:right;">${formatRupiah(item.harga * item.qty)}</td>
+                </tr>
+            `;
+        });
+
+        let diskonTr = '';
+        if (localStorage.getItem('userRole') === 'kasir' && (parseFloat(nilaiDiskonInput.value) || 0) > 0) {
+            diskonTr = `
+            <tr>
+                <td style="text-align:left;">Diskon (${namaDiskonInput.value || '-'})</td>
+                <td style="text-align:right;">-${formatRupiah(parseFloat(nilaiDiskonInput.value) || 0)}</td>
+            </tr>`;
+        }
+
         let printContent = `
             <html>
             <head>
@@ -524,34 +536,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <meta name="viewport" content="width=58mm, initial-scale=1">
                 <link rel="stylesheet" href="style.css">
                 <style>
-                    @media print {
-                        .print-actions { display: none !important; }
-                    }
-                    .print-actions {
-                        text-align: center;
-                        margin-top: 10px;
-                        margin-bottom: 10px;
-                    }
-                    .print-actions button {
-                        padding: 10px 16px;
-                        font-size: 1.1em;
-                        border-radius: 8px;
-                        margin: 0 4px;
-                        background: #00b0ff;
-                        color: #fff;
-                        border: none;
-                        cursor: pointer;
-                    }
-                    .print-actions button:active {
-                        background: #0072a3;
-                    }
-                    .print-header {
-                        text-align: center !important;
-                        margin-bottom: 10px;
-                    }
-                    .print-header p {
-                        margin: 0;
-                    }
+                    @media print { .print-actions { display: none !important; } }
+                    table { width:100%; border-collapse: collapse; font-size:1em;}
+                    td { padding:2px 0; font-weight:bold; }
+                    .total-row td { border-top:1.5px solid #000; font-size:1.15em;}
+                    .print-actions {text-align:center; margin:10px 0;}
+                    .print-header { text-align: center !important; margin-bottom: 10px;}
                 </style>
                 <script>
                     function shareWhatsApp() {
@@ -570,8 +560,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="shop-address-print">Jl Ender Rakit - Gedongan</p>
                         <p class="shop-phone-print">081235368643</p>
                     </div>
-                    <pre style="font-family:inherit;font-size:inherit;white-space:pre-wrap;">${isiTanpaHeader}</pre>
+                    <div class="print-info">
+                        <p>Nama   : ${popupNamaPelangganInput ? popupNamaPelangganInput.value : namaPemesanInput.value}</p>
+                        <p>Alamat : ${popupAlamatPelangganInput ? popupAlamatPelangganInput.value : alamatPemesanInput.value}</p>
+                        ${localStorage.getItem('userRole') === 'kasir' ? `<p>Kasir  : ${localStorage.getItem('namaKasir')}</p>` : ''}
+                        <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+                        <p>Jam    : ${new Date().toLocaleTimeString('id-ID')}</p>
+                        ${(() => {
+                            let catatan = keteranganPesananInput.value;
+                            let popupCatatan = document.getElementById('popup-catatan-belanja');
+                            if (popupCatatan && popupCatatan.value.trim() !== "") catatan = popupCatatan.value;
+                            return catatan ? `<p>Catatan: ${catatan}</p>` : '';
+                        })()}
+                    </div>
+                    <hr>
+                    <table>
+                        ${printTableProduk}
+                        ${diskonTr}
+                        <tr class="total-row"><td style="text-align:left;">TOTAL</td><td style="text-align:right;">${formatRupiah(shareResult.total)}</td></tr>
+                        <tr><td style="text-align:left;">Bayar</td><td style="text-align:right;">${formatRupiah(shareResult.nominal)}</td></tr>
+                        <tr><td style="text-align:left;">Kembalian</td><td style="text-align:right;">${formatRupiah(shareResult.nominal - shareResult.total)}</td></tr>
+                    </table>
+                    <hr>
         `;
+
         if (paymentMethod === 'QRIS') {
             printContent += `
                 <div style="text-align: center; margin-top: 10px; margin-bottom: 5px;">
@@ -587,8 +599,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button onclick="cetakUlang()">Cetak Struk</button>
                 <button onclick="shareWhatsApp()">Bagikan via WhatsApp</button>
             </div>
-        `;
-        printContent += `</div></body></html>`;
+            </div></body></html>`;
+
         const printWindow = window.open('', '_blank');
         printWindow.document.write(printContent);
         printWindow.document.close();
@@ -917,7 +929,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let alamatPelangganPopup = document.getElementById('popup-alamat-pelanggan');
         let popupCatatanInput = document.getElementById('popup-catatan-belanja');
 
-        // Tambah form keterangan/catatan jika belum ada
         if (!popupCatatanInput) {
             const catatanDiv = document.createElement('div');
             catatanDiv.style.marginBottom = "10px";
@@ -925,14 +936,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <label style="font-weight:bold;color:#007bff;">Catatan/Keterangan Pesanan:</label>
                 <textarea id="popup-catatan-belanja" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;min-height:40px;"></textarea>
             `;
-            // Tambahkan setelah alamat
             if (popupKeranjang.firstElementChild && popupKeranjang.firstElementChild.children.length >= 3) {
                 popupKeranjang.firstElementChild.insertBefore(catatanDiv, popupKeranjang.firstElementChild.children[3]);
             }
             popupCatatanInput = document.getElementById('popup-catatan-belanja');
         }
-
-        // Sinkronisasi antara popup catatan dan textarea utama
         if (popupCatatanInput) {
             popupCatatanInput.value = keteranganPesananInput.value;
             popupCatatanInput.oninput = function() {
@@ -1021,7 +1029,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const currentUserRole = localStorage.getItem('userRole');
 
-        // Sticky footer untuk tombol print & WhatsApp
         const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
         let stickyFooter = popupContent.querySelector('.popup-sticky-footer');
         if (stickyFooter) stickyFooter.remove();
