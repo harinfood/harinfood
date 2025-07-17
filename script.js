@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // === DEKLARASI VARIABEL DOM ===
     const loginPopup = document.getElementById('login-popup');
     const btnPelanggan = document.getElementById('btn-pelanggan');
     const btnKasir = document.getElementById('btn-kasir');
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupWhatsAppBtn = null;
     let kembalianModal;
 
+    // === UTILITAS ===
     function formatNumberWithDots(n) {
         if (typeof n === "string") n = n.replace(/\./g, '');
         let x = n.toString().replace(/[^0-9]/g, '');
@@ -62,7 +64,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function parseNumberFromDots(str) {
         return parseInt((str || "").toString().replace(/\./g, "")) || 0;
     }
+    function formatRupiah(number) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(number);
+    }
+    function getBase64Image(imgUrl, callback) {
+        const img = new window.Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL("image/png");
+            callback(dataURL);
+        };
+        img.onerror = function() {
+            callback(null);
+        };
+        img.src = imgUrl;
+    }
 
+    // === MODAL KEMBALIAN ===
     function createKembalianModal() {
         if (document.getElementById('kembalian-modal')) return;
         kembalianModal = document.createElement('div');
@@ -82,32 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createKembalianModal();
 
-    function setPopupKeranjangClosed(val) {
-        localStorage.setItem('popupKeranjangClosed', val ? '1' : '');
-    }
-    function isPopupKeranjangClosed() {
-        return localStorage.getItem('popupKeranjangClosed') === '1';
-    }
-    function showPopupKeranjang(forceShow = false) {
-        if (!forceShow) {
-            if (isPopupKeranjangClosed()) return;
-            if (keranjang.length === 0) return;
-        }
-        updatePopupKeranjang(true);
-        popupKeranjang.style.display = "flex";
-        setPopupKeranjangClosed(false);
-        document.body.style.overflow = "hidden";
-        setTimeout(() => {
-            document.getElementById('close-popup-keranjang').focus();
-        }, 100);
-    }
-    function hidePopupKeranjang() {
-        popupKeranjang.style.display = "none";
-        setPopupKeranjangClosed(true);
-        document.body.style.overflow = "";
-    }
-    document.getElementById('close-popup-keranjang').onclick = hidePopupKeranjang;
-
+    // === DATA PRODUK DAN KERANJANG ===
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
@@ -117,11 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh.webp", barcode: "esteh2" }
     ];
     const produkDefaultHarga = produkData.map(p => ({ id: p.id, harga: p.harga }));
-
     let keranjang = [];
     let nextManualItemId = 1000;
     let isNominalInputFocused = false;
 
+    // === LOAD/SAVE KERANJANG ===
     function saveKeranjangToStorage() {
         localStorage.setItem('keranjang', JSON.stringify(keranjang));
     }
@@ -133,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
             keranjang = [];
         }
     }
-
     function resetHargaProdukKeDefault() {
         produkDefaultHarga.forEach(def => {
             const produk = produkData.find(p => p.id === def.id);
@@ -142,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('produkHarga');
     }
 
+    // === LOGIN HANDLING ===
     btnPelanggan.addEventListener('click', () => {
         formPelanggan.style.display = 'flex';
         formKasir.style.display = 'none';
@@ -186,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Nama kasir atau password salah!');
         }
     });
-
     document.getElementById('btnSimpanNamaPemesan').onclick = function() {
         var nama = inputNamaPemesan.value.trim();
         if (nama.length < 2) { return; }
@@ -202,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // === FORM AUTOFILL ===
     function autofillNamaPemesanForm() {
         const nama = localStorage.getItem('namaPemesan') || '';
         const alamat = localStorage.getItem('alamatPelanggan') || '';
@@ -232,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         paymentChoiceButtons.style.display = 'flex';
     }
 
+    // === PRODUK DAN KERANJANG ===
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
@@ -486,32 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function formatRupiah(number) {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0
-        }).format(number);
-    }
-
-    function getBase64Image(imgUrl, callback) {
-        const img = new window.Image();
-        img.crossOrigin = "anonymous";
-        img.onload = function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            const dataURL = canvas.toDataURL("image/png");
-            callback(dataURL);
-        };
-        img.onerror = function() {
-            callback(null);
-        };
-        img.src = imgUrl;
-    }
-
+    // === PRINT/STRUK HANDLING ===
     function generateStrukText(paymentMethod, qrisBase64 = null) {
         let namaPemesan = namaPemesanInput.value.trim();
         let alamatPemesan = alamatPemesanInput.value.trim();
@@ -630,6 +608,9 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                     function cetakUlang() {
                         window.print();
                     }
+                    window.onload = function() {
+                        window.print();
+                    }
                 <\/script>
             </head>
             <body>
@@ -684,6 +665,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.focus();
+
         setTimeout(() => {
             keranjang = [];
             saveKeranjangToStorage();
@@ -706,6 +688,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         return true;
     }
 
+    // === SHARE/WA HANDLING, FAB, PRINT OPTION, DLL ===
     shareOrderFab && shareOrderFab.addEventListener('click', async () => {
         const shareResult = generateStrukText('Tunai');
         if (!shareResult.success) {
@@ -988,6 +971,32 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         };
     }
 
+    function setPopupKeranjangClosed(val) {
+        localStorage.setItem('popupKeranjangClosed', val ? '1' : '');
+    }
+    function isPopupKeranjangClosed() {
+        return localStorage.getItem('popupKeranjangClosed') === '1';
+    }
+    function showPopupKeranjang(forceShow = false) {
+        if (!forceShow) {
+            if (isPopupKeranjangClosed()) return;
+            if (keranjang.length === 0) return;
+        }
+        updatePopupKeranjang(true);
+        popupKeranjang.style.display = "flex";
+        setPopupKeranjangClosed(false);
+        document.body.style.overflow = "hidden";
+        setTimeout(() => {
+            document.getElementById('close-popup-keranjang').focus();
+        }, 100);
+    }
+    function hidePopupKeranjang() {
+        popupKeranjang.style.display = "none";
+        setPopupKeranjangClosed(true);
+        document.body.style.overflow = "";
+    }
+    document.getElementById('close-popup-keranjang').onclick = hidePopupKeranjang;
+
     function updatePopupKeranjang(forceShow = false) {
         if (popupKeranjang.style.display === "none" && !forceShow) return;
         const tbody = document.getElementById('popup-keranjang-items');
@@ -1081,7 +1090,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                 typeof node.textContent === "string" &&
                 node.textContent.trim().match(/^Total:\s*Rp[\d\.]+$/i)
             ) {
-                // Cari parent terdekat yang mengandung strong Total: ... (biasanya <div>), hapus dari DOM
                 if (node.parentElement && node.parentElement.parentElement === popupKeranjang.firstElementChild) {
                     node.parentElement.remove();
                 } else if (node.parentElement === popupKeranjang.firstElementChild) {
@@ -1396,7 +1404,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                     .thank-you { text-align: center; margin-top: 8px !important; font-size: 1em !important; font-style: italic !important; font-weight: bold !important;}
                 </style>
             </head>
-            <body>
+            <body onload="window.print()">
                 <div id="print-area">
                     ${headerHtml}
                     <pre style="font-family:inherit;font-size:inherit;white-space:pre-wrap;">${isi}</pre>
