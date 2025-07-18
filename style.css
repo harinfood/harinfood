@@ -928,3 +928,42 @@ body[data-role="pelanggan"] #popup-keranjang-print {
     font-size: 1em;
     vertical-align: middle;
 }
+/* Tambahkan/ubah kode berikut di akhir file style.css */
+
+/* FAB WhatsApp dan FAB Hapus Keranjang posisi kiri bawah */
+.fab-pesan-whatsapp {
+    /* Override: dari kanan ke kiri bawah */
+    left: 5px !important;
+    right: auto !important;
+    bottom: 10px !important;
+}
+
+@media (max-width: 600px) {
+    .fab-pesan-whatsapp {
+        left: 5px !important;
+        right: auto !important;
+        bottom: 9px !important;
+    }
+}
+
+/* FAB pelanggan hapus keranjang (custom FAB) kiri bawah */
+#pelanggan-fab-clear-cart {
+    left: 5px !important;
+    right: auto !important;
+    /* Atur bottom di bawah tombol WhatsApp dengan jarak 2px */
+}
+/* Tambahkan/ubah kode di bawah ini di akhir style.css agar tombol WhatsApp di ponsel rata kiri & tulisan kiri */
+
+@media (max-width: 600px) {
+    .fab-pesan-whatsapp {
+        left: 5px !important;
+        right: auto !important;
+        bottom: 9px !important;
+        justify-content: flex-start !important;   /* agar konten tombol rata kiri */
+        text-align: left !important;              /* tulisan dalam tombol rata kiri */
+    }
+    .fab-pesan-whatsapp .fab-pesan-text {
+        text-align: left !important;
+        margin-left: 0 !important;
+    }
+}

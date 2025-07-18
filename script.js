@@ -108,38 +108,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createPelangganFabClearCart();
 
-    function updatePelangganFabClearCartVisibility() {
-        const currentUserRole = localStorage.getItem('userRole');
-        if (!pelangganFabClearCart || !floatingPesanWhatsapp) return;
-        // FAB hanya untuk pelanggan, dan keranjang tidak kosong
-        if (currentUserRole === 'pelanggan' && keranjang.length > 0) {
-            pelangganFabClearCart.style.display = 'flex';
-            pelangganFabClearCart.style.opacity = '1';
-            pelangganFabClearCart.style.pointerEvents = 'auto';
-            pelangganFabClearCart.style.transform = 'scale(1)';
-            // Lokasi: kanan atas tombol WhatsApp
-            // Dapatkan posisi tombol WhatsApp
-            const waRect = floatingPesanWhatsapp.getBoundingClientRect();
-            // Atur posisi FAB hapus keranjang
-            let right = 0, bottom = 0;
-            if (window.innerWidth <= 600) {
-                right = 9;
-                bottom = 9 + floatingPesanWhatsapp.offsetHeight + 2;
-            } else {
-                right = 100;
-                bottom = 10 + floatingPesanWhatsapp.offsetHeight + 2; // 2px jarak
-            }
-            pelangganFabClearCart.style.right = right + 'px';
-            pelangganFabClearCart.style.left = 'auto';
-            pelangganFabClearCart.style.bottom = bottom + 'px';
-            pelangganFabClearCart.style.position = 'fixed';
+    // --- Cari function updatePelangganFabClearCartVisibility dan modifikasi bagian posisi FAB pelanggan ---
+function updatePelangganFabClearCartVisibility() {
+    const currentUserRole = localStorage.getItem('userRole');
+    if (!pelangganFabClearCart || !floatingPesanWhatsapp) return;
+    // FAB hanya untuk pelanggan, dan keranjang tidak kosong
+    if (currentUserRole === 'pelanggan' && keranjang.length > 0) {
+        pelangganFabClearCart.style.display = 'flex';
+        pelangganFabClearCart.style.opacity = '1';
+        pelangganFabClearCart.style.pointerEvents = 'auto';
+        pelangganFabClearCart.style.transform = 'scale(1)';
+        // Lokasi: kiri bawah, menempel kiri 5px, bawah di bawah WhatsApp
+        let left = 5, bottom = 0;
+        if (window.innerWidth <= 600) {
+            left = 5;
+            bottom = 9 + floatingPesanWhatsapp.offsetHeight + 2;
         } else {
-            pelangganFabClearCart.style.opacity = '0';
-            pelangganFabClearCart.style.pointerEvents = 'none';
-            pelangganFabClearCart.style.transform = 'scale(0.7)';
-            pelangganFabClearCart.style.display = 'none';
+            left = 5;
+            bottom = 10 + floatingPesanWhatsapp.offsetHeight + 2; // 2px jarak
         }
+        pelangganFabClearCart.style.left = left + 'px';
+        pelangganFabClearCart.style.right = 'auto';
+        pelangganFabClearCart.style.bottom = bottom + 'px';
+        pelangganFabClearCart.style.position = 'fixed';
+    } else {
+        pelangganFabClearCart.style.opacity = '0';
+        pelangganFabClearCart.style.pointerEvents = 'none';
+        pelangganFabClearCart.style.transform = 'scale(0.7)';
+        pelangganFabClearCart.style.display = 'none';
     }
+}
+window.addEventListener('resize', updatePelangganFabClearCartVisibility);
+
+// --- Pastikan kode ini menggantikan function updatePelangganFabClearCartVisibility yang lama ---
     window.addEventListener('resize', updatePelangganFabClearCartVisibility);
 
     // === UTILITAS ===
@@ -1453,11 +1454,11 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
             popupWhatsAppBtn.style.color = '#fff';
             popupWhatsAppBtn.style.border = 'none';
-            popupWhatsAppBtn.style.padding = '12px 18px';
+            popupWhatsAppBtn.style.padding = '5px 18px';
             popupWhatsAppBtn.style.borderRadius = '6px';
             popupWhatsAppBtn.style.cursor = 'pointer';
             popupWhatsAppBtn.style.fontSize = '1.08em';
-            popupWhatsAppBtn.style.width = '100%';
+            popupWhatsAppBtn.style.width = '40%';
             popupWhatsAppBtn.style.fontWeight = 'bold';
             popupWhatsAppBtn.style.zIndex = 10;
         }
