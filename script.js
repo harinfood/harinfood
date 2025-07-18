@@ -1458,7 +1458,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             popupWhatsAppBtn.style.borderRadius = '6px';
             popupWhatsAppBtn.style.cursor = 'pointer';
             popupWhatsAppBtn.style.fontSize = '1.08em';
-            popupWhatsAppBtn.style.width = '40%';
+            popupWhatsAppBtn.style.width = '100%';
             popupWhatsAppBtn.style.fontWeight = 'bold';
             popupWhatsAppBtn.style.zIndex = 10;
         }
