@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const manualProductQtyInput = document.getElementById('manualProductQty');
     const addManualOrderFab = document.getElementById('add-manual-order-fab');
     const clearCartFab = document.getElementById('clear-cart-fab');
-    const btnBayarQris = document.getElementById('btn-bayar-qris');
+    // const btnBayarQris = document.getElementById('btn-bayar-qris'); // DIHAPUS: permintaan hapus tombol QRIS
     const shareOrderFab = document.getElementById('share-order-fab');
     const printFab = document.getElementById('print-fab');
     const printOptionsPopup = document.getElementById('print-options-popup');
@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupAlamatPelangganInput = null;
     let popupWhatsAppBtn = null;
     let kembalianModal;
+
+    // Untuk kembalian info di popup keranjang
+    let popupKembalianInformasi = null;
 
     // === FAB HAPUS KERANJANG MENGAMBANG UNTUK PELANGGAN ===
     let pelangganFabClearCart = null;
@@ -176,21 +179,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === MODAL KEMBALIAN ===
     function createKembalianModal() {
-        if (document.getElementById('kembalian-modal')) return;
+        // Hapus modal lama jika ada (supaya update)
+        const old = document.getElementById('kembalian-modal');
+        if (old) old.remove();
+
         kembalianModal = document.createElement('div');
         kembalianModal.id = "kembalian-modal";
         kembalianModal.style.display = "none";
         kembalianModal.innerHTML = `
-            <div class="kembalian-modal-content">
+            <div class="kembalian-modal-content" tabindex="0">
                 <span id="close-kembalian-modal" style="position:absolute;right:20px;top:10px;font-size:2em;cursor:pointer;color:#333;">&times;</span>
                 <h2 style="text-align:center;color:#28a745;margin-bottom: 1em;">Kembalian</h2>
                 <div id="kembalian-modal-value" style="font-size:2.5em;font-weight:bold;text-align:center;color:#28a745;letter-spacing: 2px; margin-bottom: 20px;">Rp 0</div>
+                <button id="ok-kembalian-modal" style="margin-top:10px; padding:0.7em 2.5em; border-radius:8px; background:#00f0ff; color:#222; border:none; font-weight:bold; font-size:1.15em; cursor:pointer;">Oke</button>
             </div>
         `;
         document.body.appendChild(kembalianModal);
-        document.getElementById('close-kembalian-modal').onclick = () => {
+
+        const closeBtn = document.getElementById('close-kembalian-modal');
+        const okBtn = document.getElementById('ok-kembalian-modal');
+        const modalContent = kembalianModal.querySelector('.kembalian-modal-content');
+
+        function closeModal() {
             kembalianModal.style.display = "none";
-        };
+            // Kembalikan fokus ke popup keranjang jika terbuka
+            if (popupKeranjang && popupKeranjang.style.display !== "none") {
+                const closePopupBtn = document.getElementById('close-popup-keranjang');
+                if (closePopupBtn) closePopupBtn.focus();
+            }
+            // Tambahan: tampilkan informasi kembalian di popup keranjang
+            tampilkanKembalianPopupKeranjang();
+        }
+
+        closeBtn.onclick = closeModal;
+        okBtn.onclick = closeModal;
+
+        // Aksesibilitas: enter/esc
+        kembalianModal.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                okBtn.click();
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                closeBtn.click();
+            }
+        });
+        // Fokus otomatis ke Oke
+        setTimeout(() => {
+            okBtn.focus();
+        }, 180);
+
+        // Fokus agar event keydown aktif
+        modalContent.focus();
     }
     createKembalianModal();
 
@@ -319,6 +359,64 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActionButtonVisibility();
         paymentChoiceButtons.style.display = 'flex';
         updatePelangganFabClearCartVisibility();
+    }
+
+    // FUNGSI PENTING: Kembalian Modal Popup Keranjang
+    function showKembalianModalPopupKeranjang() {
+        // Buat ulang modal agar selalu segar
+        createKembalianModal();
+        if (!popupKeranjangNominal || !popupKeranjangTotal) return;
+        const totalBelanja = parseFloat(popupKeranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
+        const nominalPembayaran = parseNumberFromDots(popupKeranjangNominal.value);
+        const kembalian = nominalPembayaran - totalBelanja;
+        const valDiv = document.getElementById('kembalian-modal-value');
+        if (nominalPembayaran < totalBelanja) {
+            valDiv.style.color = '#dc3545';
+            valDiv.innerHTML = 'Nominal pembayaran harus lebih dari total belanjaan!';
+        } else {
+            valDiv.style.color = '#28a745';
+            valDiv.innerHTML = formatRupiah(kembalian);
+        }
+        kembalianModal.style.display = 'flex';
+        kembalianModal.style.justifyContent = 'center';
+        kembalianModal.style.alignItems = 'center';
+
+        // Fokus ke Oke
+        setTimeout(() => {
+            const okBtn = document.getElementById('ok-kembalian-modal');
+            if (okBtn) okBtn.focus();
+        }, 180);
+    }
+
+    function tampilkanKembalianPopupKeranjang() {
+        // Cek apakah popup keranjang terbuka dan elemen input & total tersedia
+        if (!popupKeranjangNominal || !popupKeranjangTotal) return;
+        let info = document.getElementById('popup-kembalian-informasi');
+        if (!info) {
+            info = document.createElement('span');
+            info.id = 'popup-kembalian-informasi';
+            popupKeranjangNominal.parentNode.appendChild(info);
+        }
+        popupKembalianInformasi = info;
+        updateKembalianInformasiPopupKeranjang();
+        // Event listener supaya update otomatis jika nominal pembayaran berubah
+        popupKeranjangNominal.removeEventListener('input', updateKembalianInformasiPopupKeranjang);
+        popupKeranjangNominal.addEventListener('input', updateKembalianInformasiPopupKeranjang);
+        popupKeranjangNominal.removeEventListener('blur', updateKembalianInformasiPopupKeranjang);
+        popupKeranjangNominal.addEventListener('blur', updateKembalianInformasiPopupKeranjang);
+    }
+    function updateKembalianInformasiPopupKeranjang() {
+        if (!popupKeranjangNominal || !popupKeranjangTotal || !popupKembalianInformasi) return;
+        const totalBelanja = parseFloat(popupKeranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
+        const nominalPembayaran = parseNumberFromDots(popupKeranjangNominal.value);
+        const kembalian = nominalPembayaran - totalBelanja;
+        if (nominalPembayaran < totalBelanja) {
+            popupKembalianInformasi.textContent = 'Kembalian: -';
+            popupKembalianInformasi.style.color = '#dc3545';
+        } else {
+            popupKembalianInformasi.textContent = 'Kembalian: ' + formatRupiah(kembalian);
+            popupKembalianInformasi.style.color = '#28a745';
+        }
     }
 
     // === PRODUK DAN KERANJANG ===
@@ -633,6 +731,8 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         message += `TOTAL     : ${formatRupiah(totalSetelahDiskon)}\n`;
         message += `Bayar     : ${formatRupiah(nominalPembayaran)}\n`;
         message += `Kembalian : ${formatRupiah(kembalian)}\n`;
+        // Tambahkan link Google Drive QRIS pada setiap pesan WhatsApp
+        message += `\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk`;
         return {
             success: true,
             message,
@@ -792,8 +892,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             alert(shareResult.message);
             return;
         }
-        const messageToShare = shareResult.message +
-            "\n\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk";
+        const messageToShare = shareResult.message;
         const totalBelanja = shareResult.total;
         const nominalPembayaran = shareResult.nominal;
         if (totalBelanja === 0) {
@@ -912,9 +1011,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             kasirFabs.style.display = (currentUserRole === 'kasir') ? 'block' : 'none';
         }
     }
-    btnBayarQris.addEventListener('click', () => {
-        window.open('https://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk', '_blank');
-    });
+    // btnBayarQris Dihapus (tidak ada event listener)
     if (printFab) {
         printFab.addEventListener('click', () => {
             if (keranjang.length === 0) {
@@ -1090,6 +1187,8 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         setTimeout(() => {
             document.getElementById('close-popup-keranjang').focus();
         }, 100);
+        // Pastikan kembalian info muncul
+        tampilkanKembalianPopupKeranjang();
     }
     function hidePopupKeranjang() {
         popupKeranjang.style.display = "none";
@@ -1382,6 +1481,9 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             stickyFooter.appendChild(popupWhatsAppBtn);
         }
         popupContent.appendChild(stickyFooter);
+
+        // Pastikan kembalian info muncul dan terus update
+        tampilkanKembalianPopupKeranjang();
     }
     window.popupUpdateQty = function(idx, val) {
         let quantity = parseInt(val);
