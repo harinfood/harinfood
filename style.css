@@ -967,3 +967,30 @@ body[data-role="pelanggan"] #popup-keranjang-print {
         margin-left: 0 !important;
     }
 }
+.wa-anim.spin {
+    animation: waSpin 1.2s linear infinite;
+}
+@keyframes waSpin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+.wa-anim {
+    animation: waBounce 1s infinite alternate;
+}
+
+@keyframes waBounce {
+    0% { transform: scale(1) rotate(-5deg);}
+    50% { transform: scale(1.2) rotate(7deg);}
+    100% { transform: scale(1) rotate(-5deg);}
+}
+.wa-slidein {
+    opacity: 0;
+    transform: translateY(40px) scale(1.6);
+    animation: waSlideFromBottom 0.8s cubic-bezier(.62,.05,.26,.98) forwards;
+}
+@keyframes waSlideFromBottom {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

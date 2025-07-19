@@ -1494,7 +1494,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         if (!popupWhatsAppBtn) {
             popupWhatsAppBtn = document.createElement('button');
             popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
-            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> PESAN';
+            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp wa-slidein"></i> PESAN';
             popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
             popupWhatsAppBtn.style.color = '#fff';
             popupWhatsAppBtn.style.border = 'none';
