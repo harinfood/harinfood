@@ -1494,14 +1494,14 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         if (!popupWhatsAppBtn) {
             popupWhatsAppBtn = document.createElement('button');
             popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
-            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim Pesan via WhatsApp';
+            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> PESAN';
             popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
             popupWhatsAppBtn.style.color = '#fff';
             popupWhatsAppBtn.style.border = 'none';
-            popupWhatsAppBtn.style.padding = '5px 18px';
-            popupWhatsAppBtn.style.borderRadius = '6px';
+            popupWhatsAppBtn.style.padding = '8px 20px';
+            popupWhatsAppBtn.style.borderRadius = '25px';
             popupWhatsAppBtn.style.cursor = 'pointer';
-            popupWhatsAppBtn.style.fontSize = '1.08em';
+            popupWhatsAppBtn.style.fontSize = '1.8em';
             popupWhatsAppBtn.style.width = '100%';
             popupWhatsAppBtn.style.fontWeight = 'bold';
             popupWhatsAppBtn.style.zIndex = 10;
