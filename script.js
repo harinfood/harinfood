@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateFloatingButtonVisibility();
             updatePelangganFabClearCartVisibility();
             saveKeranjangToStorage();
+            localStorage.removeItem('catatanPesanan'); // hapus catatan
         });
         document.body.appendChild(pelangganFabClearCart);
     }
@@ -250,9 +251,15 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     let nextManualItemId = 1000;
     let isNominalInputFocused = false;
 
-    // === LOAD/SAVE KERANJANG ===
+    // === LOAD/SAVE KERANJANG DAN CATATAN ===
     function saveKeranjangToStorage() {
         localStorage.setItem('keranjang', JSON.stringify(keranjang));
+        // Simpan catatan jika ada
+        if (keteranganPesananInput.value && keranjang.length > 0) {
+            localStorage.setItem('catatanPesanan', keteranganPesananInput.value);
+        } else {
+            localStorage.removeItem('catatanPesanan');
+        }
     }
     function loadKeranjangFromStorage() {
         try {
@@ -260,6 +267,13 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
             keranjang = data ? JSON.parse(data) : [];
         } catch (e) {
             keranjang = [];
+        }
+        // Ambil catatan jika ada
+        const catatan = localStorage.getItem('catatanPesanan');
+        if (catatan && keranjang.length > 0) {
+            keteranganPesananInput.value = catatan;
+        } else {
+            keteranganPesananInput.value = '';
         }
     }
     function resetHargaProdukKeDefault() {
@@ -353,8 +367,8 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
             namaPemesanModal.style.display = 'none';
         }
         autofillNamaPemesanForm();
-        displayProduk();
         loadKeranjangFromStorage();
+        displayProduk();
         updateKeranjang();
         hitungKembalian();
         updateActionButtonVisibility();
@@ -424,8 +438,19 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
+        // Ambil keranjang dari storage jika ada
+        let storedKeranjang = [];
+        try {
+            const data = localStorage.getItem('keranjang');
+            storedKeranjang = data ? JSON.parse(data) : [];
+        } catch (e) {
+            storedKeranjang = [];
+        }
         produkData.forEach(produk => {
             let itemInCart = keranjang.find(item => item.id === produk.id && !item.isManual);
+            if (!itemInCart) {
+                itemInCart = storedKeranjang.find(item => item.id === produk.id && !item.isManual);
+            }
             let qty = itemInCart ? itemInCart.qty : 0;
             const produkDiv = document.createElement('div');
             produkDiv.classList.add('produk-item');
@@ -645,6 +670,16 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         updateFloatingButtonVisibility();
         updatePelangganFabClearCartVisibility();
         saveKeranjangToStorage();
+        localStorage.removeItem('catatanPesanan');
+    });
+
+    // Catatan: Simpan catatan setiap kali berubah jika keranjang belum dikirim/cetak
+    keteranganPesananInput.addEventListener('input', () => {
+        if (keranjang.length > 0) {
+            localStorage.setItem('catatanPesanan', keteranganPesananInput.value);
+        } else {
+            localStorage.removeItem('catatanPesanan');
+        }
     });
 
     function hitungKembalian() {
@@ -882,6 +917,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             productSearchBarcodeInput.focus();
             updateFloatingButtonVisibility();
             updatePelangganFabClearCartVisibility();
+            localStorage.removeItem('catatanPesanan'); // hapus catatan setelah cetak/kirim
         }, 300);
         return true;
     }
@@ -927,6 +963,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                 productSearchBarcodeInput.focus();
                 updateFloatingButtonVisibility();
                 updatePelangganFabClearCartVisibility();
+                localStorage.removeItem('catatanPesanan');
                 return;
             }
         } catch (error) {}
@@ -950,6 +987,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         productSearchBarcodeInput.focus();
         updateFloatingButtonVisibility();
         updatePelangganFabClearCartVisibility();
+        localStorage.removeItem('catatanPesanan');
     });
 
     function kirimPesanWhatsappPelanggan() {
@@ -983,6 +1021,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         productSearchBarcodeInput.focus();
         updateFloatingButtonVisibility();
         updatePelangganFabClearCartVisibility();
+        localStorage.removeItem('catatanPesanan');
     }
 
     function updateFloatingButtonVisibility() {
@@ -1223,9 +1262,14 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             popupCatatanInput = document.getElementById('popup-catatan-belanja');
         }
         if (popupCatatanInput) {
-            popupCatatanInput.value = keteranganPesananInput.value;
+            popupCatatanInput.value = keteranganPesananInput.value || localStorage.getItem('catatanPesanan') || '';
             popupCatatanInput.oninput = function() {
                 keteranganPesananInput.value = popupCatatanInput.value;
+                if (keranjang.length > 0) {
+                    localStorage.setItem('catatanPesanan', popupCatatanInput.value);
+                } else {
+                    localStorage.removeItem('catatanPesanan');
+                }
             };
         }
 
