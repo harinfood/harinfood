@@ -52,8 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupAlamatPelangganInput = null;
     let popupWhatsAppBtn = null;
     let kembalianModal;
-
-    // Untuk kembalian info di popup keranjang
     let popupKembalianInformasi = null;
 
     // === FAB HAPUS KERANJANG MENGAMBANG UNTUK PELANGGAN ===
@@ -754,6 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nominalPembayaran = parseNumberFromDots(popupKeranjangNominal.value) || nominalPembayaran;
         }
         const kembalian = nominalPembayaran - totalSetelahDiskon;
+
         if (keranjang.length === 0) {
             return { success: false, message: 'Keranjang belanja masih kosong!' };
         }
@@ -762,7 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
 Alamat: ${alamatPemesan || '-'}
 ${currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : ''}Tanggal: ${new Date().toLocaleDateString('id-ID')}
 Jam: ${new Date().toLocaleTimeString('id-ID')}
-${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-----------------------------
+-----------------------------
 `;
         keranjang.forEach(item => {
             message += `${item.nama} (${item.qty}x)  ${formatRupiah(item.harga * item.qty)}\n`;
@@ -773,8 +772,14 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         }
         message += `-----------------------------\n`;
         message += `TOTAL     : ${formatRupiah(totalSetelahDiskon)}\n`;
-        message += `Bayar     : ${formatRupiah(nominalPembayaran)}\n`;
-        message += `Kembalian : ${formatRupiah(kembalian)}\n`;
+        if (nominalPembayaran !== totalSetelahDiskon) {
+            message += `Bayar     : ${formatRupiah(nominalPembayaran)}\n`;
+            message += `Kembalian : ${formatRupiah(kembalian)}\n`;
+        }
+        // Catatan pesanan diletakkan di akhir transaksi, sebelum QRIS
+        if (keteranganPesanan) {
+            message += `\nCatatan: ${keteranganPesanan}\n`;
+        }
         message += `\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk`;
         return {
             success: true,
@@ -821,6 +826,12 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             </tr>`;
         }
 
+        let keteranganPesanan = keteranganPesananInput.value.trim();
+        let popupCatatanInput = document.getElementById('popup-catatan-belanja');
+        if (popupCatatanInput && popupCatatanInput.value.trim() !== "") {
+            keteranganPesanan = popupCatatanInput.value.trim();
+        }
+
         let printContent = `
             <html>
             <head>
@@ -865,23 +876,27 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                         ${localStorage.getItem('userRole') === 'kasir' ? `<p>Kasir  : ${localStorage.getItem('namaKasir')}</p>` : ''}
                         <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
                         <p>Jam    : ${new Date().toLocaleTimeString('id-ID')}</p>
-                        ${(() => {
-                            let catatan = keteranganPesananInput.value;
-                            let popupCatatan = document.getElementById('popup-catatan-belanja');
-                            if (popupCatatan && popupCatatan.value.trim() !== "") catatan = popupCatatan.value;
-                            return catatan ? `<p>Catatan: ${catatan}</p>` : '';
-                        })()}
                     </div>
                     <hr style="margin:2px 0;">
                     <table>
                         ${printTableProduk}
                         ${diskonTr}
                         <tr class="total-row"><td style="text-align:left;font-size:11px;">TOTAL</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.total)}</td></tr>
-                        <tr><td style="text-align:left;font-size:11px;">Bayar</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.nominal)}</td></tr>
-                        <tr><td style="text-align:left;font-size:11px;">Kembalian</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.nominal - shareResult.total)}</td></tr>
+                        ${
+                            (shareResult.nominal !== shareResult.total)
+                            ? `<tr><td style="text-align:left;font-size:11px;">Bayar</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.nominal)}</td></tr>
+                               <tr><td style="text-align:left;font-size:11px;">Kembalian</td><td style="text-align:right;font-size:11px;">${formatRupiah(shareResult.nominal - shareResult.total)}</td></tr>`
+                            : ''
+                        }
                     </table>
-                    <hr style="margin:2px 0;">
         `;
+        // Catatan pesanan diletakkan di akhir, setelah tabel transaksi
+        if (keteranganPesanan) {
+            printContent += `
+                    <hr style="margin:2px 0;">
+                    <div class="print-notes"><strong>Catatan:</strong> ${keteranganPesanan}</div>
+            `;
+        }
         if (paymentMethod === 'QRIS') {
             printContent += `
                 <div style="text-align: center; margin-top: 10px; margin-bottom: 5px;">
@@ -1496,15 +1511,15 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         if (!popupWhatsAppBtn) {
             popupWhatsAppBtn = document.createElement('button');
             popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
-            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> PESAN';
+            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim Pesan via WhatsApp';
             popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
             popupWhatsAppBtn.style.color = '#fff';
             popupWhatsAppBtn.style.border = 'none';
             popupWhatsAppBtn.style.padding = '5px 18px';
-            popupWhatsAppBtn.style.borderRadius = '25px';
+            popupWhatsAppBtn.style.borderRadius = '6px';
             popupWhatsAppBtn.style.cursor = 'pointer';
-            popupWhatsAppBtn.style.fontSize = '1.8em';
-            popupWhatsAppBtn.style.width = '90%';
+            popupWhatsAppBtn.style.fontSize = '1.08em';
+            popupWhatsAppBtn.style.width = '100%';
             popupWhatsAppBtn.style.fontWeight = 'bold';
             popupWhatsAppBtn.style.zIndex = 10;
         }
