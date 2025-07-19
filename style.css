@@ -932,6 +932,7 @@ body[data-role="pelanggan"] #popup-keranjang-print {
 
 /* FAB WhatsApp dan FAB Hapus Keranjang posisi kiri bawah */
 .fab-pesan-whatsapp {
+    /* Override: dari kanan ke kiri bawah */
     left: 5px !important;
     right: auto !important;
     bottom: 10px !important;
@@ -949,8 +950,8 @@ body[data-role="pelanggan"] #popup-keranjang-print {
 #pelanggan-fab-clear-cart {
     left: 5px !important;
     right: auto !important;
+    /* Atur bottom di bawah tombol WhatsApp dengan jarak 2px */
 }
-
 /* Tambahkan/ubah kode di bawah ini di akhir style.css agar tombol WhatsApp di ponsel rata kiri & tulisan kiri */
 
 @media (max-width: 600px) {
@@ -958,120 +959,11 @@ body[data-role="pelanggan"] #popup-keranjang-print {
         left: 5px !important;
         right: auto !important;
         bottom: 9px !important;
-        justify-content: flex-start !important;
-        text-align: left !important;
+        justify-content: flex-start !important;   /* agar konten tombol rata kiri */
+        text-align: left !important;              /* tulisan dalam tombol rata kiri */
     }
     .fab-pesan-whatsapp .fab-pesan-text {
         text-align: left !important;
         margin-left: 0 !important;
     }
-}
-.wa-anim.spin {
-    animation: waSpin 1.2s linear infinite;
-}
-@keyframes waSpin {
-    0% { transform: rotate(0deg);}
-    100% { transform: rotate(360deg);}
-}
-.wa-anim {
-    animation: waBounce 1s infinite alternate;
-}
-
-@keyframes waBounce {
-    0% { transform: scale(1) rotate(-5deg);}
-    50% { transform: scale(1.2) rotate(7deg);}
-    100% { transform: scale(1) rotate(-5deg);}
-}
-.wa-slidein {
-    opacity: 0;
-    transform: translateY(40px) scale(1.6);
-    animation: waSlideFromBottom 0.8s cubic-bezier(.62,.05,.26,.98) forwards;
-}
-@keyframes waSlideFromBottom {
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* ======================== */
-/* STICKY KERANJANG BUTTONS */
-/* ======================== */
-.sticky-btns-container {
-    position: fixed;
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
-    z-index: 10012;
-    width: 40vw;
-    min-width: 200px;
-    max-width: 480px;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-}
-.sticky-cart-btn, .sticky-clear-btn {
-    width: 100%;
-    border: none;
-    border-radius: 28px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-    font-size: 1.25em;
-    font-weight: bold;
-    padding: 0.7em 1em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: opacity 0.3s, transform 0.3s;
-    pointer-events: auto;
-}
-.sticky-cart-btn {
-    background: linear-gradient(45deg, #007bff, #00b0ff);
-    color: #fff;
-}
-.sticky-clear-btn {
-    background: linear-gradient(45deg, #ff4d4d, #ff8c8c);
-    color: #fff;
-}
-.sticky-cart-btn:active, .sticky-cart-btn:hover {
-    background: linear-gradient(45deg, #0056b3, #003d80);
-    transform: scale(1.05);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.22);
-}
-.sticky-clear-btn:active, .sticky-clear-btn:hover {
-    background: linear-gradient(45deg, #c0392b, #e74c3c);
-    transform: scale(1.05);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.22);
-}
-.sticky-cart-btn .fa-shopping-cart,
-.sticky-clear-btn .fa-trash {
-    font-size: 1.3em;
-    margin-right: 7px;
-}
-.sticky-cart-text, .sticky-clear-text {
-    font-size: 1.08em;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-@media (max-width: 600px) {
-    .sticky-btns-container {
-        width: 95vw;
-        min-width: 150px;
-        max-width: 99vw;
-        bottom: 9px;
-    }
-    .sticky-cart-btn, .sticky-clear-btn {
-        font-size: 1em;
-        padding: 0.5em 0.8em;
-    }
-    .sticky-cart-btn .fa-shopping-cart,
-    .sticky-clear-btn .fa-trash {
-        font-size: 1em;
-        margin-right: 6px;
-    }
-    .sticky-cart-text, .sticky-clear-text { font-size: 1em; }
 }
