@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const manualProductQtyInput = document.getElementById('manualProductQty');
     const addManualOrderFab = document.getElementById('add-manual-order-fab');
     const clearCartFab = document.getElementById('clear-cart-fab');
-    // const btnBayarQris = document.getElementById('btn-bayar-qris'); // DIHAPUS: permintaan hapus tombol QRIS
     const shareOrderFab = document.getElementById('share-order-fab');
     const printFab = document.getElementById('print-fab');
     const printOptionsPopup = document.getElementById('print-options-popup');
@@ -103,45 +102,39 @@ document.addEventListener('DOMContentLoaded', () => {
             updateFloatingButtonVisibility();
             updatePelangganFabClearCartVisibility();
             saveKeranjangToStorage();
-            localStorage.removeItem('catatanPesanan'); // hapus catatan
+            localStorage.removeItem('catatanPesanan');
         });
         document.body.appendChild(pelangganFabClearCart);
     }
     createPelangganFabClearCart();
 
-    // --- Cari function updatePelangganFabClearCartVisibility dan modifikasi bagian posisi FAB pelanggan ---
-function updatePelangganFabClearCartVisibility() {
-    const currentUserRole = localStorage.getItem('userRole');
-    if (!pelangganFabClearCart || !floatingPesanWhatsapp) return;
-    // FAB hanya untuk pelanggan, dan keranjang tidak kosong
-    if (currentUserRole === 'pelanggan' && keranjang.length > 0) {
-        pelangganFabClearCart.style.display = 'flex';
-        pelangganFabClearCart.style.opacity = '1';
-        pelangganFabClearCart.style.pointerEvents = 'auto';
-        pelangganFabClearCart.style.transform = 'scale(1)';
-        // Lokasi: kiri bawah, menempel kiri 5px, bawah di bawah WhatsApp
-        let left = 5, bottom = 0;
-        if (window.innerWidth <= 600) {
-            left = 5;
-            bottom = 9 + floatingPesanWhatsapp.offsetHeight + 2;
+    function updatePelangganFabClearCartVisibility() {
+        const currentUserRole = localStorage.getItem('userRole');
+        if (!pelangganFabClearCart || !floatingPesanWhatsapp) return;
+        if (currentUserRole === 'pelanggan' && keranjang.length > 0) {
+            pelangganFabClearCart.style.display = 'flex';
+            pelangganFabClearCart.style.opacity = '1';
+            pelangganFabClearCart.style.pointerEvents = 'auto';
+            pelangganFabClearCart.style.transform = 'scale(1)';
+            let left = 5, bottom = 0;
+            if (window.innerWidth <= 600) {
+                left = 5;
+                bottom = 9 + floatingPesanWhatsapp.offsetHeight + 2;
+            } else {
+                left = 5;
+                bottom = 10 + floatingPesanWhatsapp.offsetHeight + 2;
+            }
+            pelangganFabClearCart.style.left = left + 'px';
+            pelangganFabClearCart.style.right = 'auto';
+            pelangganFabClearCart.style.bottom = bottom + 'px';
+            pelangganFabClearCart.style.position = 'fixed';
         } else {
-            left = 5;
-            bottom = 10 + floatingPesanWhatsapp.offsetHeight + 2; // 2px jarak
+            pelangganFabClearCart.style.opacity = '0';
+            pelangganFabClearCart.style.pointerEvents = 'none';
+            pelangganFabClearCart.style.transform = 'scale(0.7)';
+            pelangganFabClearCart.style.display = 'none';
         }
-        pelangganFabClearCart.style.left = left + 'px';
-        pelangganFabClearCart.style.right = 'auto';
-        pelangganFabClearCart.style.bottom = bottom + 'px';
-        pelangganFabClearCart.style.position = 'fixed';
-    } else {
-        pelangganFabClearCart.style.opacity = '0';
-        pelangganFabClearCart.style.pointerEvents = 'none';
-        pelangganFabClearCart.style.transform = 'scale(0.7)';
-        pelangganFabClearCart.style.display = 'none';
     }
-}
-window.addEventListener('resize', updatePelangganFabClearCartVisibility);
-
-// --- Pastikan kode ini menggantikan function updatePelangganFabClearCartVisibility yang lama ---
     window.addEventListener('resize', updatePelangganFabClearCartVisibility);
 
     // === UTILITAS ===
@@ -181,7 +174,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
 
     // === MODAL KEMBALIAN ===
     function createKembalianModal() {
-        // Hapus modal lama jika ada (supaya update)
         const old = document.getElementById('kembalian-modal');
         if (old) old.remove();
 
@@ -204,19 +196,16 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
 
         function closeModal() {
             kembalianModal.style.display = "none";
-            // Kembalikan fokus ke popup keranjang jika terbuka
             if (popupKeranjang && popupKeranjang.style.display !== "none") {
                 const closePopupBtn = document.getElementById('close-popup-keranjang');
                 if (closePopupBtn) closePopupBtn.focus();
             }
-            // Tambahan: tampilkan informasi kembalian di popup keranjang
             tampilkanKembalianPopupKeranjang();
         }
 
         closeBtn.onclick = closeModal;
         okBtn.onclick = closeModal;
 
-        // Aksesibilitas: enter/esc
         kembalianModal.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -226,12 +215,10 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
                 closeBtn.click();
             }
         });
-        // Fokus otomatis ke Oke
         setTimeout(() => {
             okBtn.focus();
         }, 180);
 
-        // Fokus agar event keydown aktif
         modalContent.focus();
     }
     createKembalianModal();
@@ -254,7 +241,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     // === LOAD/SAVE KERANJANG DAN CATATAN ===
     function saveKeranjangToStorage() {
         localStorage.setItem('keranjang', JSON.stringify(keranjang));
-        // Simpan catatan jika ada
         if (keteranganPesananInput.value && keranjang.length > 0) {
             localStorage.setItem('catatanPesanan', keteranganPesananInput.value);
         } else {
@@ -268,7 +254,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         } catch (e) {
             keranjang = [];
         }
-        // Ambil catatan jika ada
         const catatan = localStorage.getItem('catatanPesanan');
         if (catatan && keranjang.length > 0) {
             keteranganPesananInput.value = catatan;
@@ -284,7 +269,37 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         localStorage.removeItem('produkHarga');
     }
 
-    // === LOGIN HANDLING ===
+    // === LOGIN HANDLING DAN TAWK.TO ===
+    let tawkWidgetScript = null;
+    function loadTawktoWidget() {
+        if (tawkWidgetScript) return;
+        tawkWidgetScript = document.createElement("script");
+        tawkWidgetScript.type = "text/javascript";
+        tawkWidgetScript.async = true;
+        tawkWidgetScript.src = 'https://embed.tawk.to/687a5f045100991915b4e88b/1j0f06avl';
+        tawkWidgetScript.charset = 'UTF-8';
+        tawkWidgetScript.setAttribute('crossorigin','*');
+        tawkWidgetScript.id = "tawkto-script-widget";
+        let s0 = document.getElementsByTagName("script")[0];
+        s0.parentNode.insertBefore(tawkWidgetScript, s0);
+    }
+    function removeTawktoWidget() {
+        if (tawkWidgetScript) {
+            tawkWidgetScript.remove();
+            tawkWidgetScript = null;
+        }
+        const tawkIframe = document.querySelector('iframe[src*="tawk.to"]');
+        if (tawkIframe && tawkIframe.parentNode) {
+            tawkIframe.parentNode.removeChild(tawkIframe);
+        }
+        const tawkDiv = document.getElementById('tawkchat-container');
+        if (tawkDiv && tawkDiv.parentNode) {
+            tawkDiv.parentNode.removeChild(tawkDiv);
+        }
+        if (window.Tawk_API) delete window.Tawk_API;
+        if (window.Tawk_LoadStart) delete window.Tawk_LoadStart;
+    }
+
     btnPelanggan.addEventListener('click', () => {
         formPelanggan.style.display = 'flex';
         formKasir.style.display = 'none';
@@ -310,6 +325,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
             pesanInfoLabel.style.display = 'block';
             pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
             initializeApp();
+            loadTawktoWidget();
         }
     });
     formKasir.addEventListener('submit', (event) => {
@@ -325,6 +341,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
             namaPemesanModal.style.display = 'none';
             pesanInfoLabel.style.display = 'none';
             initializeApp();
+            removeTawktoWidget();
         } else {
             alert('Nama kasir atau password salah!');
         }
@@ -344,7 +361,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         }
     });
 
-    // === FORM AUTOFILL ===
     function autofillNamaPemesanForm() {
         const nama = localStorage.getItem('namaPemesan') || '';
         const alamat = localStorage.getItem('alamatPelanggan') || '';
@@ -376,9 +392,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         updatePelangganFabClearCartVisibility();
     }
 
-    // FUNGSI PENTING: Kembalian Modal Popup Keranjang
     function showKembalianModalPopupKeranjang() {
-        // Buat ulang modal agar selalu segar
         createKembalianModal();
         if (!popupKeranjangNominal || !popupKeranjangTotal) return;
         const totalBelanja = parseFloat(popupKeranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
@@ -395,8 +409,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         kembalianModal.style.display = 'flex';
         kembalianModal.style.justifyContent = 'center';
         kembalianModal.style.alignItems = 'center';
-
-        // Fokus ke Oke
         setTimeout(() => {
             const okBtn = document.getElementById('ok-kembalian-modal');
             if (okBtn) okBtn.focus();
@@ -404,7 +416,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     }
 
     function tampilkanKembalianPopupKeranjang() {
-        // Cek apakah popup keranjang terbuka dan elemen input & total tersedia
         if (!popupKeranjangNominal || !popupKeranjangTotal) return;
         let info = document.getElementById('popup-kembalian-informasi');
         if (!info) {
@@ -414,7 +425,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         }
         popupKembalianInformasi = info;
         updateKembalianInformasiPopupKeranjang();
-        // Event listener supaya update otomatis jika nominal pembayaran berubah
         popupKeranjangNominal.removeEventListener('input', updateKembalianInformasiPopupKeranjang);
         popupKeranjangNominal.addEventListener('input', updateKembalianInformasiPopupKeranjang);
         popupKeranjangNominal.removeEventListener('blur', updateKembalianInformasiPopupKeranjang);
@@ -438,7 +448,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
-        // Ambil keranjang dari storage jika ada
         let storedKeranjang = [];
         try {
             const data = localStorage.getItem('keranjang');
@@ -673,7 +682,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         localStorage.removeItem('catatanPesanan');
     });
 
-    // Catatan: Simpan catatan setiap kali berubah jika keranjang belum dikirim/cetak
     keteranganPesananInput.addEventListener('input', () => {
         if (keranjang.length > 0) {
             localStorage.setItem('catatanPesanan', keteranganPesananInput.value);
@@ -767,7 +775,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         message += `TOTAL     : ${formatRupiah(totalSetelahDiskon)}\n`;
         message += `Bayar     : ${formatRupiah(nominalPembayaran)}\n`;
         message += `Kembalian : ${formatRupiah(kembalian)}\n`;
-        // Tambahkan link Google Drive QRIS pada setiap pesan WhatsApp
         message += `\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk`;
         return {
             success: true,
@@ -875,7 +882,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                     </table>
                     <hr style="margin:2px 0;">
         `;
-
         if (paymentMethod === 'QRIS') {
             printContent += `
                 <div style="text-align: center; margin-top: 10px; margin-bottom: 5px;">
@@ -917,12 +923,11 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             productSearchBarcodeInput.focus();
             updateFloatingButtonVisibility();
             updatePelangganFabClearCartVisibility();
-            localStorage.removeItem('catatanPesanan'); // hapus catatan setelah cetak/kirim
+            localStorage.removeItem('catatanPesanan');
         }, 300);
         return true;
     }
 
-    // === SHARE/WA HANDLING, FAB, PRINT OPTION, DLL ===
     shareOrderFab && shareOrderFab.addEventListener('click', async () => {
         const shareResult = generateStrukText('Tunai');
         if (!shareResult.success) {
@@ -1051,7 +1056,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             kasirFabs.style.display = (currentUserRole === 'kasir') ? 'block' : 'none';
         }
     }
-    // btnBayarQris Dihapus (tidak ada event listener)
     if (printFab) {
         printFab.addEventListener('click', () => {
             if (keranjang.length === 0) {
@@ -1227,7 +1231,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         setTimeout(() => {
             document.getElementById('close-popup-keranjang').focus();
         }, 100);
-        // Pastikan kembalian info muncul
         tampilkanKembalianPopupKeranjang();
     }
     function hidePopupKeranjang() {
@@ -1327,7 +1330,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             });
         }
 
-        // Hapus elemen static total (Total: Rp0 atau Total: Rp...) jika ditemukan
         const staticNodes = popupKeranjang.querySelectorAll('div, strong, span');
         staticNodes.forEach(node => {
             if (
@@ -1462,7 +1464,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         stickyFooter.style.zIndex = '20';
         stickyFooter.style.display = 'flex';
         stickyFooter.style.flexDirection = 'column';
-        stickyFooter.style.gap = '2px'; // Jarak antar tombol 2px
+        stickyFooter.style.gap = '2px';
         stickyFooter.style.paddingTop = '10px';
         stickyFooter.style.boxShadow = '0 -2px 12px #0001';
 
@@ -1494,15 +1496,15 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         if (!popupWhatsAppBtn) {
             popupWhatsAppBtn = document.createElement('button');
             popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
-            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim Pesan via WhatsApp';
+            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> PESAN';
             popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
             popupWhatsAppBtn.style.color = '#fff';
             popupWhatsAppBtn.style.border = 'none';
             popupWhatsAppBtn.style.padding = '5px 18px';
-            popupWhatsAppBtn.style.borderRadius = '6px';
+            popupWhatsAppBtn.style.borderRadius = '25px';
             popupWhatsAppBtn.style.cursor = 'pointer';
-            popupWhatsAppBtn.style.fontSize = '1.08em';
-            popupWhatsAppBtn.style.width = '100%';
+            popupWhatsAppBtn.style.fontSize = '1.8em';
+            popupWhatsAppBtn.style.width = '90%';
             popupWhatsAppBtn.style.fontWeight = 'bold';
             popupWhatsAppBtn.style.zIndex = 10;
         }
@@ -1527,7 +1529,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         }
         popupContent.appendChild(stickyFooter);
 
-        // Pastikan kembalian info muncul dan terus update
         tampilkanKembalianPopupKeranjang();
     }
     window.popupUpdateQty = function(idx, val) {
@@ -1576,6 +1577,16 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             hidePopupKeranjang();
         }
     });
+
+    function handleTawkVisibilityOnReload() {
+        const storedRole = localStorage.getItem('userRole');
+        if (storedRole === 'pelanggan') {
+            loadTawktoWidget();
+        } else {
+            removeTawktoWidget();
+        }
+    }
+    handleTawkVisibilityOnReload();
 
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
