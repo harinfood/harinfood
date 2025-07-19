@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const manualProductPriceInput = document.getElementById('manualProductPrice');
     const manualProductQtyInput = document.getElementById('manualProductQty');
     const addManualOrderFab = document.getElementById('add-manual-order-fab');
-    const clearCartFab = document.getElementById('clear-cart-fab');
-    // const btnBayarQris = document.getElementById('btn-bayar-qris'); // DIHAPUS: permintaan hapus tombol QRIS
     const shareOrderFab = document.getElementById('share-order-fab');
     const printFab = document.getElementById('print-fab');
     const printOptionsPopup = document.getElementById('print-options-popup');
@@ -42,8 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const diskonSection = document.getElementById('diskon-section');
     const namaDiskonInput = document.getElementById('nama-diskon');
     const nilaiDiskonInput = document.getElementById('nilai-diskon');
-    const cartFab = document.getElementById('cart-fab');
     const floatingPesanWhatsapp = document.getElementById('floating-pesan-whatsapp');
+    const stickyBtnsContainer = document.getElementById('sticky-btns-container');
+    const stickyCartBtn = document.getElementById('sticky-cart-btn');
+    const stickyClearBtn = document.getElementById('sticky-clear-btn');
     let popupKeranjang = document.getElementById('popup-keranjang');
     let popupKeranjangNominal = document.getElementById('popup-keranjang-nominal');
     let popupKembalianDisplay = document.getElementById('popup-kembalian-display');
@@ -53,96 +53,74 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupAlamatPelangganInput = null;
     let popupWhatsAppBtn = null;
     let kembalianModal;
-
-    // Untuk kembalian info di popup keranjang
     let popupKembalianInformasi = null;
 
-    // === FAB HAPUS KERANJANG MENGAMBANG UNTUK PELANGGAN ===
-    let pelangganFabClearCart = null;
-    function createPelangganFabClearCart() {
-        if (document.getElementById('pelanggan-fab-clear-cart')) return;
-        pelangganFabClearCart = document.createElement('button');
-        pelangganFabClearCart.id = 'pelanggan-fab-clear-cart';
-        pelangganFabClearCart.title = 'Bersihkan Keranjang';
-        pelangganFabClearCart.innerHTML = '<i class="fas fa-trash"></i> <span style="font-size:0.95em;font-weight:600;margin-left:7px;letter-spacing:0.2px;">HAPUS KERANJANG</span>';
-        pelangganFabClearCart.style.position = 'fixed';
-        pelangganFabClearCart.style.zIndex = '10012';
-        pelangganFabClearCart.style.background = 'linear-gradient(45deg, #ff4d4d, #ff8c8c)';
-        pelangganFabClearCart.style.color = '#fff';
-        pelangganFabClearCart.style.border = 'none';
-        pelangganFabClearCart.style.borderRadius = '28px';
-        pelangganFabClearCart.style.boxShadow = '0 4px 16px rgba(255,77,77,0.22)';
-        pelangganFabClearCart.style.fontSize = '1.15em';
-        pelangganFabClearCart.style.fontWeight = 'bold';
-        pelangganFabClearCart.style.width = 'auto';
-        pelangganFabClearCart.style.height = '54px';
-        pelangganFabClearCart.style.display = 'none';
-        pelangganFabClearCart.style.alignItems = 'center';
-        pelangganFabClearCart.style.justifyContent = 'center';
-        pelangganFabClearCart.style.cursor = 'pointer';
-        pelangganFabClearCart.style.transition = 'opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1)';
-        pelangganFabClearCart.style.padding = '0 22px 0 20px';
-        pelangganFabClearCart.style.gap = '2px';
-
-        pelangganFabClearCart.addEventListener('click', function() {
-            keranjang = [];
-            resetHargaProdukKeDefault();
-            updateKeranjang();
-            updateProdukControls();
-            namaPemesanInput.value = '';
-            alamatPemesanInput.value = '';
-            keteranganPesananInput.value = '';
-            nominalPembayaranInput.value = 0;
-            namaDiskonInput.value = '';
-            nilaiDiskonInput.value = 0;
-            delete nominalPembayaranInput.dataset.autofilled;
-            hitungKembalian();
-            updateActionButtonVisibility();
-            productSearchBarcodeInput.value = '';
-            productSearchBarcodeInput.focus();
-            updateFloatingButtonVisibility();
-            updatePelangganFabClearCartVisibility();
-            saveKeranjangToStorage();
-            localStorage.removeItem('catatanPesanan'); // hapus catatan
-        });
-        document.body.appendChild(pelangganFabClearCart);
+    // === TAWK.TO DYNAMIC CHAT WIDGET ===
+    function loadTawkToChat() {
+        if (window.Tawk_API || document.getElementById('tawkto-chat-script')) return;
+        var s1 = document.createElement("script");
+        s1.async = true;
+        s1.src = "https://embed.tawk.to/687a5f045100991915b4e88b/1j0f06avl";
+        s1.charset = "UTF-8";
+        s1.setAttribute("crossorigin", "*");
+        s1.id = "tawkto-chat-script";
+        document.body.appendChild(s1);
     }
-    createPelangganFabClearCart();
-
-    // --- Cari function updatePelangganFabClearCartVisibility dan modifikasi bagian posisi FAB pelanggan ---
-function updatePelangganFabClearCartVisibility() {
-    const currentUserRole = localStorage.getItem('userRole');
-    if (!pelangganFabClearCart || !floatingPesanWhatsapp) return;
-    // FAB hanya untuk pelanggan, dan keranjang tidak kosong
-    if (currentUserRole === 'pelanggan' && keranjang.length > 0) {
-        pelangganFabClearCart.style.display = 'flex';
-        pelangganFabClearCart.style.opacity = '1';
-        pelangganFabClearCart.style.pointerEvents = 'auto';
-        pelangganFabClearCart.style.transform = 'scale(1)';
-        // Lokasi: kiri bawah, menempel kiri 5px, bawah di bawah WhatsApp
-        let left = 5, bottom = 0;
-        if (window.innerWidth <= 600) {
-            left = 5;
-            bottom = 9 + floatingPesanWhatsapp.offsetHeight + 2;
-        } else {
-            left = 5;
-            bottom = 10 + floatingPesanWhatsapp.offsetHeight + 2; // 2px jarak
+    function unloadTawkToChat() {
+        var script = document.getElementById('tawkto-chat-script');
+        if (script) script.remove();
+        if (window.Tawk_API && typeof window.Tawk_API.hide === 'function') {
+            window.Tawk_API.hide();
         }
-        pelangganFabClearCart.style.left = left + 'px';
-        pelangganFabClearCart.style.right = 'auto';
-        pelangganFabClearCart.style.bottom = bottom + 'px';
-        pelangganFabClearCart.style.position = 'fixed';
-    } else {
-        pelangganFabClearCart.style.opacity = '0';
-        pelangganFabClearCart.style.pointerEvents = 'none';
-        pelangganFabClearCart.style.transform = 'scale(0.7)';
-        pelangganFabClearCart.style.display = 'none';
     }
-}
-window.addEventListener('resize', updatePelangganFabClearCartVisibility);
 
-// --- Pastikan kode ini menggantikan function updatePelangganFabClearCartVisibility yang lama ---
-    window.addEventListener('resize', updatePelangganFabClearCartVisibility);
+    // === STICKY BUTTONS KASIR: KERANJANG DAN HAPUS KERANJANG ===
+    function updateStickyBtnsVisibility() {
+        const currentUserRole = localStorage.getItem('userRole');
+        if (!stickyBtnsContainer) return;
+        if (currentUserRole === 'kasir' && keranjang.length > 0) {
+            stickyBtnsContainer.style.display = 'flex';
+            stickyBtnsContainer.style.pointerEvents = 'auto';
+            stickyCartBtn.style.opacity = '1';
+            stickyCartBtn.style.transform = 'scale(1)';
+            stickyClearBtn.style.opacity = '1';
+            stickyClearBtn.style.transform = 'scale(1)';
+        } else {
+            stickyBtnsContainer.style.display = 'none';
+            stickyBtnsContainer.style.pointerEvents = 'none';
+            stickyCartBtn.style.opacity = '0';
+            stickyCartBtn.style.transform = 'scale(0.7)';
+            stickyClearBtn.style.opacity = '0';
+            stickyClearBtn.style.transform = 'scale(0.7)';
+        }
+    }
+    window.addEventListener('resize', updateStickyBtnsVisibility);
+
+    stickyCartBtn.addEventListener('click', function() {
+        showPopupKeranjang(true);
+    });
+
+    stickyClearBtn.addEventListener('click', function() {
+        keranjang = [];
+        resetHargaProdukKeDefault();
+        updateKeranjang();
+        updateProdukControls();
+        namaPemesanInput.value = '';
+        alamatPemesanInput.value = '';
+        keteranganPesananInput.value = '';
+        nominalPembayaranInput.value = 0;
+        namaDiskonInput.value = '';
+        nilaiDiskonInput.value = 0;
+        delete nominalPembayaranInput.dataset.autofilled;
+        hitungKembalian();
+        updateActionButtonVisibility();
+        productSearchBarcodeInput.value = '';
+        productSearchBarcodeInput.focus();
+        updateFloatingButtonVisibility();
+        updateStickyBtnsVisibility();
+        saveKeranjangToStorage();
+        localStorage.removeItem('catatanPesanan');
+    });
 
     // === UTILITAS ===
     function formatNumberWithDots(n) {
@@ -181,7 +159,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
 
     // === MODAL KEMBALIAN ===
     function createKembalianModal() {
-        // Hapus modal lama jika ada (supaya update)
         const old = document.getElementById('kembalian-modal');
         if (old) old.remove();
 
@@ -204,19 +181,16 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
 
         function closeModal() {
             kembalianModal.style.display = "none";
-            // Kembalikan fokus ke popup keranjang jika terbuka
             if (popupKeranjang && popupKeranjang.style.display !== "none") {
                 const closePopupBtn = document.getElementById('close-popup-keranjang');
                 if (closePopupBtn) closePopupBtn.focus();
             }
-            // Tambahan: tampilkan informasi kembalian di popup keranjang
             tampilkanKembalianPopupKeranjang();
         }
 
         closeBtn.onclick = closeModal;
         okBtn.onclick = closeModal;
 
-        // Aksesibilitas: enter/esc
         kembalianModal.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -226,12 +200,9 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
                 closeBtn.click();
             }
         });
-        // Fokus otomatis ke Oke
         setTimeout(() => {
             okBtn.focus();
         }, 180);
-
-        // Fokus agar event keydown aktif
         modalContent.focus();
     }
     createKembalianModal();
@@ -254,7 +225,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     // === LOAD/SAVE KERANJANG DAN CATATAN ===
     function saveKeranjangToStorage() {
         localStorage.setItem('keranjang', JSON.stringify(keranjang));
-        // Simpan catatan jika ada
         if (keteranganPesananInput.value && keranjang.length > 0) {
             localStorage.setItem('catatanPesanan', keteranganPesananInput.value);
         } else {
@@ -268,7 +238,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         } catch (e) {
             keranjang = [];
         }
-        // Ambil catatan jika ada
         const catatan = localStorage.getItem('catatanPesanan');
         if (catatan && keranjang.length > 0) {
             keteranganPesananInput.value = catatan;
@@ -309,6 +278,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
             kasirFabs.style.display = 'none';
             pesanInfoLabel.style.display = 'block';
             pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
+            loadTawkToChat();
             initializeApp();
         }
     });
@@ -324,6 +294,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
             kasirFabs.style.display = 'block';
             namaPemesanModal.style.display = 'none';
             pesanInfoLabel.style.display = 'none';
+            unloadTawkToChat();
             initializeApp();
         } else {
             alert('Nama kasir atau password salah!');
@@ -373,12 +344,11 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         hitungKembalian();
         updateActionButtonVisibility();
         paymentChoiceButtons.style.display = 'flex';
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
     }
 
-    // FUNGSI PENTING: Kembalian Modal Popup Keranjang
+    // FUNGSI KEMBALIAN MODAL POPUP KERANJANG
     function showKembalianModalPopupKeranjang() {
-        // Buat ulang modal agar selalu segar
         createKembalianModal();
         if (!popupKeranjangNominal || !popupKeranjangTotal) return;
         const totalBelanja = parseFloat(popupKeranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
@@ -395,8 +365,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         kembalianModal.style.display = 'flex';
         kembalianModal.style.justifyContent = 'center';
         kembalianModal.style.alignItems = 'center';
-
-        // Fokus ke Oke
         setTimeout(() => {
             const okBtn = document.getElementById('ok-kembalian-modal');
             if (okBtn) okBtn.focus();
@@ -404,7 +372,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     }
 
     function tampilkanKembalianPopupKeranjang() {
-        // Cek apakah popup keranjang terbuka dan elemen input & total tersedia
         if (!popupKeranjangNominal || !popupKeranjangTotal) return;
         let info = document.getElementById('popup-kembalian-informasi');
         if (!info) {
@@ -414,7 +381,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         }
         popupKembalianInformasi = info;
         updateKembalianInformasiPopupKeranjang();
-        // Event listener supaya update otomatis jika nominal pembayaran berubah
         popupKeranjangNominal.removeEventListener('input', updateKembalianInformasiPopupKeranjang);
         popupKeranjangNominal.addEventListener('input', updateKembalianInformasiPopupKeranjang);
         popupKeranjangNominal.removeEventListener('blur', updateKembalianInformasiPopupKeranjang);
@@ -438,7 +404,6 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
-        // Ambil keranjang dari storage jika ada
         let storedKeranjang = [];
         try {
             const data = localStorage.getItem('keranjang');
@@ -527,7 +492,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         if (btn.classList.contains('add-to-cart-btn')) {
             const product = produkData.find(p => p.id === produkId);
             if (product) tambahKeKeranjang(product);
-            updatePelangganFabClearCartVisibility();
+            updateStickyBtnsVisibility();
             return;
         }
         if (btn.classList.contains('plus-btn')) {
@@ -536,7 +501,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
                 itemInCart.qty++;
                 updateKeranjang();
                 updateProdukControls();
-                updatePelangganFabClearCartVisibility();
+                updateStickyBtnsVisibility();
             }
             return;
         }
@@ -549,7 +514,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
                 }
                 updateKeranjang();
                 updateProdukControls();
-                updatePelangganFabClearCartVisibility();
+                updateStickyBtnsVisibility();
             }
             return;
         }
@@ -566,7 +531,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
                 updateKeranjang();
                 updateProdukControls();
                 saveKeranjangToStorage();
-                updatePelangganFabClearCartVisibility();
+                updateStickyBtnsVisibility();
                 return;
             } else {
                 productToAdd = { ...produkSumber, qty: produkSumber.qty || 1 };
@@ -581,8 +546,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         keranjang.push(productToAdd);
         updateKeranjang();
         updateProdukControls();
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         saveKeranjangToStorage();
     }
 
@@ -624,8 +588,7 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         }
         hitungKembalian();
         updatePopupKeranjang();
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         saveKeranjangToStorage();
     }
 
@@ -638,42 +601,17 @@ window.addEventListener('resize', updatePelangganFabClearCartVisibility);
         else keranjang[index].qty = quantity;
         updateKeranjang();
         updateProdukControls();
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         saveKeranjangToStorage();
     };
     window.removeFromCart = function(index) {
         keranjang.splice(index, 1);
         updateKeranjang();
         updateProdukControls();
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         saveKeranjangToStorage();
     };
 
-    clearCartFab.addEventListener('click', () => {
-        keranjang = [];
-        resetHargaProdukKeDefault();
-        updateKeranjang();
-        updateProdukControls();
-        namaPemesanInput.value = '';
-        alamatPemesanInput.value = '';
-        keteranganPesananInput.value = '';
-        nominalPembayaranInput.value = 0;
-        namaDiskonInput.value = '';
-        nilaiDiskonInput.value = 0;
-        delete nominalPembayaranInput.dataset.autofilled;
-        hitungKembalian();
-        updateActionButtonVisibility();
-        productSearchBarcodeInput.value = '';
-        productSearchBarcodeInput.focus();
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
-        saveKeranjangToStorage();
-        localStorage.removeItem('catatanPesanan');
-    });
-
-    // Catatan: Simpan catatan setiap kali berubah jika keranjang belum dikirim/cetak
     keteranganPesananInput.addEventListener('input', () => {
         if (keranjang.length > 0) {
             localStorage.setItem('catatanPesanan', keteranganPesananInput.value);
@@ -767,7 +705,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         message += `TOTAL     : ${formatRupiah(totalSetelahDiskon)}\n`;
         message += `Bayar     : ${formatRupiah(nominalPembayaran)}\n`;
         message += `Kembalian : ${formatRupiah(kembalian)}\n`;
-        // Tambahkan link Google Drive QRIS pada setiap pesan WhatsApp
         message += `\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk`;
         return {
             success: true,
@@ -915,9 +852,8 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             updateActionButtonVisibility();
             productSearchBarcodeInput.value = '';
             productSearchBarcodeInput.focus();
-            updateFloatingButtonVisibility();
-            updatePelangganFabClearCartVisibility();
-            localStorage.removeItem('catatanPesanan'); // hapus catatan setelah cetak/kirim
+            updateStickyBtnsVisibility();
+            localStorage.removeItem('catatanPesanan');
         }, 300);
         return true;
     }
@@ -961,8 +897,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
                 updateActionButtonVisibility();
                 productSearchBarcodeInput.value = '';
                 productSearchBarcodeInput.focus();
-                updateFloatingButtonVisibility();
-                updatePelangganFabClearCartVisibility();
+                updateStickyBtnsVisibility();
                 localStorage.removeItem('catatanPesanan');
                 return;
             }
@@ -985,8 +920,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         updateActionButtonVisibility();
         productSearchBarcodeInput.value = '';
         productSearchBarcodeInput.focus();
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         localStorage.removeItem('catatanPesanan');
     });
 
@@ -1019,8 +953,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         updateActionButtonVisibility();
         productSearchBarcodeInput.value = '';
         productSearchBarcodeInput.focus();
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         localStorage.removeItem('catatanPesanan');
     }
 
@@ -1045,122 +978,18 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             floatingPesanWhatsapp.style.transform = "scale(0.7)";
         }
     }
+
     function updateKasirFabVisibility() {
         const currentUserRole = localStorage.getItem('userRole');
         if (kasirFabs) {
             kasirFabs.style.display = (currentUserRole === 'kasir') ? 'block' : 'none';
         }
+        updateStickyBtnsVisibility();
     }
-    // btnBayarQris Dihapus (tidak ada event listener)
-    if (printFab) {
-        printFab.addEventListener('click', () => {
-            if (keranjang.length === 0) {
-                alert('Keranjang belanja kosong. Tidak ada yang bisa dicetak.');
-                return;
-            }
-            printOptionsPopup.style.display = 'flex';
-        });
-    }
-    cetakStrukButton.addEventListener('click', () => {
-        if (keranjang.length === 0) {
-            alert('Keranjang belanja kosong. Tidak ada yang bisa dicetak.');
-            return;
-        }
-        printOptionsPopup.style.display = 'flex';
-    });
-    btnPrintTunai.addEventListener('click', () => {
-        printOptionsPopup.style.display = 'none';
-        printStruk('Tunai');
-    });
-    btnPrintQris.addEventListener('click', () => {
-        printOptionsPopup.style.display = 'none';
-        printStruk('QRIS');
-    });
-    closePrintPopupBtn.addEventListener('click', () => {
-        printOptionsPopup.style.display = 'none';
-    });
-
-    addManualOrderFab.addEventListener('click', () => {
-        manualOrderModal.style.display = 'flex';
-        manualProductNameInput.value = '';
-        manualProductPriceInput.value = '';
-        manualProductQtyInput.value = '1';
-        manualProductNameInput.focus();
-    });
-    manualProductNameInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-            e.preventDefault();
-            manualProductPriceInput.focus();
-        }
-    });
-    manualProductPriceInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-            e.preventDefault();
-            manualProductQtyInput.focus();
-        }
-    });
-    manualProductQtyInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-            e.preventDefault();
-            window.addManualOrderItem();
-        }
-    });
-    window.closeManualOrderModal = function() {
-        manualOrderModal.style.display = 'none';
-        productSearchBarcodeInput.focus(); 
-    };
-    window.addManualOrderItem = function() {
-        const name = manualProductNameInput.value.trim();
-        const price = parseFloat(manualProductPriceInput.value);
-        const qty = parseInt(manualProductQtyInput.value);
-        if (!name || isNaN(price) || price < 0 || isNaN(qty) || qty < 1) {
-            alert('Harap isi nama produk, harga (minimal 0), dan kuantitas (minimal 1) dengan benar.');
-            return;
-        }
-        const newManualItem = {
-            id: nextManualItemId++, 
-            nama: name,
-            harga: price,
-            qty: qty,
-            isManual: true 
-        };
-        tambahKeKeranjang(newManualItem);
-        manualOrderModal.style.display = 'none';
-        productSearchBarcodeInput.focus(); 
-    };
-
-    productSearchBarcodeInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-            e.preventDefault(); 
-            const query = productSearchBarcodeInput.value.trim();
-            if (query) {
-                const foundProduct = produkData.find(p => 
-                    p.barcode === query || p.nama.toLowerCase().includes(query.toLowerCase())
-                );
-                if (foundProduct) {
-                    tambahKeKeranjang(foundProduct);
-                    searchBarcodeFeedback.textContent = `Produk "${foundProduct.nama}" ditambahkan!`;
-                    searchBarcodeFeedback.style.color = '#28a745';
-                    productSearchBarcodeInput.value = ''; 
-                } else {
-                    searchBarcodeFeedback.textContent = `Produk atau barcode "${query}" tidak ditemukan.`;
-                    searchBarcodeFeedback.style.color = '#dc3545';
-                }
-            } else {
-                searchBarcodeFeedback.textContent = 'Masukkan nama produk atau scan barcode.';
-                searchBarcodeFeedback.style.color = '#e0e0e0';
-            }
-            productSearchBarcodeInput.focus();
-        }
-    });
-    productSearchBarcodeInput.addEventListener('input', () => {
-        searchBarcodeFeedback.textContent = '';
-    });
-
     function updateActionButtonVisibility() {
         updateKasirFabVisibility();
         updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
     }
 
     document.addEventListener('keydown', function(e) {
@@ -1168,7 +997,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         const manualOrderModal = document.getElementById('manualOrderModal');
         const manualOrderOpen = manualOrderModal && manualOrderModal.style.display === 'flex';
         if (currentUserRole !== 'kasir' || manualOrderOpen) return;
-
         if (e.key === "F12") {
             e.preventDefault();
             const dapurFab = document.getElementById('dapur-fab');
@@ -1190,7 +1018,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         }
         if (e.key === 'F4') {
             e.preventDefault();
-            if (clearCartFab) clearCartFab.click();
+            stickyClearBtn.click();
         }
         if (e.key === 'F6') {
             e.preventDefault();
@@ -1198,11 +1026,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         }
     });
 
-    if (cartFab) {
-        cartFab.addEventListener('click', function() {
-            showPopupKeranjang(true);
-        });
-    }
     if (floatingPesanWhatsapp) {
         floatingPesanWhatsapp.onclick = function() {
             showPopupKeranjang(true);
@@ -1215,6 +1038,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
     function isPopupKeranjangClosed() {
         return localStorage.getItem('popupKeranjangClosed') === '1';
     }
+
     function showPopupKeranjang(forceShow = false) {
         if (!forceShow) {
             if (isPopupKeranjangClosed()) return;
@@ -1227,7 +1051,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         setTimeout(() => {
             document.getElementById('close-popup-keranjang').focus();
         }, 100);
-        // Pastikan kembalian info muncul
         tampilkanKembalianPopupKeranjang();
     }
     function hidePopupKeranjang() {
@@ -1327,7 +1150,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
             });
         }
 
-        // Hapus elemen static total (Total: Rp0 atau Total: Rp...) jika ditemukan
         const staticNodes = popupKeranjang.querySelectorAll('div, strong, span');
         staticNodes.forEach(node => {
             if (
@@ -1462,7 +1284,7 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         stickyFooter.style.zIndex = '20';
         stickyFooter.style.display = 'flex';
         stickyFooter.style.flexDirection = 'column';
-        stickyFooter.style.gap = '2px'; // Jarak antar tombol 2px
+        stickyFooter.style.gap = '2px';
         stickyFooter.style.paddingTop = '10px';
         stickyFooter.style.boxShadow = '0 -2px 12px #0001';
 
@@ -1527,7 +1349,6 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         }
         popupContent.appendChild(stickyFooter);
 
-        // Pastikan kembalian info muncul dan terus update
         tampilkanKembalianPopupKeranjang();
     }
     window.popupUpdateQty = function(idx, val) {
@@ -1537,16 +1358,14 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         else keranjang[idx].qty = quantity;
         updateKeranjang();
         updatePopupKeranjang(true);
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         saveKeranjangToStorage();
     };
     window.popupRemoveItem = function(idx) {
         keranjang.splice(idx, 1);
         updateKeranjang();
         updatePopupKeranjang(true);
-        updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         saveKeranjangToStorage();
     };
 
@@ -1577,6 +1396,83 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         }
     });
 
+    addManualOrderFab.addEventListener('click', () => {
+        manualOrderModal.style.display = 'flex';
+        manualProductNameInput.value = '';
+        manualProductPriceInput.value = '';
+        manualProductQtyInput.value = '1';
+        manualProductNameInput.focus();
+    });
+    manualProductNameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            manualProductPriceInput.focus();
+        }
+    });
+    manualProductPriceInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            manualProductQtyInput.focus();
+        }
+    });
+    manualProductQtyInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            window.addManualOrderItem();
+        }
+    });
+    window.closeManualOrderModal = function() {
+        manualOrderModal.style.display = 'none';
+        productSearchBarcodeInput.focus(); 
+    };
+    window.addManualOrderItem = function() {
+        const name = manualProductNameInput.value.trim();
+        const price = parseFloat(manualProductPriceInput.value);
+        const qty = parseInt(manualProductQtyInput.value);
+        if (!name || isNaN(price) || price < 0 || isNaN(qty) || qty < 1) {
+            alert('Harap isi nama produk, harga (minimal 0), dan kuantitas (minimal 1) dengan benar.');
+            return;
+        }
+        const newManualItem = {
+            id: nextManualItemId++, 
+            nama: name,
+            harga: price,
+            qty: qty,
+            isManual: true 
+        };
+        tambahKeKeranjang(newManualItem);
+        manualOrderModal.style.display = 'none';
+        productSearchBarcodeInput.focus(); 
+    };
+
+    productSearchBarcodeInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault(); 
+            const query = productSearchBarcodeInput.value.trim();
+            if (query) {
+                const foundProduct = produkData.find(p => 
+                    p.barcode === query || p.nama.toLowerCase().includes(query.toLowerCase())
+                );
+                if (foundProduct) {
+                    tambahKeKeranjang(foundProduct);
+                    searchBarcodeFeedback.textContent = `Produk "${foundProduct.nama}" ditambahkan!`;
+                    searchBarcodeFeedback.style.color = '#28a745';
+                    productSearchBarcodeInput.value = ''; 
+                } else {
+                    searchBarcodeFeedback.textContent = `Produk atau barcode "${query}" tidak ditemukan.`;
+                    searchBarcodeFeedback.style.color = '#dc3545';
+                }
+            } else {
+                searchBarcodeFeedback.textContent = 'Masukkan nama produk atau scan barcode.';
+                searchBarcodeFeedback.style.color = '#e0e0e0';
+            }
+            productSearchBarcodeInput.focus();
+        }
+    });
+    productSearchBarcodeInput.addEventListener('input', () => {
+        searchBarcodeFeedback.textContent = '';
+    });
+
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
         document.body.setAttribute("data-role", storedRole);
@@ -1584,23 +1480,23 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         appContainer.style.display = 'block';
         updateKasirFabVisibility();
         updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
         if (storedRole === 'kasir') {
+            unloadTawkToChat();
             cetakStrukButton.style.display = 'none';
             pesanInfoLabel.style.display = 'none';
             shareOrderFab.style.display = 'flex';
             productSearchBarcodeInput.style.display = 'block';
             productSearchBarcodeInput.focus();
             if (printFab) printFab.style.display = 'flex';
-            if (cartFab) cartFab.style.display = 'flex';
-        } else {
+        } else if (storedRole === 'pelanggan') {
+            loadTawkToChat();
             cetakStrukButton.style.display = 'none';
             pesanInfoLabel.style.display = 'block';
             pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
             shareOrderFab.style.display = 'none';
             productSearchBarcodeInput.style.display = 'none';
             if (printFab) printFab.style.display = 'none';
-            if (cartFab) cartFab.style.display = 'none';
         }
         initializeApp();
     } else {
@@ -1609,9 +1505,9 @@ ${keteranganPesanan ? `Catatan: ${keteranganPesanan}\n` : ''}-------------------
         appContainer.style.display = 'none';
         updateKasirFabVisibility();
         updateFloatingButtonVisibility();
-        updatePelangganFabClearCartVisibility();
+        updateStickyBtnsVisibility();
+        unloadTawkToChat();
         if (printFab) printFab.style.display = 'none';
-        if (cartFab) cartFab.style.display = 'none';
     }
 
     const dapurFab = document.getElementById('dapur-fab');

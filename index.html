@@ -121,12 +121,6 @@
             <div class="fab-button fab-manual" id="add-manual-order-fab" title="Tambah Pesanan Manual">
                 <i class="fas fa-shopping-basket"></i>
             </div>
-            <div class="fab-button fab-clear" id="clear-cart-fab" title="Bersihkan Keranjang">
-                <i class="fas fa-trash"></i>
-            </div>
-            <div class="fab-button fab-cart" id="cart-fab" title="Keranjang Belanjaan">
-                <i class="fas fa-shopping-cart"></i>
-            </div>
             <div class="fab-button fab-dapur" id="dapur-fab" title="Cetak Struk Dapur">
                 <i class="fas fa-utensils"></i>
             </div>
@@ -156,6 +150,17 @@
                 <button onclick="printDapurStruk()">Cetak Struk Pelanggan</button>
             </div>
         </div>
+        <!-- Sticky Keranjang Belanjaan Buttons (for kasir) -->
+        <div id="sticky-btns-container" class="sticky-btns-container" style="display:none;">
+            <button id="sticky-clear-btn" class="sticky-clear-btn">
+                <i class="fas fa-trash"></i>
+                <span class="sticky-clear-text">Hapus Keranjang</span>
+            </button>
+            <button id="sticky-cart-btn" class="sticky-cart-btn">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="sticky-cart-text">Keranjang Belanjaan</span>
+            </button>
+        </div>
         <div id="popup-keranjang" style="display:none;">
             <div class="popup-keranjang-content">
                 <button id="close-popup-keranjang" title="Tutup" style="position:absolute;right:10px;top:10px;font-size:1.5em;background:none;border:none;cursor:pointer;">&times;</button>
@@ -181,29 +186,9 @@
                     <input type="number" id="popup-keranjang-nominal" min="0" value="0">
                     <p>Kembalian: <span id="popup-kembalian-display">Rp0</span></p>
                 </div>
-                <!-- Nama dan alamat input akan dimasukkan lewat JS agar dinamis -->
-                <div style="margin-top:10px;text-align:right;">
-                    <button id="popup-keranjang-print" style="background:#007bff;color:#fff;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;">
-                        <i class="fas fa-print"></i> Cetak Struk
-                    </button>
-                    <!-- Tombol WhatsApp akan dimasukkan lewat JS agar dinamis -->
-                </div>
             </div>
         </div>
     </div>
     <script src="script.js"></script>
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/687a5f045100991915b4e88b/1j0f06avl';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
 </body>
 </html>
