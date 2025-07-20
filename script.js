@@ -799,7 +799,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (keteranganPesanan) {
             message += `\nCatatan: ${keteranganPesanan}\n`;
         }
-        message += `\n[Link Pembayaran QRIS]\nhttps://drive.google.com/file/d/1XAOms4tVa2jkkkCdXRwbNIGy0dvu7RIk/view?usp=drivesdk`;
+        message += `\n[Link Pembayaran QRIS]\nhttps://bit.ly/4eVAZkA`;
         return {
             success: true,
             message,
