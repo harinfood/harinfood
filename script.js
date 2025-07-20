@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === DEKLARASI VARIABEL DOM ===
     const loginPopup = document.getElementById('login-popup');
     const btnPelanggan = document.getElementById('btn-pelanggan');
     const btnKasir = document.getElementById('btn-kasir');
@@ -53,8 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let popupWhatsAppBtn = null;
     let kembalianModal;
     let popupKembalianInformasi = null;
-
-    // === FAB HAPUS KERANJANG MENGAMBANG UNTUK PELANGGAN ===
     let pelangganFabClearCart = null;
     function createPelangganFabClearCart() {
         if (document.getElementById('pelanggan-fab-clear-cart')) return;
@@ -80,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pelangganFabClearCart.style.transition = 'opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1)';
         pelangganFabClearCart.style.padding = '0 22px 0 20px';
         pelangganFabClearCart.style.gap = '2px';
-
         pelangganFabClearCart.addEventListener('click', function() {
             keranjang = [];
             resetHargaProdukKeDefault();
@@ -105,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(pelangganFabClearCart);
     }
     createPelangganFabClearCart();
-
     function updatePelangganFabClearCartVisibility() {
         const currentUserRole = localStorage.getItem('userRole');
         if (!pelangganFabClearCart || !floatingPesanWhatsapp) return;
@@ -134,8 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     window.addEventListener('resize', updatePelangganFabClearCartVisibility);
-
-    // === UTILITAS ===
     function formatNumberWithDots(n) {
         if (typeof n === "string") n = n.replace(/\./g, '');
         let x = n.toString().replace(/[^0-9]/g, '');
@@ -169,12 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         img.src = imgUrl;
     }
-
-    // === MODAL KEMBALIAN ===
     function createKembalianModal() {
         const old = document.getElementById('kembalian-modal');
         if (old) old.remove();
-
         kembalianModal = document.createElement('div');
         kembalianModal.id = "kembalian-modal";
         kembalianModal.style.display = "none";
@@ -187,11 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         document.body.appendChild(kembalianModal);
-
         const closeBtn = document.getElementById('close-kembalian-modal');
         const okBtn = document.getElementById('ok-kembalian-modal');
         const modalContent = kembalianModal.querySelector('.kembalian-modal-content');
-
         function closeModal() {
             kembalianModal.style.display = "none";
             if (popupKeranjang && popupKeranjang.style.display !== "none") {
@@ -200,10 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             tampilkanKembalianPopupKeranjang();
         }
-
         closeBtn.onclick = closeModal;
         okBtn.onclick = closeModal;
-
         kembalianModal.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -216,12 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             okBtn.focus();
         }, 180);
-
         modalContent.focus();
     }
     createKembalianModal();
-
-    // === DATA PRODUK DAN KERANJANG ===
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
@@ -235,8 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let keranjang = [];
     let nextManualItemId = 1000;
     let isNominalInputFocused = false;
-
-    // === LOAD/SAVE KERANJANG DAN CATATAN ===
     function saveKeranjangToStorage() {
         localStorage.setItem('keranjang', JSON.stringify(keranjang));
         if (keteranganPesananInput.value && keranjang.length > 0) {
@@ -266,8 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         localStorage.removeItem('produkHarga');
     }
-
-    // === LOGIN HANDLING DAN TAWK.TO ===
     let tawkWidgetScript = null;
     function loadTawktoWidget() {
         if (tawkWidgetScript) return;
@@ -297,7 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.Tawk_API) delete window.Tawk_API;
         if (window.Tawk_LoadStart) delete window.Tawk_LoadStart;
     }
-
     btnPelanggan.addEventListener('click', () => {
         formPelanggan.style.display = 'flex';
         formKasir.style.display = 'none';
@@ -333,6 +311,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (namaKasir === 'Harry' && passwordKasirLoginInput.value.trim() === '313121') {
             localStorage.setItem('userRole', 'kasir');
             localStorage.setItem('namaKasir', namaKasir);
+            localStorage.removeItem('namaPelanggan');
+            localStorage.removeItem('alamatPelanggan');
+            localStorage.removeItem('namaPemesan');
             loginPopup.style.display = 'none';
             appContainer.style.display = 'block';
             kasirFabs.style.display = 'block';
@@ -358,10 +339,14 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btnSimpanNamaPemesan').click();
         }
     });
-
     function autofillNamaPemesanForm() {
-        const nama = localStorage.getItem('namaPemesan') || '';
-        const alamat = localStorage.getItem('alamatPelanggan') || '';
+        const currentUserRole = localStorage.getItem('userRole');
+        let nama = '';
+        let alamat = '';
+        if (currentUserRole === 'pelanggan') {
+            nama = localStorage.getItem('namaPemesan') || '';
+            alamat = localStorage.getItem('alamatPelanggan') || '';
+        }
         if (namaPemesanInput) namaPemesanInput.value = nama;
         if (alamatPemesanInput) alamatPemesanInput.value = alamat;
     }
@@ -389,7 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
         paymentChoiceButtons.style.display = 'flex';
         updatePelangganFabClearCartVisibility();
     }
-
     function showKembalianModalPopupKeranjang() {
         createKembalianModal();
         if (!popupKeranjangNominal || !popupKeranjangTotal) return;
@@ -412,7 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (okBtn) okBtn.focus();
         }, 180);
     }
-
     function tampilkanKembalianPopupKeranjang() {
         if (!popupKeranjangNominal || !popupKeranjangTotal) return;
         let info = document.getElementById('popup-kembalian-informasi');
@@ -441,8 +424,6 @@ document.addEventListener('DOMContentLoaded', () => {
             popupKembalianInformasi.style.color = '#28a745';
         }
     }
-
-    // === PRODUK DAN KERANJANG ===
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
@@ -526,7 +507,6 @@ document.addEventListener('DOMContentLoaded', () => {
             input.blur();
         }
     });
-
     produkList.addEventListener('click', function(e) {
         const btn = e.target.closest('button');
         if (!btn) return;
@@ -561,7 +541,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     });
-
     function tambahKeKeranjang(produkSumber) {
         let productToAdd;
         if (produkSumber.isManual) {
@@ -592,7 +571,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePelangganFabClearCartVisibility();
         saveKeranjangToStorage();
     }
-
     function updateKeranjang() {
         let total = 0;
         keranjangItems.innerHTML = '';
@@ -635,7 +613,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePelangganFabClearCartVisibility();
         saveKeranjangToStorage();
     }
-
     nilaiDiskonInput.addEventListener('input', updateKeranjang);
     window.clearQtyOnFocus = function(inputElement, index) { inputElement.value = ''; };
     window.updateCartItemQty = function(index, newQty) {
@@ -657,7 +634,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePelangganFabClearCartVisibility();
         saveKeranjangToStorage();
     };
-
     clearCartFab.addEventListener('click', () => {
         keranjang = [];
         resetHargaProdukKeDefault();
@@ -679,7 +655,6 @@ document.addEventListener('DOMContentLoaded', () => {
         saveKeranjangToStorage();
         localStorage.removeItem('catatanPesanan');
     });
-
     keteranganPesananInput.addEventListener('input', () => {
         if (keranjang.length > 0) {
             localStorage.setItem('catatanPesanan', keteranganPesananInput.value);
@@ -687,7 +662,6 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('catatanPesanan');
         }
     });
-
     function hitungKembalian() {
         const totalBelanja = parseFloat(keranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
         const nominalPembayaran = parseFloat(nominalPembayaranInput.value) || 0;
@@ -725,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === PRINT/STRUK HANDLING ===
+    // PEMBAHARUAN: generateStrukText dan doPrintStruk (tidak mencetak nama/alamat pelanggan jika kasir tidak mengisi)
     function generateStrukText(paymentMethod, qrisBase64 = null) {
         let namaPemesan = namaPemesanInput.value.trim();
         let alamatPemesan = alamatPemesanInput.value.trim();
@@ -752,17 +726,21 @@ document.addEventListener('DOMContentLoaded', () => {
             nominalPembayaran = parseNumberFromDots(popupKeranjangNominal.value) || nominalPembayaran;
         }
         const kembalian = nominalPembayaran - totalSetelahDiskon;
-
         if (keranjang.length === 0) {
             return { success: false, message: 'Keranjang belanja masih kosong!' };
         }
-        let message =
-`Nama: ${namaPemesan || '-'}
-Alamat: ${alamatPemesan || '-'}
-${currentUserRole === 'kasir' ? `Kasir: ${kasirName}\n` : ''}Tanggal: ${new Date().toLocaleDateString('id-ID')}
-Jam: ${new Date().toLocaleTimeString('id-ID')}
------------------------------
-`;
+        let showNamaAlamat = true;
+        if (currentUserRole === 'kasir' && (!namaPemesan && !alamatPemesan)) {
+            showNamaAlamat = false;
+        }
+        let message = '';
+        if (showNamaAlamat) {
+            message += `Nama: ${namaPemesan || '-'}\nAlamat: ${alamatPemesan || '-'}\n`;
+        }
+        if (currentUserRole === 'kasir') {
+            message += `Kasir: ${kasirName}\n`;
+        }
+        message += `Tanggal: ${new Date().toLocaleDateString('id-ID')}\nJam: ${new Date().toLocaleTimeString('id-ID')}\n-----------------------------\n`;
         keranjang.forEach(item => {
             message += `${item.nama} (${item.qty}x)  ${formatRupiah(item.harga * item.qty)}\n`;
         });
@@ -776,7 +754,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             message += `Bayar     : ${formatRupiah(nominalPembayaran)}\n`;
             message += `Kembalian : ${formatRupiah(kembalian)}\n`;
         }
-        // Catatan pesanan diletakkan di akhir transaksi, sebelum QRIS
         if (keteranganPesanan) {
             message += `\nCatatan: ${keteranganPesanan}\n`;
         }
@@ -799,7 +776,15 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             doPrintStruk(paymentMethod, null);
         }
     }
-
+    function afterKasirTransaksiLangsungKosongkan() {
+        localStorage.removeItem('namaPelanggan');
+        localStorage.removeItem('alamatPelanggan');
+        localStorage.removeItem('namaPemesan');
+        if (namaPemesanInput) namaPemesanInput.value = '';
+        if (alamatPemesanInput) alamatPemesanInput.value = '';
+        if (popupNamaPelangganInput) popupNamaPelangganInput.value = '';
+        if (popupAlamatPelangganInput) popupAlamatPelangganInput.value = '';
+    }
     function doPrintStruk(paymentMethod, qrisBase64) {
         const shareResult = generateStrukText(paymentMethod, qrisBase64);
         if (!shareResult.success) {
@@ -816,7 +801,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 </tr>
             `;
         });
-
         let diskonTr = '';
         if (localStorage.getItem('userRole') === 'kasir' && (parseFloat(nilaiDiskonInput.value) || 0) > 0) {
             diskonTr = `
@@ -825,13 +809,25 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 <td style="text-align:right;font-size:11px;padding:0.5px 0;">-${formatRupiah(parseFloat(nilaiDiskonInput.value) || 0)}</td>
             </tr>`;
         }
-
         let keteranganPesanan = keteranganPesananInput.value.trim();
         let popupCatatanInput = document.getElementById('popup-catatan-belanja');
         if (popupCatatanInput && popupCatatanInput.value.trim() !== "") {
             keteranganPesanan = popupCatatanInput.value.trim();
         }
-
+        let showNamaAlamat = true;
+        const currentUserRole = localStorage.getItem('userRole');
+        let namaCetak = popupNamaPelangganInput ? popupNamaPelangganInput.value.trim() : namaPemesanInput.value.trim();
+        let alamatCetak = popupAlamatPelangganInput ? popupAlamatPelangganInput.value.trim() : alamatPemesanInput.value.trim();
+        if (currentUserRole === 'kasir' && (!namaCetak && !alamatCetak)) {
+            showNamaAlamat = false;
+        }
+        let infoNamaAlamatHTML = '';
+        if (showNamaAlamat) {
+            infoNamaAlamatHTML = `
+                <p>Nama   : ${namaCetak || '-'}</p>
+                <p>Alamat : ${alamatCetak || '-'}</p>
+            `;
+        }
         let printContent = `
             <html>
             <head>
@@ -871,8 +867,7 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                         <p class="shop-phone-print">081235368643</p>
                     </div>
                     <div class="print-info">
-                        <p>Nama   : ${popupNamaPelangganInput ? popupNamaPelangganInput.value : namaPemesanInput.value}</p>
-                        <p>Alamat : ${popupAlamatPelangganInput ? popupAlamatPelangganInput.value : alamatPemesanInput.value}</p>
+                        ${infoNamaAlamatHTML}
                         ${localStorage.getItem('userRole') === 'kasir' ? `<p>Kasir  : ${localStorage.getItem('namaKasir')}</p>` : ''}
                         <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
                         <p>Jam    : ${new Date().toLocaleTimeString('id-ID')}</p>
@@ -890,7 +885,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                         }
                     </table>
         `;
-        // Catatan pesanan diletakkan di akhir, setelah tabel transaksi
         if (keteranganPesanan) {
             printContent += `
                     <hr style="margin:2px 0;">
@@ -913,12 +907,10 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 <button onclick="shareWhatsApp()">Bagikan via WhatsApp</button>
             </div>
             </div></body></html>`;
-
         const printWindow = window.open('', '_blank');
         printWindow.document.write(printContent);
         printWindow.document.close();
         printWindow.focus();
-
         setTimeout(() => {
             keranjang = [];
             saveKeranjangToStorage();
@@ -939,6 +931,9 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             updateFloatingButtonVisibility();
             updatePelangganFabClearCartVisibility();
             localStorage.removeItem('catatanPesanan');
+            if (localStorage.getItem('userRole') === 'kasir') {
+                afterKasirTransaksiLangsungKosongkan();
+            }
         }, 300);
         return true;
     }
@@ -984,6 +979,9 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 updateFloatingButtonVisibility();
                 updatePelangganFabClearCartVisibility();
                 localStorage.removeItem('catatanPesanan');
+                if (localStorage.getItem('userRole') === 'kasir') {
+                    afterKasirTransaksiLangsungKosongkan();
+                }
                 return;
             }
         } catch (error) {}
@@ -1008,8 +1006,10 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         updateFloatingButtonVisibility();
         updatePelangganFabClearCartVisibility();
         localStorage.removeItem('catatanPesanan');
+        if (localStorage.getItem('userRole') === 'kasir') {
+            afterKasirTransaksiLangsungKosongkan();
+        }
     });
-
     function kirimPesanWhatsappPelanggan() {
         if (keranjang.length === 0) {
             alert('Keranjang masih kosong, silakan pilih pesanan terlebih dahulu!');
@@ -1043,7 +1043,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         updatePelangganFabClearCartVisibility();
         localStorage.removeItem('catatanPesanan');
     }
-
     function updateFloatingButtonVisibility() {
         const currentUserRole = localStorage.getItem('userRole');
         if (!floatingPesanWhatsapp) return;
@@ -1098,7 +1097,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
     closePrintPopupBtn.addEventListener('click', () => {
         printOptionsPopup.style.display = 'none';
     });
-
     addManualOrderFab.addEventListener('click', () => {
         manualOrderModal.style.display = 'flex';
         manualProductNameInput.value = '';
@@ -1147,7 +1145,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         manualOrderModal.style.display = 'none';
         productSearchBarcodeInput.focus(); 
     };
-
     productSearchBarcodeInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
             e.preventDefault(); 
@@ -1175,19 +1172,16 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
     productSearchBarcodeInput.addEventListener('input', () => {
         searchBarcodeFeedback.textContent = '';
     });
-
     function updateActionButtonVisibility() {
         updateKasirFabVisibility();
         updateFloatingButtonVisibility();
         updatePelangganFabClearCartVisibility();
     }
-
     document.addEventListener('keydown', function(e) {
         const currentUserRole = localStorage.getItem('userRole');
         const manualOrderModal = document.getElementById('manualOrderModal');
         const manualOrderOpen = manualOrderModal && manualOrderModal.style.display === 'flex';
         if (currentUserRole !== 'kasir' || manualOrderOpen) return;
-
         if (e.key === "F12") {
             e.preventDefault();
             const dapurFab = document.getElementById('dapur-fab');
@@ -1216,7 +1210,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             showPopupKeranjang(true);
         }
     });
-
     if (cartFab) {
         cartFab.addEventListener('click', function() {
             showPopupKeranjang(true);
@@ -1227,7 +1220,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             showPopupKeranjang(true);
         };
     }
-
     function setPopupKeranjangClosed(val) {
         localStorage.setItem('popupKeranjangClosed', val ? '1' : '');
     }
@@ -1254,7 +1246,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         document.body.style.overflow = "";
     }
     document.getElementById('close-popup-keranjang').onclick = hidePopupKeranjang;
-
     function updatePopupKeranjang(forceShow = false) {
         if (popupKeranjang.style.display === "none" && !forceShow) return;
         const tbody = document.getElementById('popup-keranjang-items');
@@ -1266,7 +1257,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         let namaPelangganPopup = document.getElementById('popup-nama-pelanggan');
         let alamatPelangganPopup = document.getElementById('popup-alamat-pemesan');
         let popupCatatanInput = document.getElementById('popup-catatan-belanja');
-
         if (!popupCatatanInput) {
             const catatanDiv = document.createElement('div');
             catatanDiv.style.marginBottom = "10px";
@@ -1290,7 +1280,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 }
             };
         }
-
         if (!namaPelangganPopup || !alamatPelangganPopup) {
             const namaAlamatDiv = document.createElement('div');
             namaAlamatDiv.style.marginBottom = "10px";
@@ -1306,21 +1295,31 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         }
         popupNamaPelangganInput = namaPelangganPopup;
         popupAlamatPelangganInput = alamatPelangganPopup;
-
-        let namaPelangganDefault = localStorage.getItem('namaPemesan') || namaPemesanInput.value || "";
-        let alamatPelangganDefault = localStorage.getItem('alamatPelanggan') || alamatPemesanInput.value || "";
+        const currentUserRole = localStorage.getItem('userRole');
+        let namaPelangganDefault = '';
+        let alamatPelangganDefault = '';
+        if (currentUserRole === 'pelanggan') {
+            namaPelangganDefault = localStorage.getItem('namaPemesan') || namaPemesanInput.value || "";
+            alamatPelangganDefault = localStorage.getItem('alamatPelanggan') || alamatPemesanInput.value || "";
+        }
         if (popupNamaPelangganInput && popupNamaPelangganInput.value === "") popupNamaPelangganInput.value = namaPelangganDefault;
         if (popupAlamatPelangganInput && popupAlamatPelangganInput.value === "") popupAlamatPelangganInput.value = alamatPelangganDefault;
-
         popupNamaPelangganInput.oninput = function() {
-            namaPemesanInput.value = popupNamaPelangganInput.value;
-            localStorage.setItem('namaPemesan', popupNamaPelangganInput.value);
+            if (currentUserRole === 'pelanggan') {
+                namaPemesanInput.value = popupNamaPelangganInput.value;
+                localStorage.setItem('namaPemesan', popupNamaPelangganInput.value);
+            } else {
+                namaPemesanInput.value = popupNamaPelangganInput.value;
+            }
         };
         popupAlamatPelangganInput.oninput = function() {
-            alamatPemesanInput.value = popupAlamatPelangganInput.value;
-            localStorage.setItem('alamatPelanggan', popupAlamatPelangganInput.value);
+            if (currentUserRole === 'pelanggan') {
+                alamatPemesanInput.value = popupAlamatPelangganInput.value;
+                localStorage.setItem('alamatPelanggan', popupAlamatPelangganInput.value);
+            } else {
+                alamatPemesanInput.value = popupAlamatPelangganInput.value;
+            }
         };
-
         let total = 0;
         tbody.innerHTML = '';
         if (keranjang.length === 0) {
@@ -1344,7 +1343,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 tbody.appendChild(row);
             });
         }
-
         const staticNodes = popupKeranjang.querySelectorAll('div, strong, span');
         staticNodes.forEach(node => {
             if (
@@ -1359,7 +1357,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 }
             }
         });
-
         let pembayaranInline = popupKeranjang.querySelector('.pembayaran-section-inline');
         if (pembayaranInline && pembayaranInline.parentElement) {
             pembayaranInline.parentElement.removeChild(pembayaranInline);
@@ -1377,7 +1374,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         pembayaranInline.style.alignItems = 'center';
         pembayaranInline.style.justifyContent = 'space-between';
         pembayaranInline.style.gap = '8px';
-
         let leftDiv = document.createElement('div');
         leftDiv.style.display = 'flex';
         leftDiv.style.alignItems = 'center';
@@ -1395,7 +1391,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         spanTotal.style.fontSize = '1em';
         leftDiv.appendChild(labelTotal);
         leftDiv.appendChild(spanTotal);
-
         let rightDiv = document.createElement('div');
         rightDiv.style.display = 'flex';
         rightDiv.style.alignItems = 'center';
@@ -1419,15 +1414,11 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         inputNominal.style.background = '#f8f8f8';
         rightDiv.appendChild(labelNominal);
         rightDiv.appendChild(inputNominal);
-
         pembayaranInline.appendChild(leftDiv);
         pembayaranInline.appendChild(rightDiv);
-
         popupKeranjang.firstElementChild.appendChild(pembayaranInline);
-
         popupKeranjangTotal = pembayaranInline.querySelector('#popup-keranjang-total');
         popupKeranjangNominal = pembayaranInline.querySelector('#popup-keranjang-nominal');
-
         if (!popupKeranjangNominal._formatted) {
             popupKeranjangNominal.value = total > 0 ? formatNumberWithDots(total) : "";
             popupKeranjangNominal.dataset.lastTotal = total;
@@ -1435,7 +1426,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         }
         popupKeranjangNominal.style.color = "#222";
         hitungKembalianPopup();
-
         popupKeranjangNominal.addEventListener('input', function(e) {
             let cursor = popupKeranjangNominal.selectionStart;
             let before = popupKeranjangNominal.value.length;
@@ -1445,7 +1435,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             popupKeranjangNominal.setSelectionRange(cursor + (after - before), cursor + (after - before));
             hitungKembalianPopup();
         });
-
         popupKeranjangNominal.addEventListener('focus', function() {
             this.value = "";
         });
@@ -1463,12 +1452,9 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
                 showKembalianModalPopupKeranjang();
             }
         });
-
-        const currentUserRole = localStorage.getItem('userRole');
         const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
         let stickyFooter = popupContent.querySelector('.popup-sticky-footer');
         if (stickyFooter) stickyFooter.remove();
-
         stickyFooter = document.createElement('div');
         stickyFooter.className = 'popup-sticky-footer';
         stickyFooter.style.position = 'sticky';
@@ -1482,7 +1468,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         stickyFooter.style.gap = '2px';
         stickyFooter.style.paddingTop = '10px';
         stickyFooter.style.boxShadow = '0 -2px 12px #0001';
-
         if (!popupKeranjangPrintBtn) {
             popupKeranjangPrintBtn = document.createElement('button');
             popupKeranjangPrintBtn.id = 'popup-keranjang-print';
@@ -1507,7 +1492,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             printStruk('Tunai');
             setPopupKeranjangClosed(true);
         };
-
         if (!popupWhatsAppBtn) {
             popupWhatsAppBtn = document.createElement('button');
             popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
@@ -1518,8 +1502,8 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             popupWhatsAppBtn.style.padding = '8px 20px';
             popupWhatsAppBtn.style.borderRadius = '25px';
             popupWhatsAppBtn.style.cursor = 'pointer';
-            popupWhatsAppBtn.style.fontSize = '1.5em';
-            popupWhatsAppBtn.style.width = '90%';
+            popupWhatsAppBtn.style.fontSize = '1.8em';
+            popupWhatsAppBtn.style.width = '100%';
             popupWhatsAppBtn.style.fontWeight = 'bold';
             popupWhatsAppBtn.style.zIndex = 10;
         }
@@ -1527,15 +1511,16 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         popupWhatsAppBtn.onclick = function() {
             namaPemesanInput.value = popupNamaPelangganInput.value.trim();
             alamatPemesanInput.value = popupAlamatPelangganInput.value.trim();
-            localStorage.setItem('namaPemesan', namaPemesanInput.value);
-            localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
+            if (currentUserRole === 'pelanggan') {
+                localStorage.setItem('namaPemesan', namaPemesanInput.value);
+                localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
+            }
             nominalPembayaranInput.value = parseNumberFromDots(popupKeranjangNominal.value);
             hitungKembalian();
             hidePopupKeranjang();
             kirimPesanWhatsappPelanggan();
             setPopupKeranjangClosed(true);
         };
-
         if(currentUserRole === 'kasir') {
             stickyFooter.appendChild(popupKeranjangPrintBtn);
         }
@@ -1543,7 +1528,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
             stickyFooter.appendChild(popupWhatsAppBtn);
         }
         popupContent.appendChild(stickyFooter);
-
         tampilkanKembalianPopupKeranjang();
     }
     window.popupUpdateQty = function(idx, val) {
@@ -1565,7 +1549,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         updatePelangganFabClearCartVisibility();
         saveKeranjangToStorage();
     };
-
     function showKembalianModalPopupKeranjang() {
         if (!popupKeranjangNominal || !popupKeranjangTotal) return;
         const totalBelanja = parseFloat(popupKeranjangTotal.textContent.replace('Rp', '').replace(/\./g, '').replace(',', '.')) || 0;
@@ -1584,15 +1567,12 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         kembalianModal.style.justifyContent = 'center';
         kembalianModal.style.alignItems = 'center';
     }
-
     function hitungKembalianPopup() {}
-
     popupKeranjang.addEventListener('click', function(e) {
         if (e.target === popupKeranjang) {
             hidePopupKeranjang();
         }
     });
-
     function handleTawkVisibilityOnReload() {
         const storedRole = localStorage.getItem('userRole');
         if (storedRole === 'pelanggan') {
@@ -1602,7 +1582,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         }
     }
     handleTawkVisibilityOnReload();
-
     const storedRole = localStorage.getItem('userRole');
     if (storedRole) {
         document.body.setAttribute("data-role", storedRole);
@@ -1639,11 +1618,9 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
         if (printFab) printFab.style.display = 'none';
         if (cartFab) cartFab.style.display = 'none';
     }
-
     const dapurFab = document.getElementById('dapur-fab');
     const dapurStrukModal = document.getElementById('dapurStrukModal');
     const dapurBodyInput = document.getElementById('dapurBodyInput');
-
     if (dapurFab) {
         dapurFab.addEventListener('click', () => {
             dapurBodyInput.value = '';
@@ -1654,7 +1631,6 @@ Jam: ${new Date().toLocaleTimeString('id-ID')}
     window.closeDapurStrukModal = function() {
         dapurStrukModal.style.display = 'none';
     };
-
     window.printDapurStruk = function() {
         const isi = dapurBodyInput.value.trim();
         if (!isi) {
