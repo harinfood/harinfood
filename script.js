@@ -1,4 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // === SUARA UNTUK 3 TOMBOL SAJA, DAN HANYA PELANGGAN ===
+    function playSound(type) {
+        if (type === 'click') {
+            const audio = document.getElementById('audio-click');
+            if (audio) { audio.currentTime = 0; audio.play(); }
+        } else if (type === 'beep') {
+            const audio = document.getElementById('audio-beep');
+            if (audio) { audio.currentTime = 0; audio.play(); }
+        }
+    }
+
+    // Fungsi untuk pasang event pada 3 tombol saja
+    function enableSpecialButtonSounds() {
+        if (localStorage.getItem('userRole') !== 'pelanggan') return;
+
+        // 1. Tombol hapus keranjang (id: pelanggan-fab-clear-cart)
+        const hapusBtn = document.getElementById('pelanggan-fab-clear-cart');
+        if (hapusBtn && !hapusBtn._hasSound) {
+            hapusBtn.addEventListener('click', () => playSound('beep'), { capture: true });
+            hapusBtn._hasSound = true;
+        }
+
+        // 2. Tombol keranjang belanjaan (id: cart-fab)
+        const keranjangBtn = document.getElementById('cart-fab');
+        if (keranjangBtn && !keranjangBtn._hasSound) {
+            keranjangBtn.addEventListener('click', () => playSound('click'), { capture: true });
+            keranjangBtn._hasSound = true;
+        }
+
+        // 3. Tombol pesan WhatsApp (id: floating-pesan-whatsapp)
+        const waBtn = document.getElementById('floating-pesan-whatsapp');
+        if (waBtn && !waBtn._hasSound) {
+            waBtn.addEventListener('click', () => playSound('click'), { capture: true });
+            waBtn._hasSound = true;
+        }
+    }
+
+    // Pantau DOM jika tombol dinamis
+    const observer = new MutationObserver(enableSpecialButtonSounds);
+    observer.observe(document.body, { childList: true, subtree: true });
+    // Jalankan sekali saat awal
+    enableSpecialButtonSounds();
     const loginPopup = document.getElementById('login-popup');
     const btnPelanggan = document.getElementById('btn-pelanggan');
     const btnKasir = document.getElementById('btn-kasir');
