@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 4, nama: "Tteokbokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki.webp", barcode: "toppoki10" },
         { id: 6, nama: "spaghetti", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
-        { id: 6, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1" },
+        { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1" },
         { id: 9, nama: "Es Teh Jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" },
         { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh.webp", barcode: "esteh2" }
     ];
