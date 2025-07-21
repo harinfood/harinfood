@@ -967,3 +967,29 @@ body[data-role="pelanggan"] #popup-keranjang-print {
         margin-left: 0 !important;
     }
 }
+.fab-button {
+    position: relative;
+}
+.fab-label {
+    position: absolute;
+    bottom: 3px;
+    right: 6px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 0.68em;
+    padding: 1.5px 5px;
+    border-radius: 6px;
+    font-weight: 700;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 6px #0004;
+    z-index: 2;
+}
+@media (max-width: 480px) {
+    .fab-label {
+        font-size: 0.57em;
+        bottom: 2px;
+        right: 4px;
+        padding: 1px 4px;
+    }
+}
