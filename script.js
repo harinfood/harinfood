@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const audio = document.getElementById('audio-beep');
             if (audio) { audio.currentTime = 0; audio.play(); }
         }
+        else if (type === 'ding') {
+    const audio = document.getElementById('audio-ding');
+    if (audio) { audio.currentTime = 0; audio.play(); }
+}
+        
     }
 
     // Fungsi untuk pasang event pada 3 tombol saja
@@ -330,24 +335,25 @@ document.addEventListener('DOMContentLoaded', () => {
         formPelanggan.style.display = 'none';
         namaKasirLoginInput.focus();
     });
-    formPelanggan.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const nama = namaPelangganLoginInput.value.trim();
-        const alamat = alamatPelangganLoginInput.value.trim();
-        if (nama && alamat) {
-            localStorage.setItem('userRole', 'pelanggan');
-            localStorage.setItem('namaPelanggan', nama);
-            localStorage.setItem('alamatPelanggan', alamat);
-            localStorage.setItem('namaPemesan', nama);
-            loginPopup.style.display = 'none';
-            appContainer.style.display = 'block';
-            kasirFabs.style.display = 'none';
-            pesanInfoLabel.style.display = 'block';
-            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
-            initializeApp();
-            loadTawktoWidget();
-        }
-    });
+formPelanggan.addEventListener('submit', (event) => {
+    event.preventDefault();
+    playSound('ding'); // TAMBAHKAN INI
+    const nama = namaPelangganLoginInput.value.trim();
+    const alamat = alamatPelangganLoginInput.value.trim();
+    if (nama && alamat) {
+        localStorage.setItem('userRole', 'pelanggan');
+        localStorage.setItem('namaPelanggan', nama);
+        localStorage.setItem('alamatPelanggan', alamat);
+        localStorage.setItem('namaPemesan', nama);
+        loginPopup.style.display = 'none';
+        appContainer.style.display = 'block';
+        kasirFabs.style.display = 'none';
+        pesanInfoLabel.style.display = 'block';
+        pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
+        initializeApp();
+        loadTawktoWidget();
+    }
+});
     formKasir.addEventListener('submit', (event) => {
         event.preventDefault();
         const namaKasir = namaKasirLoginInput.value.trim();
