@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
-        /*{ id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
+       /* { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
         { id: 4, nama: "Tteokbokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki.webp", barcode: "toppoki10" },*/
         { id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
@@ -567,8 +567,10 @@ formPelanggan.addEventListener('submit', (event) => {
         }
     });
     produkList.addEventListener('click', function(e) {
-        const btn = e.target.closest('button');
-        if (!btn) return;
+    const produkDiv = e.target.closest('.produk-item');
+    const btn = e.target.closest('button');
+    // Jika klik pada tombol khusus, gunakan logika lama
+    if (btn) {
         const produkId = parseInt(btn.dataset.id);
         if (btn.classList.contains('add-to-cart-btn')) {
             const product = produkData.find(p => p.id === produkId);
@@ -599,7 +601,26 @@ formPelanggan.addEventListener('submit', (event) => {
             }
             return;
         }
-    });
+    }
+    // Jika klik di area produk (bukan tombol plus/minus), tambahkan produk
+    if (produkDiv && !e.target.closest('button') && !e.target.classList.contains('product-price-input')) {
+        // Ambil ID produk dari dataset input price atau dari elemen gambar/h3 parent
+        let produkId = null;
+        // Coba dari input price
+        const priceInput = produkDiv.querySelector('.product-price-input');
+        if (priceInput) produkId = parseInt(priceInput.dataset.id);
+        // Jika tidak ada, coba dari button plus
+        if (!produkId) {
+            const plusBtn = produkDiv.querySelector('.add-to-cart-btn, .plus-btn');
+            if (plusBtn) produkId = parseInt(plusBtn.dataset.id);
+        }
+        if (produkId) {
+            const product = produkData.find(p => p.id === produkId);
+            if (product) tambahKeKeranjang(product);
+            updatePelangganFabClearCartVisibility();
+        }
+    }
+});
     function tambahKeKeranjang(produkSumber) {
         let productToAdd;
         if (produkSumber.isManual) {

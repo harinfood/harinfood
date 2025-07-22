@@ -993,3 +993,12 @@ body[data-role="pelanggan"] #popup-keranjang-print {
         padding: 1px 4px;
     }
 }
+.produk-item {
+    cursor: pointer;
+}
+.produk-controls button {
+    cursor: pointer;
+}
+.product-price-input {
+    cursor: text !important;
+}
