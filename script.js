@@ -484,168 +484,142 @@ formPelanggan.addEventListener('submit', (event) => {
             popupKembalianInformasi.style.color = '#28a745';
         }
     }
-function displayProduk() {
-    produkList.innerHTML = '';
-    const currentUserRole = localStorage.getItem('userRole');
-    let storedKeranjang = [];
-    try {
-        const data = localStorage.getItem('keranjang');
-        storedKeranjang = data ? JSON.parse(data) : [];
-    } catch (e) {
-        storedKeranjang = [];
-    }
-    produkData.forEach(produk => {
-        let itemInCart = keranjang.find(item => item.id === produk.id && !item.isManual);
-        if (!itemInCart) {
-            itemInCart = storedKeranjang.find(item => item.id === produk.id && !item.isManual);
-        }
-        let qty = itemInCart ? itemInCart.qty : 0;
-        const produkDiv = document.createElement('div');
-        produkDiv.classList.add('produk-item');
-        let hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span></p>`;
-        if (currentUserRole === 'kasir') {
-            hargaDisplayHtml = `
-                <p class="edit-price-wrapper">
-                    Harga: 
-                    <input type="number" 
-                           class="product-price-input" 
-                           data-id="${produk.id}" 
-                           value="${produk.harga}" 
-                           min="0" 
-                           onchange="handlePriceChange(this, ${produk.id})"
-                           onblur="formatPriceInput(this)">
-                </p>`;
-        }
 
-        if (currentUserRole === 'pelanggan') {
+    
+    function displayProduk() {
+        produkList.innerHTML = '';
+        const currentUserRole = localStorage.getItem('userRole');
+        let storedKeranjang = [];
+        try {
+            const data = localStorage.getItem('keranjang');
+            storedKeranjang = data ? JSON.parse(data) : [];
+        } catch (e) {
+            storedKeranjang = [];
+        }
+        produkData.forEach(produk => {
+            let itemInCart = keranjang.find(item => item.id === produk.id && !item.isManual);
+            if (!itemInCart) {
+                itemInCart = storedKeranjang.find(item => item.id === produk.id && !item.isManual);
+            }
+            let qty = itemInCart ? itemInCart.qty : 0;
+            const produkDiv = document.createElement('div');
+            produkDiv.classList.add('produk-item');
+            produkDiv.setAttribute('data-id', produk.id);
+
+            let hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span></p>`;
+            if (currentUserRole === 'kasir') {
+                hargaDisplayHtml = `
+                    <p class="edit-price-wrapper">
+                        Harga: 
+                        <input type="number" 
+                               class="product-price-input" 
+                               data-id="${produk.id}" 
+                               value="${produk.harga}" 
+                               min="0" 
+                               onchange="handlePriceChange(this, ${produk.id})"
+                               onblur="formatPriceInput(this)">
+                    </p>`;
+            }
+            let controlsHtml = '';
+            if (currentUserRole === 'pelanggan' && qty > 0) {
+                controlsHtml = `
+                    <button class="qty-control-btn qty-btn minus-btn" data-id="${produk.id}" data-action="minus" title="Kurangi qty">-</button>
+                    <input type="number" class="qty-edit-input" data-id="${produk.id}" min="1" max="999" value="${qty}" 
+                        style="width:60px;text-align:center;font-size:1.1em;font-weight:bold;border-radius:7px;border:1.5px solid #00f0ff;"
+                        onfocus="this.value='';" 
+                    >
+                `;
+            } else if (qty < 1) {
+                controlsHtml = `
+                    <button class="add-to-cart-btn qty-btn" data-id="${produk.id}" title="Tambah ke keranjang"><i class="fas fa-plus"></i></button>
+                `;
+            } else {
+                controlsHtml = `
+                    <button class="qty-control-btn qty-btn minus-btn" data-id="${produk.id}" data-action="minus" title="Kurangi qty">-</button>
+                    <span class="qty-value">${qty}</span>
+                    <button class="qty-control-btn qty-btn plus-btn" data-id="${produk.id}" data-action="plus" title="Tambah qty">+</button>
+                `;
+            }
             produkDiv.innerHTML = `
-                <img src="${produk.gambar}" alt="${produk.nama}" class="produk-img" data-id="${produk.id}">
-                <h3 class="produk-nama" data-id="${produk.id}">${produk.nama}</h3>
-                ${hargaDisplayHtml}
-                <div class="produk-controls" id="controls-${produk.id}">
-                    ${qty < 1 ? `
-                        <button class="add-to-cart-btn qty-btn" data-id="${produk.id}" title="Tambah ke keranjang"><i class="fas fa-plus"></i></button>
-                    ` : `
-                        <button class="qty-control-btn qty-btn minus-btn" data-id="${produk.id}" data-action="minus" title="Kurangi qty">-</button>
-                        <input type="number" class="qty-value-input" value="${qty}" min="1" max="999" maxlength="3" data-id="${produk.id}" style="width: 60px; text-align: center; font-size: 1.1em; color: var(--text-accent-color); font-weight: bold; border-radius: 6px; border: 1px solid #00f0ff;" />
-                        <!-- Tombol plus dihilangkan -->
-                    `}
-                </div>
-            `;
-        } else {
-            produkDiv.innerHTML = `
-                <img src="${produk.gambar}" alt="${produk.nama}">
+                <img src="${produk.gambar}" alt="${produk.nama}" data-id="${produk.id}" class="produk-img" style="cursor:pointer;">
                 <h3>${produk.nama}</h3>
                 ${hargaDisplayHtml} 
                 <div class="produk-controls" id="controls-${produk.id}">
-                    ${qty < 1 ? `
-                        <button class="add-to-cart-btn qty-btn" data-id="${produk.id}" title="Tambah ke keranjang"><i class="fas fa-plus"></i></button>
-                    ` : `
-                        <button class="qty-control-btn qty-btn minus-btn" data-id="${produk.id}" data-action="minus" title="Kurangi qty">-</button>
-                        <span class="qty-value">${qty}</span>
-                        <button class="qty-control-btn qty-btn plus-btn" data-id="${produk.id}" data-action="plus" title="Tambah qty">+</button>
-                    `}
+                    ${controlsHtml}
                 </div>
             `;
-        }
-        produkList.appendChild(produkDiv);
-    });
-
-    // Event Listener untuk input qty di mode pelanggan
-    if (currentUserRole === 'pelanggan') {
-        produkList.querySelectorAll('.qty-value-input').forEach(input => {
-            // Kosongkan input saat focus
-            input.onfocus = function(e) { this.value = ""; };
-            // Enter key pada input qty
-            input.onkeydown = function(e) {
-                if (e.key === 'Enter') {
-                    let value = parseInt(this.value);
-                    if (isNaN(value) || value < 1) value = 1;
-                    if (value > 999) value = 999;
-                    this.value = value;
-                    const produkId = parseInt(this.dataset.id);
-                    const itemInCart = keranjang.find(item => item.id === produkId && !item.isManual);
-                    if (itemInCart) {
-                        itemInCart.qty = value;
-                        updateKeranjang();
-                        updateProdukControls();
-                        updatePelangganFabClearCartVisibility();
-                        saveKeranjangToStorage();
-                    }
-                }
-            };
-            // Batasi input hanya sampai 3 digit
-            input.oninput = function(e) {
-                let value = this.value.replace(/\D/g, '');
-                if (value.length > 3) value = value.slice(0, 3);
-                let intValue = parseInt(value) || 1;
-                if (intValue < 1) intValue = 1;
-                if (intValue > 999) intValue = 999;
-                this.value = intValue;
-            };
-            // Blur/keluar dari input, qty langsung update
-            input.onblur = function(e) {
-                let value = parseInt(this.value) || 1;
-                if (value < 1) value = 1;
-                if (value > 999) value = 999;
-                this.value = value;
-                const produkId = parseInt(this.dataset.id);
-                const itemInCart = keranjang.find(item => item.id === produkId && !item.isManual);
-                if (itemInCart) {
-                    itemInCart.qty = value;
-                    updateKeranjang();
-                    updateProdukControls();
-                    updatePelangganFabClearCartVisibility();
-                    saveKeranjangToStorage();
-                }
-            };
+            produkList.appendChild(produkDiv);
         });
 
-        // Klik gambar/nama/area produk (selain - dan input qty) => tambah 1 qty
-        produkList.querySelectorAll('.produk-item').forEach(div => {
-            div.onclick = function(e) {
-                // Cek jika klik bukan tombol minus atau input qty
-                const target = e.target;
-                if (
-                    !target.classList.contains('minus-btn') &&
-                    !target.classList.contains('qty-value-input')
-                ) {
-                    const produkId = div.querySelector('.produk-img')?.dataset.id || div.querySelector('.produk-nama')?.dataset.id;
-                    const idNum = parseInt(produkId);
-                    let itemInCart = keranjang.find(item => item.id === idNum && !item.isManual);
-                    if (!itemInCart) {
-                        // Belum ada di keranjang, tambahkan 1
-                        const produk = produkData.find(p => p.id === idNum);
-                        if (produk) tambahKeKeranjang(produk);
+        // Event binding untuk qty-edit-input pelanggan
+        const qtyInputs = document.querySelectorAll('.qty-edit-input');
+        qtyInputs.forEach(input => {
+            input.addEventListener('focus', function () {
+                this.value = '';
+            });
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '').slice(0, 3);
+            });
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    let produkId = parseInt(this.dataset.id);
+                    let val = parseInt(this.value);
+                    if (isNaN(val) || val < 1) {
+                        keranjang = keranjang.filter(item => !(item.id === produkId && !item.isManual));
                     } else {
-                        // Sudah ada, tambah qty 1 (maks 999)
-                        if (itemInCart.qty < 999) {
-                            itemInCart.qty += 1;
-                            updateKeranjang();
-                            updateProdukControls();
-                            updatePelangganFabClearCartVisibility();
-                            saveKeranjangToStorage();
+                        let item = keranjang.find(item => item.id === produkId && !item.isManual);
+                        if (item) {
+                            item.qty = val;
                         }
                     }
+                    updateKeranjang();
+                    displayProduk();
+                    updatePelangganFabClearCartVisibility();
                 }
-                // Jika klik area lain tetap fokus ke input qty
-                if (
-                    !target.classList.contains('add-to-cart-btn') &&
-                    !target.classList.contains('minus-btn') &&
-                    !target.classList.contains('qty-value-input')
-                ) {
-                    const input = div.querySelector('.qty-value-input');
-                    if (input) input.focus();
+            });
+            input.addEventListener('blur', function () {
+                let produkId = parseInt(this.dataset.id);
+                let val = parseInt(this.value);
+                if (isNaN(val) || val < 1) {
+                    keranjang = keranjang.filter(item => !(item.id === produkId && !item.isManual));
+                } else {
+                    let item = keranjang.find(item => item.id === produkId && !item.isManual);
+                    if (item) {
+                        item.qty = val;
+                    }
                 }
-            };
+                updateKeranjang();
+                displayProduk();
+                updatePelangganFabClearCartVisibility();
+            });
         });
+
+        // Event binding untuk gambar produk (mode pelanggan)
+        if (localStorage.getItem('userRole') === 'pelanggan') {
+            const imgElements = produkList.querySelectorAll('.produk-img');
+            imgElements.forEach(imgEl => {
+                imgEl.addEventListener('click', function (ev) {
+                    let produkId = parseInt(imgEl.getAttribute('data-id'));
+                    let item = keranjang.find(item => item.id === produkId && !item.isManual);
+                    if (!item) {
+                        // Belum ada di keranjang, area gambar tidak berfungsi
+                        return;
+                    } else {
+                        // Sudah ada, tambah qty +1 (maks 999)
+                        if (item.qty < 999) item.qty += 1;
+                        updateKeranjang();
+                        displayProduk();
+                        updatePelangganFabClearCartVisibility();
+                    }
+                });
+            });
+        }
     }
-}
-function updateProdukControls() { displayProduk(); }
-function updateProdukControls() { displayProduk(); }
-function updateProdukControls() { displayProduk(); }
-function updateProdukControls() { displayProduk(); }
-function updateProdukControls() { displayProduk(); }
+
+
+
+    function updateProdukControls() { displayProduk(); }
     window.handlePriceChange = function(inputElement, produkId) {
         let newPrice = parseFloat(inputElement.value);
         if (isNaN(newPrice) || newPrice < 0) newPrice = 0;

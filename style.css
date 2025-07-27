@@ -751,25 +751,25 @@ footer {
     .print-header .shop-name-print, .print-header .shop-address-print, .print-header .shop-phone-print { font-size: 1.05em !important; font-weight: bold !important; margin: 0 !important; line-height: 1.05 !important; padding: 0 !important;}
     html, body { height: auto !important; max-height: none !important; overflow: visible !important; margin: 0 !important; padding: 0 !important;}
     body * { visibility: hidden !important; box-shadow: none !important; background: none !important; margin: 0 !important; padding: 0 !important;}
-    #print-area, #print-area * { visibility: visible !important; color: #000 !important; background: none !important; font-family: 'Arial', 'Poppins', sans-serif !important; font-size: 15px !important; line-height: 1.35 !important; font-weight: normal !important; letter-spacing: 0.03em !important;}
+    #print-area, #print-area * { visibility: visible !important; color: #000 !important; background: none !important; font-family: 'Arial', 'Poppins', sans-serif !important; font-size: 15px !important; line-height: 1.35 !important; font-weight: bold !important; letter-spacing: 0.03em !important;}
     #print-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 58mm !important; min-width: 58mm !important; max-width: 58mm !important; padding: 2mm 2mm 0 2mm !important; background: #fff !important; margin: 0 !important; min-height: 0 !important; max-height: none !important; height: auto !important; page-break-after: avoid !important; page-break-before: avoid !important; page-break-inside: avoid !important; break-after: avoid-page !important; break-before: avoid-page !important; break-inside: avoid-page !important;}
     .print-header { text-align: center !important; margin-bottom: 3px !important; border-bottom: 1px dashed #000 !important; padding-bottom: 3px !important; font-size: 1.25em !important; font-weight: bold !important;}
     .print-header .shop-name-print { font-size: 1.3em !important; font-weight: bold !important; letter-spacing: 1px !important;}
     .print-header .shop-address-print, .print-header .shop-phone-print { font-size: 1em !important; font-weight: bold !important;}
     .print-info p { margin: 0 !important; font-size: 1em !important; font-weight: bold !important;}
-    .print-notes { margin-top: 5px !important; margin-bottom: 8px !important; font-size: 1em !important; font-weight: normal !important; padding-top: 5px !important;}
+    .print-notes { margin-top: 5px !important; margin-bottom: 8px !important; font-size: 1em !important; font-weight: bold !important; padding-top: 5px !important;}
     hr { border: none !important; border-bottom: 1.5px dashed #000 !important; height: 0 !important; margin: 5px 0 !important;}
-    table { width: 100% !important; border-collapse: collapse !important; font-size: 1em !important; font-weight: normal !important;}
+    table { width: 100% !important; border-collapse: collapse !important; font-size: 1em !important; font-weight: bold !important;}
     table thead { display: none !important;}
     table tr { page-break-inside: avoid !important;}
     table td { padding: 2px 0 !important; font-size: 1em !important; vertical-align: top !important; font-weight: bold !important;}
-    table td:nth-child(1) { width: 60% !important; text-align: left !important; font-weight: normal !important; word-break: break-word !important;}
-    table td:nth-child(2) { width: 40% !important; text-align: right !important; font-weight: normal !important;}
+    table td:nth-child(1) { width: 60% !important; text-align: left !important; font-weight: bold !important; word-break: break-word !important;}
+    table td:nth-child(2) { width: 40% !important; text-align: right !important; font-weight: bold !important;}
     .total-row { font-size: 1.15em !important; font-weight: bold !important; text-align: right !important; margin-top: 5px !important; border-top: 1.5px solid #000 !important; padding-top: 5px !important;}
     .total-row span { float: left !important; font-weight: bold !important;}
-    .print-payment-info { font-size: 1em !important; font-weight: normal !important; text-align: right !important; margin: 2px 0 !important;}
-    .print-payment-info span { float: left !important; font-weight: normal !important;}
-    .thank-you { text-align: center !important; margin-top: 8px !important; font-size: 1em !important; font-style: italic !important; font-weight: normal !important;}
+    .print-payment-info { font-size: 1em !important; font-weight: bold !important; text-align: right !important; margin: 2px 0 !important;}
+    .print-payment-info span { float: left !important; font-weight: bold !important;}
+    .thank-you { text-align: center !important; margin-top: 8px !important; font-size: 1em !important; font-style: italic !important; font-weight: bold !important;}
     #print-area img { display: block !important; margin: 0 auto 4px auto !important; max-width: 40mm !important; height: auto !important;}
 }
 #popup-keranjang {
