@@ -1025,3 +1025,32 @@ body[data-role="pelanggan"] #popup-keranjang-print {
     box-shadow: 0 4px 18px ##000000
     ;
 }
+/* Selalu 4 kolom untuk produk grid pada layar >= 600px */
+#produk-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5em;
+    align-content: start;
+    flex-grow: 1;
+}
+
+/* 2 kolom untuk layar kecil (HP) */
+@media (max-width: 599px) {
+    #produk-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8em;
+    }
+}
+
+/* Layout jadi satu kolom untuk semua ukuran layar, keranjang di bawah produk */
+.main-layout {
+    display: block !important;
+    padding: 2em;
+    max-width: 1400px;
+    margin: 1em auto;
+}
+
+/* Tambahan: beri jarak keranjang di bawah produk */
+#keranjang-form-section {
+    margin-top: 2em;
+}
