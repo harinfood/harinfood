@@ -1414,63 +1414,72 @@ formPelanggan.addEventListener('submit', (event) => {
     }
     document.getElementById('close-popup-keranjang').onclick = hidePopupKeranjang;
     function updatePopupKeranjang(forceShow = false) {
-        if (popupKeranjang.style.display === "none" && !forceShow) return;
-        const tbody = document.getElementById('popup-keranjang-items');
-        popupKeranjangTotal = document.getElementById('popup-keranjang-total');
-        popupKeranjangNominal = document.getElementById('popup-keranjang-nominal');
-        popupKembalianDisplay = document.getElementById('popup-kembalian-display');
-        popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
-        popupWhatsAppBtn = document.getElementById('popup-keranjang-whatsapp');
-        let namaPelangganPopup = document.getElementById('popup-nama-pelanggan');
-        let alamatPelangganPopup = document.getElementById('popup-alamat-pemesan');
-        let popupCatatanInput = document.getElementById('popup-catatan-belanja');
-        if (!popupCatatanInput) {
-            const catatanDiv = document.createElement('div');
-            catatanDiv.style.marginBottom = "10px";
-            catatanDiv.innerHTML = `
-                <label style="font-weight:bold;color:#007bff;">Catatan/Keterangan Pesanan:</label>
-                <textarea id="popup-catatan-belanja" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;min-height:40px;"></textarea>
-            `;
-            if (popupKeranjang.firstElementChild && popupKeranjang.firstElementChild.children.length >= 3) {
-                popupKeranjang.firstElementChild.insertBefore(catatanDiv, popupKeranjang.firstElementChild.children[3]);
+    // --- Variable dasar ---
+    if (popupKeranjang.style.display === "none" && !forceShow) return;
+    const tbody = document.getElementById('popup-keranjang-items');
+    popupKeranjangTotal = document.getElementById('popup-keranjang-total');
+    popupKeranjangNominal = document.getElementById('popup-keranjang-nominal');
+    popupKembalianDisplay = document.getElementById('popup-kembalian-display');
+    popupKeranjangPrintBtn = document.getElementById('popup-keranjang-print');
+    popupWhatsAppBtn = document.getElementById('popup-keranjang-whatsapp');
+    let namaPelangganPopup = document.getElementById('popup-nama-pelanggan');
+    let alamatPelangganPopup = document.getElementById('popup-alamat-pemesan');
+    let popupCatatanInput = document.getElementById('popup-catatan-belanja');
+
+    // --- Catatan pesanan (textarea) ---
+    if (!popupCatatanInput) {
+        const catatanDiv = document.createElement('div');
+        catatanDiv.style.marginBottom = "10px";
+        catatanDiv.innerHTML = `
+            <label style="font-weight:bold;color:#007bff;">Catatan/Keterangan Pesanan:</label>
+            <textarea id="popup-catatan-belanja" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;min-height:40px;"></textarea>
+        `;
+        if (popupKeranjang.firstElementChild && popupKeranjang.firstElementChild.children.length >= 3) {
+            popupKeranjang.firstElementChild.insertBefore(catatanDiv, popupKeranjang.firstElementChild.children[3]);
+        }
+        popupCatatanInput = document.getElementById('popup-catatan-belanja');
+    }
+    if (popupCatatanInput) {
+        popupCatatanInput.value = keteranganPesananInput.value || localStorage.getItem('catatanPesanan') || '';
+        popupCatatanInput.oninput = function() {
+            keteranganPesananInput.value = popupCatatanInput.value;
+            if (keranjang.length > 0) {
+                localStorage.setItem('catatanPesanan', popupCatatanInput.value);
+            } else {
+                localStorage.removeItem('catatanPesanan');
             }
-            popupCatatanInput = document.getElementById('popup-catatan-belanja');
-        }
-        if (popupCatatanInput) {
-            popupCatatanInput.value = keteranganPesananInput.value || localStorage.getItem('catatanPesanan') || '';
-            popupCatatanInput.oninput = function() {
-                keteranganPesananInput.value = popupCatatanInput.value;
-                if (keranjang.length > 0) {
-                    localStorage.setItem('catatanPesanan', popupCatatanInput.value);
-                } else {
-                    localStorage.removeItem('catatanPesanan');
-                }
-            };
-        }
-        if (!namaPelangganPopup || !alamatPelangganPopup) {
-            const namaAlamatDiv = document.createElement('div');
-            namaAlamatDiv.style.marginBottom = "10px";
-            namaAlamatDiv.innerHTML = `
-                <label style="font-weight:bold;color:#007bff;">Nama Pemesan:</label>
-                <input type="text" id="popup-nama-pelanggan" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;margin-bottom:8px;">
-                <label style="font-weight:bold;color:#007bff;">Alamat Pemesan:</label>
-                <textarea id="popup-alamat-pemesan" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;min-height:40px;"></textarea>
-            `;
-            popupKeranjang.firstElementChild.insertBefore(namaAlamatDiv, popupKeranjang.firstElementChild.children[2]);
-            namaPelangganPopup = document.getElementById('popup-nama-pelanggan');
-            alamatPelangganPopup = document.getElementById('popup-alamat-pemesan');
-        }
-        popupNamaPelangganInput = namaPelangganPopup;
-        popupAlamatPelangganInput = alamatPelangganPopup;
-        const currentUserRole = localStorage.getItem('userRole');
-        let namaPelangganDefault = '';
-        let alamatPelangganDefault = '';
-        if (currentUserRole === 'pelanggan') {
-            namaPelangganDefault = localStorage.getItem('namaPemesan') || namaPemesanInput.value || "";
-            alamatPelangganDefault = localStorage.getItem('alamatPelanggan') || alamatPemesanInput.value || "";
-        }
-        if (popupNamaPelangganInput && popupNamaPelangganInput.value === "") popupNamaPelangganInput.value = namaPelangganDefault;
-        if (popupAlamatPelangganInput && popupAlamatPelangganInput.value === "") popupAlamatPelangganInput.value = alamatPelangganDefault;
+        };
+    }
+
+    // --- Form Nama & Alamat Pemesan dengan onfocus kosongkan ---
+    if (!namaPelangganPopup || !alamatPelangganPopup) {
+        const namaAlamatDiv = document.createElement('div');
+        namaAlamatDiv.style.marginBottom = "10px";
+        namaAlamatDiv.innerHTML = `
+            <label style="font-weight:bold;color:#007bff;">Nama Pemesan:</label>
+            <input type="text" id="popup-nama-pelanggan" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;margin-bottom:8px;">
+            <label style="font-weight:bold;color:#007bff;">Alamat Pemesan:</label>
+            <textarea id="popup-alamat-pemesan" style="width:99%;padding:7px;border-radius:5px;border:1px solid #007bff;min-height:40px;"></textarea>
+        `;
+        popupKeranjang.firstElementChild.insertBefore(namaAlamatDiv, popupKeranjang.firstElementChild.children[2]);
+        namaPelangganPopup = document.getElementById('popup-nama-pelanggan');
+        alamatPelangganPopup = document.getElementById('popup-alamat-pemesan');
+    }
+    popupNamaPelangganInput = namaPelangganPopup;
+    popupAlamatPelangganInput = alamatPelangganPopup;
+    const currentUserRole = localStorage.getItem('userRole');
+    let namaPelangganDefault = '';
+    let alamatPelangganDefault = '';
+    if (currentUserRole === 'pelanggan') {
+        namaPelangganDefault = localStorage.getItem('namaPemesan') || namaPemesanInput.value || "";
+        alamatPelangganDefault = localStorage.getItem('alamatPelanggan') || alamatPemesanInput.value || "";
+    }
+    // On focus, kosongkan input
+    if (popupNamaPelangganInput) {
+        popupNamaPelangganInput.value = popupNamaPelangganInput.value || namaPelangganDefault;
+        popupNamaPelangganInput.onfocus = function () {
+            this.value = '';
+        };
         popupNamaPelangganInput.oninput = function() {
             if (currentUserRole === 'pelanggan') {
                 namaPemesanInput.value = popupNamaPelangganInput.value;
@@ -1478,6 +1487,12 @@ formPelanggan.addEventListener('submit', (event) => {
             } else {
                 namaPemesanInput.value = popupNamaPelangganInput.value;
             }
+        };
+    }
+    if (popupAlamatPelangganInput) {
+        popupAlamatPelangganInput.value = popupAlamatPelangganInput.value || alamatPelangganDefault;
+        popupAlamatPelangganInput.onfocus = function () {
+            this.value = '';
         };
         popupAlamatPelangganInput.oninput = function() {
             if (currentUserRole === 'pelanggan') {
@@ -1487,216 +1502,238 @@ formPelanggan.addEventListener('submit', (event) => {
                 alamatPemesanInput.value = popupAlamatPelangganInput.value;
             }
         };
-        let total = 0;
-        tbody.innerHTML = '';
-        if (keranjang.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#222;font-weight:500;">Keranjang kosong.</td></tr>`;
-        } else {
-            keranjang.forEach((item, idx) => {
-                const subtotal = item.harga * item.qty;
-                total += subtotal;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="color:#222;">${item.nama}</td>
-                    <td>
-                        <input type="number" value="${item.qty}" min="1" style="width:48px;color:#222;"
-                            onchange="window.popupUpdateQty(${idx}, this.value)">
-                    </td>
-                    <td style="color:#222;">${formatRupiah(subtotal)}</td>
-                    <td>
-                        <button onclick="window.popupRemoveItem(${idx})" style="background:none;border:none;color:#dc3545;font-size:1.2em;cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        const staticNodes = popupKeranjang.querySelectorAll('div, strong, span');
-        staticNodes.forEach(node => {
-            if (
-                node.textContent &&
-                typeof node.textContent === "string" &&
-                node.textContent.trim().match(/^Total:\s*Rp[\d\.]+$/i)
-            ) {
-                if (node.parentElement && node.parentElement.parentElement === popupKeranjang.firstElementChild) {
-                    node.parentElement.remove();
-                } else if (node.parentElement === popupKeranjang.firstElementChild) {
-                    node.remove();
-                }
-            }
-        });
-        let pembayaranInline = popupKeranjang.querySelector('.pembayaran-section-inline');
-        if (pembayaranInline && pembayaranInline.parentElement) {
-            pembayaranInline.parentElement.removeChild(pembayaranInline);
-        }
-        pembayaranInline = document.createElement('div');
-        pembayaranInline.className = 'pembayaran-section-inline';
-        pembayaranInline.style.position = 'sticky';
-        pembayaranInline.style.bottom = '62px';
-        pembayaranInline.style.background = '#fff';
-        pembayaranInline.style.zIndex = '22';
-        pembayaranInline.style.padding = '6px 0 6px 0';
-        pembayaranInline.style.margin = '0 -20px 0 -20px';
-        pembayaranInline.style.borderTop = '1px solid #eee';
-        pembayaranInline.style.display = 'flex';
-        pembayaranInline.style.alignItems = 'center';
-        pembayaranInline.style.justifyContent = 'space-between';
-        pembayaranInline.style.gap = '8px';
-        let leftDiv = document.createElement('div');
-        leftDiv.style.display = 'flex';
-        leftDiv.style.alignItems = 'center';
-        let labelTotal = document.createElement('span');
-        labelTotal.textContent = 'Total:';
-        labelTotal.style.fontWeight = 'bold';
-        labelTotal.style.color = '#222';
-        labelTotal.style.fontSize = '1em';
-        labelTotal.style.marginRight = '4px';
-        let spanTotal = document.createElement('span');
-        spanTotal.id = 'popup-keranjang-total';
-        spanTotal.textContent = formatRupiah(total);
-        spanTotal.style.fontWeight = 'bold';
-        spanTotal.style.color = '#ff9800';
-        spanTotal.style.fontSize = '1em';
-        leftDiv.appendChild(labelTotal);
-        leftDiv.appendChild(spanTotal);
-        let rightDiv = document.createElement('div');
-        rightDiv.style.display = 'flex';
-        rightDiv.style.alignItems = 'center';
-        let labelNominal = document.createElement('span');
-        labelNominal.textContent = 'Bayar:';
-        labelNominal.style.color = '#00f0ff';
-        labelNominal.style.fontWeight = '700';
-        labelNominal.style.fontSize = '1em';
-        labelNominal.style.marginRight = '3px';
-        let inputNominal = document.createElement('input');
-        inputNominal.type = 'number';
-        inputNominal.id = 'popup-keranjang-nominal';
-        inputNominal.min = '0';
-        inputNominal.value = total > 0 ? formatNumberWithDots(total) : "";
-        inputNominal.style.width = '90px';
-        inputNominal.style.padding = '6px';
-        inputNominal.style.borderRadius = '4px';
-        inputNominal.style.border = '2px solid #00f0ff';
-        inputNominal.style.color = '#222';
-        inputNominal.style.fontWeight = 'bold';
-        inputNominal.style.background = '#f8f8f8';
-        rightDiv.appendChild(labelNominal);
-        rightDiv.appendChild(inputNominal);
-        pembayaranInline.appendChild(leftDiv);
-        pembayaranInline.appendChild(rightDiv);
-        popupKeranjang.firstElementChild.appendChild(pembayaranInline);
-        popupKeranjangTotal = pembayaranInline.querySelector('#popup-keranjang-total');
-        popupKeranjangNominal = pembayaranInline.querySelector('#popup-keranjang-nominal');
-        if (!popupKeranjangNominal._formatted) {
-            popupKeranjangNominal.value = total > 0 ? formatNumberWithDots(total) : "";
-            popupKeranjangNominal.dataset.lastTotal = total;
-            popupKeranjangNominal._formatted = true;
-        }
-        popupKeranjangNominal.style.color = "#222";
-        hitungKembalianPopup();
-        popupKeranjangNominal.addEventListener('input', function(e) {
-            let cursor = popupKeranjangNominal.selectionStart;
-            let before = popupKeranjangNominal.value.length;
-            let clean = formatNumberWithDots(popupKeranjangNominal.value);
-            popupKeranjangNominal.value = clean;
-            let after = clean.length;
-            popupKeranjangNominal.setSelectionRange(cursor + (after - before), cursor + (after - before));
-            hitungKembalianPopup();
-        });
-        popupKeranjangNominal.addEventListener('focus', function() {
-            this.value = "";
-        });
-        popupKeranjangNominal.addEventListener('blur', function() {
-            if (this.value === "" || isNaN(parseNumberFromDots(this.value))) {
-                this.value = total > 0 ? formatNumberWithDots(total) : "";
-                this.dataset.lastTotal = total;
-            }
-            hitungKembalianPopup();
-        });
-        popupKeranjangNominal.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                e.preventDefault();
-                hitungKembalianPopup();
-                showKembalianModalPopupKeranjang();
-            }
-        });
-        const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
-        let stickyFooter = popupContent.querySelector('.popup-sticky-footer');
-        if (stickyFooter) stickyFooter.remove();
-        stickyFooter = document.createElement('div');
-        stickyFooter.className = 'popup-sticky-footer';
-        stickyFooter.style.position = 'sticky';
-        stickyFooter.style.bottom = '0';
-        stickyFooter.style.left = '0';
-        stickyFooter.style.right = '0';
-        stickyFooter.style.background = '#fff';
-        stickyFooter.style.zIndex = '20';
-        stickyFooter.style.display = 'flex';
-        stickyFooter.style.flexDirection = 'column';
-        stickyFooter.style.gap = '2px';
-        stickyFooter.style.paddingTop = '10px';
-        stickyFooter.style.boxShadow = '0 -2px 12px #0001';
-        if (!popupKeranjangPrintBtn) {
-            popupKeranjangPrintBtn = document.createElement('button');
-            popupKeranjangPrintBtn.id = 'popup-keranjang-print';
-            popupKeranjangPrintBtn.innerHTML = '<i class="fas fa-print"></i> Cetak Struk';
-            popupKeranjangPrintBtn.style.background = '#007bff';
-            popupKeranjangPrintBtn.style.color = '#fff';
-            popupKeranjangPrintBtn.style.border = 'none';
-            popupKeranjangPrintBtn.style.padding = '8px 16px';
-            popupKeranjangPrintBtn.style.borderRadius = '5px';
-            popupKeranjangPrintBtn.style.cursor = 'pointer';
-            popupKeranjangPrintBtn.style.fontWeight = 'bold';
-            popupKeranjangPrintBtn.style.fontSize = '1em';
-            popupKeranjangPrintBtn.style.width = '100%';
-        }
-        popupKeranjangPrintBtn.style.display = (currentUserRole === 'kasir') ? 'block' : 'none';
-        popupKeranjangPrintBtn.onclick = function() {
-            namaPemesanInput.value = popupNamaPelangganInput.value;
-            alamatPemesanInput.value = popupAlamatPelangganInput.value;
-            nominalPembayaranInput.value = parseNumberFromDots(popupKeranjangNominal.value);
-            hitungKembalian();
-            hidePopupKeranjang();
-            printStruk('Tunai');
-            setPopupKeranjangClosed(true);
-        };
-        if (!popupWhatsAppBtn) {
-            popupWhatsAppBtn = document.createElement('button');
-            popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
-            popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> PESAN';
-            popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
-            popupWhatsAppBtn.style.color = '#fff';
-            popupWhatsAppBtn.style.border = 'none';
-            popupWhatsAppBtn.style.padding = '8px 20px';
-            popupWhatsAppBtn.style.borderRadius = '25px';
-            popupWhatsAppBtn.style.cursor = 'pointer';
-            popupWhatsAppBtn.style.fontSize = '1.8em';
-            popupWhatsAppBtn.style.width = '100%';
-            popupWhatsAppBtn.style.fontWeight = 'bold';
-            popupWhatsAppBtn.style.zIndex = 10;
-        }
-        popupWhatsAppBtn.style.display = (currentUserRole === 'pelanggan') ? 'block' : 'none';
-        popupWhatsAppBtn.onclick = function() {
-            namaPemesanInput.value = popupNamaPelangganInput.value.trim();
-            alamatPemesanInput.value = popupAlamatPelangganInput.value.trim();
-            if (currentUserRole === 'pelanggan') {
-                localStorage.setItem('namaPemesan', namaPemesanInput.value);
-                localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
-            }
-            nominalPembayaranInput.value = parseNumberFromDots(popupKeranjangNominal.value);
-            hitungKembalian();
-            hidePopupKeranjang();
-            kirimPesanWhatsappPelanggan();
-            setPopupKeranjangClosed(true);
-        };
-        if(currentUserRole === 'kasir') {
-            stickyFooter.appendChild(popupKeranjangPrintBtn);
-        }
-        if(currentUserRole === 'pelanggan') {
-            stickyFooter.appendChild(popupWhatsAppBtn);
-        }
-        popupContent.appendChild(stickyFooter);
-        tampilkanKembalianPopupKeranjang();
     }
+
+    // --- Tabel keranjang produk ---
+    let total = 0;
+    tbody.innerHTML = '';
+    if (keranjang.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#222;font-weight:500;">Keranjang kosong.</td></tr>`;
+    } else {
+        keranjang.forEach((item, idx) => {
+            const subtotal = item.harga * item.qty;
+            total += subtotal;
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="color:#222;">${item.nama}</td>
+                <td>
+                    <input type="number" value="${item.qty}" min="1" style="width:48px;color:#222;"
+                        onchange="window.popupUpdateQty(${idx}, this.value)">
+                </td>
+                <td style="color:#222;">${formatRupiah(subtotal)}</td>
+                <td>
+                    <button onclick="window.popupRemoveItem(${idx})" style="background:none;border:none;color:#dc3545;font-size:1.2em;cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // --- Total dan pembayaran inline ---
+    const staticNodes = popupKeranjang.querySelectorAll('div, strong, span');
+    staticNodes.forEach(node => {
+        if (
+            node.textContent &&
+            typeof node.textContent === "string" &&
+            node.textContent.trim().match(/^Total:\s*Rp[\d\.]+$/i)
+        ) {
+            if (node.parentElement && node.parentElement.parentElement === popupKeranjang.firstElementChild) {
+                node.parentElement.remove();
+            } else if (node.parentElement === popupKeranjang.firstElementChild) {
+                node.remove();
+            }
+        }
+    });
+    let pembayaranInline = popupKeranjang.querySelector('.pembayaran-section-inline');
+    if (pembayaranInline && pembayaranInline.parentElement) {
+        pembayaranInline.parentElement.removeChild(pembayaranInline);
+    }
+    pembayaranInline = document.createElement('div');
+    pembayaranInline.className = 'pembayaran-section-inline';
+    pembayaranInline.style.position = 'sticky';
+    pembayaranInline.style.bottom = '62px';
+    pembayaranInline.style.background = '#fff';
+    pembayaranInline.style.zIndex = '22';
+    pembayaranInline.style.padding = '6px 0 6px 0';
+    pembayaranInline.style.margin = '0 -20px 0 -20px';
+    pembayaranInline.style.borderTop = '1px solid #eee';
+    pembayaranInline.style.display = 'flex';
+    pembayaranInline.style.alignItems = 'center';
+    pembayaranInline.style.justifyContent = 'space-between';
+    pembayaranInline.style.gap = '8px';
+    let leftDiv = document.createElement('div');
+    leftDiv.style.display = 'flex';
+    leftDiv.style.alignItems = 'center';
+    let labelTotal = document.createElement('span');
+    labelTotal.textContent = 'Total:';
+    labelTotal.style.fontWeight = 'bold';
+    labelTotal.style.color = '#222';
+    labelTotal.style.fontSize = '1em';
+    labelTotal.style.marginRight = '4px';
+    let spanTotal = document.createElement('span');
+    spanTotal.id = 'popup-keranjang-total';
+    spanTotal.textContent = formatRupiah(total);
+    spanTotal.style.fontWeight = 'bold';
+    spanTotal.style.color = '#ff9800';
+    spanTotal.style.fontSize = '1em';
+    leftDiv.appendChild(labelTotal);
+    leftDiv.appendChild(spanTotal);
+    let rightDiv = document.createElement('div');
+    rightDiv.style.display = 'flex';
+    rightDiv.style.alignItems = 'center';
+    let labelNominal = document.createElement('span');
+    labelNominal.textContent = 'Bayar:';
+    labelNominal.style.color = '#00f0ff';
+    labelNominal.style.fontWeight = '700';
+    labelNominal.style.fontSize = '1em';
+    labelNominal.style.marginRight = '3px';
+    let inputNominal = document.createElement('input');
+    inputNominal.type = 'number';
+    inputNominal.id = 'popup-keranjang-nominal';
+    inputNominal.min = '0';
+    inputNominal.value = total > 0 ? formatNumberWithDots(total) : "";
+    inputNominal.style.width = '90px';
+    inputNominal.style.padding = '6px';
+    inputNominal.style.borderRadius = '4px';
+    inputNominal.style.border = '2px solid #00f0ff';
+    inputNominal.style.color = '#222';
+    inputNominal.style.fontWeight = 'bold';
+    inputNominal.style.background = '#f8f8f8';
+    rightDiv.appendChild(labelNominal);
+    rightDiv.appendChild(inputNominal);
+    pembayaranInline.appendChild(leftDiv);
+    pembayaranInline.appendChild(rightDiv);
+    popupKeranjang.firstElementChild.appendChild(pembayaranInline);
+    popupKeranjangTotal = pembayaranInline.querySelector('#popup-keranjang-total');
+    popupKeranjangNominal = pembayaranInline.querySelector('#popup-keranjang-nominal');
+    if (!popupKeranjangNominal._formatted) {
+        popupKeranjangNominal.value = total > 0 ? formatNumberWithDots(total) : "";
+        popupKeranjangNominal.dataset.lastTotal = total;
+        popupKeranjangNominal._formatted = true;
+    }
+    popupKeranjangNominal.style.color = "#222";
+    hitungKembalianPopup();
+    popupKeranjangNominal.addEventListener('input', function(e) {
+        let cursor = popupKeranjangNominal.selectionStart;
+        let before = popupKeranjangNominal.value.length;
+        let clean = formatNumberWithDots(popupKeranjangNominal.value);
+        popupKeranjangNominal.value = clean;
+        let after = clean.length;
+        popupKeranjangNominal.setSelectionRange(cursor + (after - before), cursor + (after - before));
+        hitungKembalianPopup();
+    });
+    popupKeranjangNominal.addEventListener('focus', function() {
+        this.value = "";
+    });
+    popupKeranjangNominal.addEventListener('blur', function() {
+        if (this.value === "" || isNaN(parseNumberFromDots(this.value))) {
+            this.value = total > 0 ? formatNumberWithDots(total) : "";
+            this.dataset.lastTotal = total;
+        }
+        hitungKembalianPopup();
+    });
+    popupKeranjangNominal.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            hitungKembalianPopup();
+            showKembalianModalPopupKeranjang();
+        }
+    });
+
+    // --- Sticky footer: tombol cetak struk mini & tombol pesan ---
+    const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
+    let stickyFooter = popupContent.querySelector('.popup-sticky-footer');
+    if (stickyFooter) stickyFooter.remove();
+    stickyFooter = document.createElement('div');
+    stickyFooter.className = 'popup-sticky-footer';
+    stickyFooter.style.position = 'sticky';
+    stickyFooter.style.bottom = '0';
+    stickyFooter.style.left = '0';
+    stickyFooter.style.right = '0';
+    stickyFooter.style.background = '#fff';
+    stickyFooter.style.zIndex = '20';
+    stickyFooter.style.display = 'flex';
+    stickyFooter.style.flexDirection = 'row';
+    stickyFooter.style.gap = '10px';
+    stickyFooter.style.paddingTop = '10px';
+    stickyFooter.style.boxShadow = '0 -2px 12px #0001';
+    stickyFooter.style.alignItems = 'center';
+    stickyFooter.style.justifyContent = 'flex-end';
+
+    // Tombol cetak struk bulat kecil
+    let cetakStrukMiniBtn = document.getElementById('popup-keranjang-mini-print');
+    if (!cetakStrukMiniBtn) {
+        cetakStrukMiniBtn = document.createElement('button');
+        cetakStrukMiniBtn.id = 'popup-keranjang-mini-print';
+        cetakStrukMiniBtn.title = "Cetak Struk";
+        cetakStrukMiniBtn.innerHTML = '<i class="fas fa-print"></i>';
+        cetakStrukMiniBtn.style.background = 'linear-gradient(45deg, #28a745, #1e7e34)';
+        cetakStrukMiniBtn.style.color = '#fff';
+        cetakStrukMiniBtn.style.border = 'none';
+        cetakStrukMiniBtn.style.borderRadius = '50%';
+        cetakStrukMiniBtn.style.width = '44px';
+        cetakStrukMiniBtn.style.height = '44px';
+        cetakStrukMiniBtn.style.fontSize = '1.4em';
+        cetakStrukMiniBtn.style.display = 'flex';
+        cetakStrukMiniBtn.style.alignItems = 'center';
+        cetakStrukMiniBtn.style.justifyContent = 'center';
+        cetakStrukMiniBtn.style.cursor = 'pointer';
+        cetakStrukMiniBtn.style.boxShadow = '0 2px 10px #28a74544';
+        cetakStrukMiniBtn.style.marginRight = '6px';
+    }
+    cetakStrukMiniBtn.onclick = function() {
+        namaPemesanInput.value = popupNamaPelangganInput.value;
+        alamatPemesanInput.value = popupAlamatPelangganInput.value;
+        nominalPembayaranInput.value = parseNumberFromDots(popupKeranjangNominal.value);
+        hitungKembalian();
+        hidePopupKeranjang();
+        printStruk('Tunai');
+        setPopupKeranjangClosed(true);
+    };
+
+    // Tombol pesan WhatsApp
+    if (!popupWhatsAppBtn) {
+        popupWhatsAppBtn = document.createElement('button');
+        popupWhatsAppBtn.id = 'popup-keranjang-whatsapp';
+        popupWhatsAppBtn.innerHTML = '<i class="fab fa-whatsapp"></i> PESAN';
+        popupWhatsAppBtn.style.background = 'linear-gradient(45deg, #25D366, #128C7E)';
+        popupWhatsAppBtn.style.color = '#fff';
+        popupWhatsAppBtn.style.border = 'none';
+        popupWhatsAppBtn.style.padding = '8px 20px';
+        popupWhatsAppBtn.style.borderRadius = '25px';
+        popupWhatsAppBtn.style.cursor = 'pointer';
+        popupWhatsAppBtn.style.fontSize = '1.8em';
+        popupWhatsAppBtn.style.width = '100%';
+        popupWhatsAppBtn.style.fontWeight = 'bold';
+        popupWhatsAppBtn.style.zIndex = 10;
+        popupWhatsAppBtn.style.display = 'block';
+    }
+    popupWhatsAppBtn.onclick = function() {
+        namaPemesanInput.value = popupNamaPelangganInput.value.trim();
+        alamatPemesanInput.value = popupAlamatPelangganInput.value.trim();
+        if (localStorage.getItem('userRole') === 'pelanggan') {
+            localStorage.setItem('namaPemesan', namaPemesanInput.value);
+            localStorage.setItem('alamatPelanggan', alamatPemesanInput.value);
+        }
+        nominalPembayaranInput.value = parseNumberFromDots(popupKeranjangNominal.value);
+        hitungKembalian();
+        hidePopupKeranjang();
+        kirimPesanWhatsappPelanggan();
+        setPopupKeranjangClosed(true);
+    };
+
+    // Jika pelanggan, tampilkan dua tombol berdampingan
+    if (localStorage.getItem('userRole') === 'pelanggan') {
+        stickyFooter.appendChild(cetakStrukMiniBtn);
+        stickyFooter.appendChild(popupWhatsAppBtn);
+    } else if (localStorage.getItem('userRole') === 'kasir') {
+        // Kasir: tetap pakai tombol print besar
+        if (popupKeranjangPrintBtn) stickyFooter.appendChild(popupKeranjangPrintBtn);
+    }
+    popupContent.appendChild(stickyFooter);
+
+    tampilkanKembalianPopupKeranjang();
+}
     window.popupUpdateQty = function(idx, val) {
         let quantity = parseInt(val);
         if (isNaN(quantity) || quantity < 1) quantity = 0;
