@@ -1028,7 +1028,7 @@ body[data-role="pelanggan"] #popup-keranjang-print {
 /* Selalu 4 kolom untuk produk grid pada layar >= 600px */
 #produk-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5em;
     align-content: start;
     flex-grow: 1;
