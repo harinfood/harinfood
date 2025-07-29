@@ -965,8 +965,8 @@ formPelanggan.addEventListener('submit', (event) => {
         keranjang.forEach(item => {
             printTableProduk += `
                 <tr>
-                    <td class="print-item" style="text-align:left;word-break:break-word;font-size:11px;padding:0.5px 0;line-height:1.05;">${item.nama} (${item.qty}x)</td>
-                    <td class="print-item" style="text-align:right;font-size:11px;padding:0.5px 0;line-height:1.05;">${formatRupiah(item.harga * item.qty)}</td>
+                  <td class="print-item" style="text-align:left;word-break:break-word;font-size:11px;padding:0.5px 0;line-height:1.05;">${item.nama} (${item.qty}x)</td>
+                  <td class="print-item" style="text-align:right;font-size:11px;padding:0.5px 0;line-height:1.05;">${formatRupiah(item.harga * item.qty)}</td>
                 </tr>
             `;
         });
