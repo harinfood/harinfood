@@ -5,9 +5,9 @@
 
 :root {
     --primary-bg-color: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    --secondary-bg-color: rgba(255, 255, 255, 0.08);
-    --border-neon-color: #00f0ff;
-    --shadow-neon-color: rgba(0, 240, 255, 0.4);
+    /*--secondary-bg-color: rgba(255, 255, 255, 0.08);*/
+   /* --border-neon-color: #00f0ff;
+    --shadow-neon-color: rgba(0, 240, 255, 0.4);*/
     --text-primary-color: #e0e0e0;
     --text-accent-color: #00f0ff;
     --text-price-color: #ffcc00;
@@ -72,7 +72,7 @@ footer {
     border-radius: 15px;
     padding: 1.5em;
     box-shadow: 0 0 20px var(--shadow-neon-color);
-    border: 1px solid rgba(0, 240, 255, 0.3);
+    /*border: 1px solid rgba(0, 240, 255, 0.3);*/
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     display: flex;
@@ -747,36 +747,24 @@ footer {
     }
 }
 @media print {
-#print-area, #print-area * {
-        font-weight: normal !important; /* Semua huruf normal */
-    }
-    .print-header,
-    .print-header .shop-name-print,
-    .print-header .shop-address-print,
-    .print-header .shop-phone-print {
-        font-weight: bold !important;   /* Header tetap tebal */
-    }
-    .total-row td {
-        font-weight: bold !important;   /* TOTAL tetap tebal */
-    }
 .print-header { text-align: center !important; margin-bottom: 1px !important; border-bottom: 1px dashed #000 !important; padding-bottom: 2px !important; font-size: 1.25em !important; font-weight: bold !important; line-height: 1.05 !important; }
     .print-header .shop-name-print, .print-header .shop-address-print, .print-header .shop-phone-print { font-size: 1.05em !important; font-weight: bold !important; margin: 0 !important; line-height: 1.05 !important; padding: 0 !important;}
     html, body { height: auto !important; max-height: none !important; overflow: visible !important; margin: 0 !important; padding: 0 !important;}
     body * { visibility: hidden !important; box-shadow: none !important; background: none !important; margin: 0 !important; padding: 0 !important;}
-    #print-area, #print-area * { visibility: visible !important; color: #000 !important; background: none !important; font-family: 'Arial', 'Poppins', sans-serif !important; font-size: 15px !important; line-height: 1.35 !important; font-weight: normal !important; letter-spacing: 0.03em !important;}
+    #print-area, #print-area * { visibility: visible !important; color: #000 !important; background: none !important; font-family: 'Arial', 'Poppins', sans-serif !important; font-size: 15px !important; line-height: 1.35 !important; font-weight: bold !important; letter-spacing: 0.03em !important;}
     #print-area { position: absolute !important; left: 0 !important; top: 0 !important; width: 58mm !important; min-width: 58mm !important; max-width: 58mm !important; padding: 2mm 2mm 0 2mm !important; background: #fff !important; margin: 0 !important; min-height: 0 !important; max-height: none !important; height: auto !important; page-break-after: avoid !important; page-break-before: avoid !important; page-break-inside: avoid !important; break-after: avoid-page !important; break-before: avoid-page !important; break-inside: avoid-page !important;}
     .print-header { text-align: center !important; margin-bottom: 3px !important; border-bottom: 1px dashed #000 !important; padding-bottom: 3px !important; font-size: 1.25em !important; font-weight: bold !important;}
     .print-header .shop-name-print { font-size: 1.3em !important; font-weight: bold !important; letter-spacing: 1px !important;}
     .print-header .shop-address-print, .print-header .shop-phone-print { font-size: 1em !important; font-weight: bold !important;}
-    .print-info p { margin: 0 !important; font-size: 1em !important; font-weight: normal !important;}
-    .print-notes { margin-top: 5px !important; margin-bottom: 8px !important; font-size: 1em !important; font-weight: normal !important; padding-top: 5px !important;}
+    .print-info p { margin: 0 !important; font-size: 1em !important; font-weight: bold !important;}
+    .print-notes { margin-top: 5px !important; margin-bottom: 8px !important; font-size: 1em !important; font-weight: bold !important; padding-top: 5px !important;}
     hr { border: none !important; border-bottom: 1.5px dashed #000 !important; height: 0 !important; margin: 5px 0 !important;}
-    table { width: 100% !important; border-collapse: collapse !important; font-size: 1em !important; font-weight: normal !important;}
+    table { width: 100% !important; border-collapse: collapse !important; font-size: 1em !important; font-weight: bold !important;}
     table thead { display: none !important;}
     table tr { page-break-inside: avoid !important;}
-    table td { padding: 2px 0 !important; font-size: 1em !important; vertical-align: top !important; font-weight: normal !important;}
-    table td:nth-child(1) { width: 60% !important; text-align: left !important; font-weight: normal !important; word-break: break-word !important;}
-    table td:nth-child(2) { width: 40% !important; text-align: right !important; font-weight: normal !important;}
+    table td { padding: 2px 0 !important; font-size: 1em !important; vertical-align: top !important; font-weight: bold !important;}
+    table td:nth-child(1) { width: 60% !important; text-align: left !important; font-weight: bold !important; word-break: break-word !important;}
+    table td:nth-child(2) { width: 40% !important; text-align: right !important; font-weight: bold !important;}
     .total-row { font-size: 1.15em !important; font-weight: bold !important; text-align: right !important; margin-top: 5px !important; border-top: 1.5px solid #000 !important; padding-top: 5px !important;}
     .total-row span { float: left !important; font-weight: bold !important;}
     .print-payment-info { font-size: 1em !important; font-weight: bold !important; text-align: right !important; margin: 2px 0 !important;}
@@ -1037,7 +1025,6 @@ body[data-role="pelanggan"] #popup-keranjang-print {
     box-shadow: 0 4px 18px ##000000
     ;
 }
-
 /* Selalu 4 kolom untuk produk grid pada layar >= 600px */
 #produk-list {
     display: grid;
@@ -1067,11 +1054,154 @@ body[data-role="pelanggan"] #popup-keranjang-print {
 #keranjang-form-section {
     margin-top: 2em;
 }
-/* Tombol cetak bulat kecil hitam khusus pelanggan */
-body[data-role="pelanggan"] #popup-keranjang-mini-print {
-    background: linear-gradient(45deg, #000000, #222222) !important;
-    color: #fff !important;
+#produk-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* atau 3, jika di desktop */
+    gap: 5px !important;         /* Jarak antar produk 5px atas, bawah, kanan, kiri */
+    padding: 5px !important;     /* Jarak ke tepi kiri-kanan juga 5px */
+    box-sizing: border-box;
+    margin: 0 !important;
 }
-body[data-role="pelanggan"] #popup-keranjang-mini-print:hover {
-    background: linear-gradient(45deg, #222222, #000000) !important;
+
+@media (min-width: 601px) {
+    #produk-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Hilangkan padding/margin horizontal pada parent section agar tidak menambah jarak ke tepi */
+#menu-produk-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Hapus margin dari produk-item supaya benar-benar jaraknya dikontrol oleh gap grid */
+
+/* Pastikan produk-item tidak ada padding horizontal */
+.produk-item {
+    padding: 0 !important;
+    border-radius: 10px !important; /* pastikan radius sama, bisa sesuaikan 10px */
+    overflow: hidden;               /* gambar tidak keluar dari border-radius */
+    margin: 0 !important;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Gambar produk mengisi seluruh kolom, radius sama dengan parent */
+.produk-item img {
+    width: 100% !important;
+    height: auto;
+    display: block;
+    aspect-ratio: 1/1;       /* tetap persegi */
+    object-fit: cover;
+    border-radius: 0 !important;   /* jangan ada radius di img, biar ikut parent */
+    margin: 0 !important;
+    background: #111;
+}
+/* Tarik seluruh isi ke atas dengan jarak 25px dari batas layar */
+body,
+#app-container,
+.main-layout,
+#menu-produk-section {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#menu-produk-section {
+    padding-top: 10px !important;
+}
+
+.section-title {
+    margin-top: 0 !important;
+    margin-bottom: 0.7em !important;
+}
+/* Animasi glow nyala-mati untuk kedua tombol */
+@keyframes smallGlowPulse {
+    0% {
+        box-shadow: 0 0 3px 1px #00f0ff88;
+    }
+    50% {
+        box-shadow: 0 0 3px 3px #00f0ff;
+    }
+    100% {
+        box-shadow: 0 0 3px 1px #00f0ff88;
+    }
+}
+
+/* Tombol Hapus Keranjang Pelanggan */
+#pelanggan-fab-clear-cart {
+    animation: smallGlowPulse 1.2s infinite;
+    /* Jika sudah ada box-shadow lain, bisa tambahkan dengan koma */
+    /* box-shadow: 0 0 2px 2px #00f0ff, 0 4px 16px rgba(255,77,77,0.22); */
+    z-index: 10012;
+    /* properti lain tetap seperti sebelumnya */
+}
+
+/* Tombol "TEKAN DISINI UNTUK MEMESAN" */
+.fab-pesan-whatsapp {
+    animation: smallGlowPulse 1.2s infinite;
+    /* box-shadow: 0 0 2px 2px #00f0ff, 0 4px 16px rgba(255,255,255,0); */
+    z-index: 10010;
+}
+#popup-keranjang-mini-print {
+    background: linear-gradient(45deg, #000000, #000000);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px #28a74544;
+    margin-right: 6px;
+    transition: background 0.18s, transform 0.18s;
+}
+#popup-keranjang-mini-print:hover {
+    background: linear-gradient(45deg, #333, #155724);
+    transform: scale(1.08);
+    box-shadow: 0 4px 18px #000000;
+}
+#popup-keranjang-mini-print {
+    background: linear-gradient(45deg, #000000, #000000);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px #28a74544;
+    margin-right: 6px;
+    transition: background 0.18s, transform 0.18s;
+}
+#popup-keranjang-mini-print:hover {
+    background: linear-gradient(45deg, #333, #155724);
+    transform: scale(1.08);
+    box-shadow: 0 4px 18px #000000;
+}#popup-keranjang-mini-print {
+    background: linear-gradient(45deg, #000000, #000000);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px #28a74544;
+    margin-right: 6px;
+    transition: background 0.18s, transform 0.18s;
+}
+#popup-keranjang-mini-print:hover {
+    background: linear-gradient(45deg, #333, #155724);
+    transform: scale(1.08);
+    box-shadow: 0 4px 18px #000000;
 }

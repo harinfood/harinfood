@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#25223d">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
@@ -53,12 +51,12 @@
             <button id="close-print-popup" class="close-popup-btn">&times;</button>
         </div>
     </div>
-    <div id="app-container" style="display: none;">
+    <div id="app-container" style="display: none; margin-top: 25px;">
         <header></header>
         <div class="main-layout">
             <!-- Produk -->
             <section id="menu-produk-section">
-                <h1 style="font-size:25px" class="section-title">DAFTAR MENU HARINFOOD</h1>
+                <h1 style="font-size:25px" class="section-title">DAFTAR MENU <br> HARINFOOD</h1>
                 <div class="search-barcode-input">
                     <input type="text" id="product-search-barcode" placeholder="Cari produk atau scan barcode..." autofocus>
                     <span id="search-barcode-feedback" class="feedback-message"></span>
@@ -181,9 +179,12 @@
                         <tbody id="popup-keranjang-items"></tbody>
                     </table>
                 </div>
-                <div style="margin-top:10px;">
-                    <strong>Total: <span id="popup-keranjang-total">Rp0</span></strong>
-                </div>
+               <div style="margin-top:10px;display:flex;align-items:center;gap:7px;">
+    <strong>Total: <span id="popup-keranjang-total">Rp0</span></strong>
+    <button id="popup-keranjang-mini-print" title="Cetak Struk" style="display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-print"></i>
+    </button>
+</div>
                 <div class="pembayaran-section-inline" style="margin-top:10px;">
                     <label for="popup-keranjang-nominal">Nominal Pembayaran:</label>
                     <input type="number" id="popup-keranjang-nominal" min="0" value="0">
