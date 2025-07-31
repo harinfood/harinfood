@@ -1205,3 +1205,26 @@ body,
     transform: scale(1.08);
     box-shadow: 0 4px 18px #000000;
 }
+/* ... CSS di atas ... */
+
+/* Default (tablet ke atas) */
+#produk-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 kolom desktop/tablet */
+    gap: 5px !important;
+    align-content: start;
+    flex-grow: 1;
+    padding: 5px !important;
+    box-sizing: border-box;
+    margin: 0 !important;
+}
+
+/* 2 kolom untuk layar kecil (HP) */
+@media (max-width: 599px) {
+    #produk-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8em;
+    }
+}
+
+/* ... CSS lain ... */
