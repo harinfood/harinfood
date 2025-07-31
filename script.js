@@ -1920,5 +1920,19 @@ function generateQuickPrinterStruk() {
         // sendToQuickPrinterChrome(strukText);
                      }
           });
+          // ==== PWA Service Worker Registration ====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js')
+      .then(function(reg) {
+        // Registration success, can do something if needed
+        // console.log('SW registered: ', reg);
+      })
+      .catch(function(error) {
+        // Registration failed
+        // console.error('SW registration failed: ', error);
+      });
+  });
+}
           
 });
