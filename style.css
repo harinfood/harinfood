@@ -692,7 +692,7 @@ footer {
         align-items: flex-start;
     }
     #produk-list {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* Ubah dari 2 ke 3 */
         gap: 1.2em;
     }
     #menu-produk-section, #keranjang-form-section {
@@ -702,7 +702,7 @@ footer {
     .section-title { font-size: 1.6em;}
     .fab-button { width: 48px; height: 48px; font-size: 1.2em;}
 }
-@media (min-width: 600px) and (max-width: 1024px) and (orientation: landscape) {
+@media (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
     .main-layout {
         display: grid;
         grid-template-columns: 2fr 1fr;
@@ -713,7 +713,7 @@ footer {
         align-items: flex-start;
     }
     #produk-list {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 1em;
     }
     #menu-produk-section, #keranjang-form-section {
@@ -731,7 +731,7 @@ footer {
         margin: 0 auto;
     }
     #produk-list {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.8em;
     }
     #menu-produk-section {
@@ -1056,7 +1056,7 @@ body[data-role="pelanggan"] #popup-keranjang-print {
 }
 #produk-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* atau 3, jika di desktop */
+    grid-template-columns: repeat(3, 1fr); /* atau 3, jika di desktop */
     gap: 5px !important;         /* Jarak antar produk 5px atas, bawah, kanan, kiri */
     padding: 5px !important;     /* Jarak ke tepi kiri-kanan juga 5px */
     box-sizing: border-box;
