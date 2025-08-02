@@ -1,14 +1,14 @@
-// sw.js - Service Worker HARINFOOD POS Lite
-// Versi cache (Ubah angka setiap update aplikasi)
-const CACHE_VERSION = 'v3'; // GANTI setiap update (misal v4, v5, dst)
+// sw.js - Service Worker HARINFOOD POS Lite (Optimal for Automatic Updates & Offline)
+// GANTI versi cache SETIAP kali ada update file!
+const CACHE_VERSION = 'v4'; // Ganti setiap update!
 const CACHE_NAME = `harinfood-cache-${CACHE_VERSION}`;
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/style.css?v=3',
-  '/script.js?v=3',
-  '/manifest.json?v=3',
-  // Tambahkan semua gambar/icon/audio yang ingin di-cache:
+  '/style.css?v=4',
+  '/script.js?v=4',
+  '/manifest.json?v=4',
+  // Tambahkan semua gambar/audio/icon di bawah ini:
   '/risol.webp',
   '/cibay.webp',
   '/toppoki.webp',
@@ -27,7 +27,7 @@ const ASSETS_TO_CACHE = [
   '/aaa.mp3'
 ];
 
-// Install: cache semua aset
+// Install: cache semua aset penting
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS_TO_CACHE))
@@ -35,57 +35,50 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Activate: hapus cache lama!
+// Activate: hapus semua cache versi lama
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-            .map(key => caches.delete(key))
-      )
+      Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))
     )
   );
   self.clients.claim();
 });
 
-// Fetch: cache-first untuk file statis, network-first untuk index.html
+// Fetch: index.html selalu fresh dari network. Asset lain pakai cache-first.
 self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // Jika permintaan untuk index.html, selalu ambil dari network agar update terlihat
-  if (url.pathname === '/' || url.pathname.endsWith('index.html')) {
+  // Untuk index.html atau navigasi, selalu ambil dari network (agar update langsung terlihat)
+  if (
+    request.mode === 'navigate' ||
+    url.pathname === '/' ||
+    url.pathname.endsWith('index.html')
+  ) {
     event.respondWith(
       fetch(request)
         .then(response => {
-          // Simpan salinan index.html di cache (opsional, untuk offline)
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(request, responseClone);
-          });
+          // Optional, simpan ke cache untuk offline
+          caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
           return response;
         })
-        .catch(() => caches.match(request)) // fallback offline
+        .catch(() => caches.match(request))
     );
     return;
   }
 
-  // Untuk file lain, cache-first
+  // Untuk asset lain (CSS, JS, gambar, audio), cache-first
   event.respondWith(
     caches.match(request).then(cachedResponse => {
       if (cachedResponse) return cachedResponse;
       return fetch(request).then(networkResponse => {
-        // Jika file termasuk asset yang di-cache, simpan ke cache
+        // Simpan ke cache jika asset penting
         if (ASSETS_TO_CACHE.some(asset => url.pathname.endsWith(asset.replace('/', '')))) {
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(request, networkResponse.clone());
-          });
+          caches.open(CACHE_NAME).then(cache => cache.put(request, networkResponse.clone()));
         }
         return networkResponse;
-      }).catch(() => {
-        // Fallback ke cache jika offline
-        return caches.match(request);
-      });
+      }).catch(() => caches.match(request));
     })
   );
 });
