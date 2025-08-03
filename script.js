@@ -109,6 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let kembalianModal;
     let popupKembalianInformasi = null;
     let pelangganFabClearCart = null;
+    // Tambahan variabel barcode popup
+    let popupProductSearchBarcodeInput = null;
+    let popupSearchBarcodeFeedback = null;
+
     function createPelangganFabClearCart() {
         if (document.getElementById('pelanggan-fab-clear-cart')) return;
         pelangganFabClearCart = document.createElement('button');
@@ -262,15 +266,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createKembalianModal();
     const produkData = [
-{ id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
+        { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
-       /*{ id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },*/
+        //{ id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
         { id: 4, nama: "Tteokbokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki.webp", barcode: "toppoki10" },
         { id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
         { id: 7, nama: "spaghetti dengan toping", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1" },
         { id: 13, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" },
-        /*{ id: 8, nama: "Balungan", harga: 5000, gambar: "balungan.webp", barcode: "balungan" },*/
+        //{ id: 8, nama: "Balungan", harga: 5000, gambar: "balungan.webp", barcode: "balungan" },
         { id: 9, nama: "Es Teh Jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" },
         { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" },
         { id: 11, nama: "Es Rasa rasa", harga: 2000, gambar: "2000.webp", barcode: "rasa" },
@@ -349,25 +353,25 @@ document.addEventListener('DOMContentLoaded', () => {
         formPelanggan.style.display = 'none';
         namaKasirLoginInput.focus();
     });
-formPelanggan.addEventListener('submit', (event) => {
-    event.preventDefault();
-    playSound('ding'); // TAMBAHKAN INI
-    const nama = namaPelangganLoginInput.value.trim();
-    const alamat = alamatPelangganLoginInput.value.trim();
-    if (nama && alamat) {
-        localStorage.setItem('userRole', 'pelanggan');
-        localStorage.setItem('namaPelanggan', nama);
-        localStorage.setItem('alamatPelanggan', alamat);
-        localStorage.setItem('namaPemesan', nama);
-        loginPopup.style.display = 'none';
-        appContainer.style.display = 'block';
-        kasirFabs.style.display = 'none';
-        pesanInfoLabel.style.display = 'block';
-        pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
-        initializeApp();
-        loadTawktoWidget();
-    }
-});
+    formPelanggan.addEventListener('submit', (event) => {
+        event.preventDefault();
+        playSound('ding');
+        const nama = namaPelangganLoginInput.value.trim();
+        const alamat = alamatPelangganLoginInput.value.trim();
+        if (nama && alamat) {
+            localStorage.setItem('userRole', 'pelanggan');
+            localStorage.setItem('namaPelanggan', nama);
+            localStorage.setItem('alamatPelanggan', alamat);
+            localStorage.setItem('namaPemesan', nama);
+            loginPopup.style.display = 'none';
+            appContainer.style.display = 'block';
+            kasirFabs.style.display = 'none';
+            pesanInfoLabel.style.display = 'block';
+            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
+            initializeApp();
+            loadTawktoWidget();
+        }
+    });
     formKasir.addEventListener('submit', (event) => {
         event.preventDefault();
         const namaKasir = namaKasirLoginInput.value.trim();
@@ -489,7 +493,6 @@ formPelanggan.addEventListener('submit', (event) => {
         }
     }
 
-    
     function displayProduk() {
         produkList.innerHTML = '';
         const currentUserRole = localStorage.getItem('userRole');
@@ -621,8 +624,6 @@ formPelanggan.addEventListener('submit', (event) => {
         }
     }
 
-
-
     function updateProdukControls() { displayProduk(); }
     window.handlePriceChange = function(inputElement, produkId) {
         let newPrice = parseFloat(inputElement.value);
@@ -658,60 +659,60 @@ formPelanggan.addEventListener('submit', (event) => {
         }
     });
     produkList.addEventListener('click', function(e) {
-    const produkDiv = e.target.closest('.produk-item');
-    const btn = e.target.closest('button');
-    // Jika klik pada tombol khusus, gunakan logika lama
-    if (btn) {
-        const produkId = parseInt(btn.dataset.id);
-        if (btn.classList.contains('add-to-cart-btn')) {
-            const product = produkData.find(p => p.id === produkId);
-            if (product) tambahKeKeranjang(product);
-            updatePelangganFabClearCartVisibility();
-            return;
-        }
-        if (btn.classList.contains('plus-btn')) {
-            const itemInCart = keranjang.find(item => item.id === produkId && !item.isManual);
-            if (itemInCart) {
-                itemInCart.qty++;
-                updateKeranjang();
-                updateProdukControls();
+        const produkDiv = e.target.closest('.produk-item');
+        const btn = e.target.closest('button');
+        // Jika klik pada tombol khusus, gunakan logika lama
+        if (btn) {
+            const produkId = parseInt(btn.dataset.id);
+            if (btn.classList.contains('add-to-cart-btn')) {
+                const product = produkData.find(p => p.id === produkId);
+                if (product) tambahKeKeranjang(product);
                 updatePelangganFabClearCartVisibility();
+                return;
             }
-            return;
-        }
-        if (btn.classList.contains('minus-btn')) {
-            const itemInCart = keranjang.find(item => item.id === produkId && !item.isManual);
-            if (itemInCart) {
-                itemInCart.qty--;
-                if (itemInCart.qty <= 0) {
-                    keranjang = keranjang.filter(item => !(item.id === produkId && !item.isManual));
+            if (btn.classList.contains('plus-btn')) {
+                const itemInCart = keranjang.find(item => item.id === produkId && !item.isManual);
+                if (itemInCart) {
+                    itemInCart.qty++;
+                    updateKeranjang();
+                    updateProdukControls();
+                    updatePelangganFabClearCartVisibility();
                 }
-                updateKeranjang();
-                updateProdukControls();
+                return;
+            }
+            if (btn.classList.contains('minus-btn')) {
+                const itemInCart = keranjang.find(item => item.id === produkId && !item.isManual);
+                if (itemInCart) {
+                    itemInCart.qty--;
+                    if (itemInCart.qty <= 0) {
+                        keranjang = keranjang.filter(item => !(item.id === produkId && !item.isManual));
+                    }
+                    updateKeranjang();
+                    updateProdukControls();
+                    updatePelangganFabClearCartVisibility();
+                }
+                return;
+            }
+        }
+        // Jika klik di area produk (bukan tombol plus/minus), tambahkan produk
+        if (produkDiv && !e.target.closest('button') && !e.target.classList.contains('product-price-input')) {
+            // Ambil ID produk dari dataset input price atau dari elemen gambar/h3 parent
+            let produkId = null;
+            // Coba dari input price
+            const priceInput = produkDiv.querySelector('.product-price-input');
+            if (priceInput) produkId = parseInt(priceInput.dataset.id);
+            // Jika tidak ada, coba dari button plus
+            if (!produkId) {
+                const plusBtn = produkDiv.querySelector('.add-to-cart-btn, .plus-btn');
+                if (plusBtn) produkId = parseInt(plusBtn.dataset.id);
+            }
+            if (produkId) {
+                const product = produkData.find(p => p.id === produkId);
+                if (product) tambahKeKeranjang(product);
                 updatePelangganFabClearCartVisibility();
             }
-            return;
         }
-    }
-    // Jika klik di area produk (bukan tombol plus/minus), tambahkan produk
-    if (produkDiv && !e.target.closest('button') && !e.target.classList.contains('product-price-input')) {
-        // Ambil ID produk dari dataset input price atau dari elemen gambar/h3 parent
-        let produkId = null;
-        // Coba dari input price
-        const priceInput = produkDiv.querySelector('.product-price-input');
-        if (priceInput) produkId = parseInt(priceInput.dataset.id);
-        // Jika tidak ada, coba dari button plus
-        if (!produkId) {
-            const plusBtn = produkDiv.querySelector('.add-to-cart-btn, .plus-btn');
-            if (plusBtn) produkId = parseInt(plusBtn.dataset.id);
-        }
-        if (produkId) {
-            const product = produkData.find(p => p.id === produkId);
-            if (product) tambahKeKeranjang(product);
-            updatePelangganFabClearCartVisibility();
-        }
-    }
-});
+    });
     function tambahKeKeranjang(produkSumber) {
         let productToAdd;
         if (produkSumber.isManual) {
@@ -1417,6 +1418,7 @@ formPelanggan.addEventListener('submit', (event) => {
         document.body.style.overflow = "";
     }
     document.getElementById('close-popup-keranjang').onclick = hidePopupKeranjang;
+
     function updatePopupKeranjang(forceShow = false) {
         if (popupKeranjang.style.display === "none" && !forceShow) return;
         const tbody = document.getElementById('popup-keranjang-items');
@@ -1651,6 +1653,61 @@ formPelanggan.addEventListener('submit', (event) => {
                 showKembalianModalPopupKeranjang();
             }
         });
+
+        // Barcode input di popup: hanya kasir yang bisa lihat & pakai
+        popupProductSearchBarcodeInput = document.getElementById('popup-product-search-barcode');
+        popupSearchBarcodeFeedback = document.getElementById('popup-search-barcode-feedback');
+        const barcodeInputWrapper = popupProductSearchBarcodeInput?.parentElement;
+        if (barcodeInputWrapper) {
+            if (currentUserRole === 'kasir') {
+                barcodeInputWrapper.style.display = '';
+            } else {
+                barcodeInputWrapper.style.display = 'none';
+            }
+        }
+        if (currentUserRole === 'kasir' && popupProductSearchBarcodeInput) {
+            popupProductSearchBarcodeInput.value = '';
+            popupSearchBarcodeFeedback.textContent = '';
+            popupProductSearchBarcodeInput.onkeydown = function(e) {
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    e.preventDefault();
+                    const query = popupProductSearchBarcodeInput.value.trim();
+                    if (!query) {
+                        popupSearchBarcodeFeedback.textContent = 'Isi barcode atau nama produk.';
+                        popupSearchBarcodeFeedback.style.color = '#e0e0e0';
+                        return;
+                    }
+                    const foundProduct = produkData.find(p =>
+                        (p.barcode && p.barcode.toLowerCase() === query.toLowerCase()) ||
+                        p.nama.toLowerCase().includes(query.toLowerCase())
+                    );
+                    if (foundProduct) {
+                        tambahKeKeranjang(foundProduct);
+                        popupSearchBarcodeFeedback.textContent = `Produk "${foundProduct.nama}" ditambahkan!`;
+                        popupSearchBarcodeFeedback.style.color = '#28a745';
+                        popupProductSearchBarcodeInput.value = '';
+                        setTimeout(() => popupProductSearchBarcodeInput.focus(), 120);
+                        updatePopupKeranjang(true);
+                    } else {
+                        popupSearchBarcodeFeedback.textContent = `Produk/barcode "${query}" tidak ditemukan!`;
+                        popupSearchBarcodeFeedback.style.color = '#dc3545';
+                        popupProductSearchBarcodeInput.select();
+                    }
+                }
+            };
+            popupProductSearchBarcodeInput.oninput = function() {
+                popupSearchBarcodeFeedback.textContent = '';
+            };
+            setTimeout(() => {
+                if (popupProductSearchBarcodeInput && popupKeranjang.style.display !== "none") {
+                    popupProductSearchBarcodeInput.focus();
+                }
+            }, 180);
+        } else if (popupProductSearchBarcodeInput) {
+            popupProductSearchBarcodeInput.onkeydown = null;
+            popupProductSearchBarcodeInput.oninput = null;
+        }
+
         const popupContent = popupKeranjang.querySelector('.popup-keranjang-content');
         let stickyFooter = popupContent.querySelector('.popup-sticky-footer');
         if (stickyFooter) stickyFooter.remove();
@@ -1878,62 +1935,59 @@ formPelanggan.addEventListener('submit', (event) => {
         }, 300);
     };
     function sendToQuickPrinter(strukText) {
-    var textEncoded = encodeURI(strukText);
-    window.location.href = "quickprinter://" + textEncoded;
-}
-function sendToQuickPrinterChrome(strukText) {
-    var textEncoded = encodeURI(strukText);
-    window.location.href = "intent://" + textEncoded + "#Intent;scheme=quickprinter;package=pe.diegoveloper.printerserverapp;end;";
-}
-
-function generateQuickPrinterStruk() {
-    let nama = document.getElementById('popup-nama-pelanggan')?.value || '';
-    let alamat = document.getElementById('popup-alamat-pemesan')?.value || '';
-    let total = document.getElementById('popup-keranjang-total')?.textContent || '';
-    let rows = Array.from(document.querySelectorAll('#popup-keranjang-items tr'));
-    let belanjaan = '';
-    rows.forEach(row => {
-        const tds = row.querySelectorAll('td');
-        if(tds.length === 4) {
-            belanjaan += tds[0].textContent + " x" + tds[1].querySelector('input')?.value + " = " + tds[2].textContent + "<br>";
+        var textEncoded = encodeURI(strukText);
+        window.location.href = "quickprinter://" + textEncoded;
+    }
+    function sendToQuickPrinterChrome(strukText) {
+        var textEncoded = encodeURI(strukText);
+        window.location.href = "intent://" + textEncoded + "#Intent;scheme=quickprinter;package=pe.diegoveloper.printerserverapp;end;";
+    }
+    function generateQuickPrinterStruk() {
+        let nama = document.getElementById('popup-nama-pelanggan')?.value || '';
+        let alamat = document.getElementById('popup-alamat-pemesan')?.value || '';
+        let total = document.getElementById('popup-keranjang-total')?.textContent || '';
+        let rows = Array.from(document.querySelectorAll('#popup-keranjang-items tr'));
+        let belanjaan = '';
+        rows.forEach(row => {
+            const tds = row.querySelectorAll('td');
+            if(tds.length === 4) {
+                belanjaan += tds[0].textContent + " x" + tds[1].querySelector('input')?.value + " = " + tds[2].textContent + "<br>";
+            }
+        });
+        let struk =
+            "<big>HARINFOOD<br>" +
+            "Jl Ender Rakit - Gedongan<br>" +
+            "----------------------<br>" +
+            "Nama: " + nama + "<br>" +
+            "Alamat: " + alamat + "<br>" +
+            "----------------------<br>" +
+            belanjaan +
+            "----------------------<br>" +
+            "TOTAL: " + total + "<br>" +
+            "<cut>";
+        return struk;
+    }
+    // Event global agar tombol print mini selalu aktif
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('#popup-keranjang-mini-print')) {
+            var strukText = generateQuickPrinterStruk();
+            sendToQuickPrinter(strukText);
+            // Jika ingin pakai intent Chrome, ganti baris di atas jadi:
+            // sendToQuickPrinterChrome(strukText);
         }
     });
-    let struk =
-        "<big>HARINFOOD<br>" +
-        "Jl Ender Rakit - Gedongan<br>" +
-        "----------------------<br>" +
-        "Nama: " + nama + "<br>" +
-        "Alamat: " + alamat + "<br>" +
-        "----------------------<br>" +
-        belanjaan +
-        "----------------------<br>" +
-        "TOTAL: " + total + "<br>" +
-        "<cut>";
-    return struk;
-}
-
-// Event global agar tombol print mini selalu aktif
-        document.addEventListener('click', function(e) {
-               if (e.target.closest('#popup-keranjang-mini-print')) {
-                  var strukText = generateQuickPrinterStruk();
-                  sendToQuickPrinter(strukText);
-        // Jika ingin pakai intent Chrome, ganti baris di atas jadi:
-        // sendToQuickPrinterChrome(strukText);
-                     }
-          });
-          // ==== PWA Service Worker Registration ====
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js')
-      .then(function(reg) {
-        // Registration success, can do something if needed
-        // console.log('SW registered: ', reg);
-      })
-      .catch(function(error) {
-        // Registration failed
-        // console.error('SW registration failed: ', error);
-      });
-  });
-}
-          
+    // ==== PWA Service Worker Registration ====
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(reg) {
+                    // Registration success, can do something if needed
+                    // console.log('SW registered: ', reg);
+                })
+                .catch(function(error) {
+                    // Registration failed
+                    // console.error('SW registration failed: ', error);
+                });
+        });
+    }
 });

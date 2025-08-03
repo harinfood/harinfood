@@ -1226,5 +1226,32 @@ body,
         gap: 0.8em;
     }
 }
+/* Tambahkan style berikut di akhir file style.css */
 
+.popup-search-barcode-input {
+    margin-bottom: 10px;
+    text-align: center;
+}
+.popup-search-barcode-input input[type="text"] {
+    width: 96%;
+    max-width: 340px;
+    padding: 10px 12px;
+    border: 2px solid #00f0ff;
+    border-radius: 8px;
+    font-size: 1em;
+    background: #fafbfb;
+    color: #222;
+    outline: none;
+    margin-bottom: 2px;
+    box-sizing: border-box;
+}
+.popup-search-barcode-input input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px #00f0ff99;
+}
+.popup-search-barcode-input .feedback-message {
+    display: block;
+    font-size: 0.95em;
+    margin-top: 2px;
+}
 /* ... CSS lain ... */

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
-    <link rel="manifest" href="manifest.json?v=11">
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="manifest" href="manifest.json?v=12">
+    <link rel="stylesheet" href="style.css?v=12">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
@@ -33,6 +33,7 @@
             </form>
         </div>
     </div>
+
     <!-- Modal Nama Pemesan -->
     <div id="namaPemesanModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
         <div style="background:#222; padding:2em 2em 1em 2em; border-radius:12px; box-shadow:0 8px 40px #000; max-width:90vw;">
@@ -41,6 +42,7 @@
             <button id="btnSimpanNamaPemesan" style="margin-top:1em; padding:0.7em 2em; border-radius:8px; background:#00f0ff; color:#222; border:none; font-weight:bold;">Simpan</button>
         </div>
     </div>
+
     <!-- Popup Pilihan Cetak -->
     <div id="print-options-popup" class="popup-overlay" style="display: none;">
         <div class="popup-content">
@@ -52,6 +54,7 @@
             <button id="close-print-popup" class="close-popup-btn">&times;</button>
         </div>
     </div>
+
     <div id="app-container" style="display: none; margin-top: 25px;">
         <header></header>
         <div class="main-layout">
@@ -113,31 +116,31 @@
             <p>&copy; 2025 HARINFOOD. All Rights Reserved.</p>
         </footer>
         <div id="kasir-fabs" style="display: none;">
-    <div class="fab-button fab-print" id="print-fab" title="Cetak Struk">
-        <i class="fas fa-print"></i>
-        <span class="fab-label">F1</span>
-    </div>
-    <div class="fab-button fab-share" id="share-order-fab" title="Bagikan Transaksi">
-        <i class="fas fa-share-alt"></i>
-        <span class="fab-label">F2</span>
-    </div>
-    <div class="fab-button fab-manual" id="add-manual-order-fab" title="Tambah Pesanan Manual">
-        <i class="fas fa-shopping-basket"></i>
-        <span class="fab-label">F3</span>
-    </div>
-    <div class="fab-button fab-clear" id="clear-cart-fab" title="Bersihkan Keranjang">
-        <i class="fas fa-trash"></i>
-        <span class="fab-label">F4</span>
-    </div>
-    <div class="fab-button fab-cart" id="cart-fab" title="Keranjang Belanjaan">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="fab-label">F6</span>
-    </div>
-    <div class="fab-button fab-dapur" id="dapur-fab" title="Cetak Struk Dapur">
-        <i class="fas fa-utensils"></i>
-        <span class="fab-label">F12</span>
-    </div>
-</div>
+            <div class="fab-button fab-print" id="print-fab" title="Cetak Struk">
+                <i class="fas fa-print"></i>
+                <span class="fab-label">F1</span>
+            </div>
+            <div class="fab-button fab-share" id="share-order-fab" title="Bagikan Transaksi">
+                <i class="fas fa-share-alt"></i>
+                <span class="fab-label">F2</span>
+            </div>
+            <div class="fab-button fab-manual" id="add-manual-order-fab" title="Tambah Pesanan Manual">
+                <i class="fas fa-shopping-basket"></i>
+                <span class="fab-label">F3</span>
+            </div>
+            <div class="fab-button fab-clear" id="clear-cart-fab" title="Bersihkan Keranjang">
+                <i class="fas fa-trash"></i>
+                <span class="fab-label">F4</span>
+            </div>
+            <div class="fab-button fab-cart" id="cart-fab" title="Keranjang Belanjaan">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="fab-label">F6</span>
+            </div>
+            <div class="fab-button fab-dapur" id="dapur-fab" title="Cetak Struk Dapur">
+                <i class="fas fa-utensils"></i>
+                <span class="fab-label">F12</span>
+            </div>
+        </div>
         <button id="floating-pesan-whatsapp" class="fab-pesan-whatsapp">
             <i class="fab fa-whatsapp" style="font-size: 24px;"></i> <span class="fab-pesan-text">TEKAN DISINI UNTUK MEMESAN</span>
         </button>
@@ -163,10 +166,17 @@
                 <button onclick="printDapurStruk()">Cetak Struk Pelanggan</button>
             </div>
         </div>
+
+        <!-- POPUP KERANJANG dengan pencarian barcode -->
         <div id="popup-keranjang" style="display:none;">
             <div class="popup-keranjang-content">
                 <button id="close-popup-keranjang" title="Tutup" style="position:absolute;right:10px;top:10px;font-size:1.5em;background:none;border:none;cursor:pointer;">&times;</button>
                 <h2 style="margin-top:0;margin-bottom:10px;"><i class="fas fa-shopping-cart"></i> Keranjang Belanjaan</h2>
+                <!-- Tambahan kotak pencarian barcode di popup -->
+                <div class="popup-search-barcode-input" style="margin-bottom: 10px;">
+                    <input type="text" id="popup-product-search-barcode" placeholder="Cari produk / scan barcode di sini..." autofocus>
+                    <span id="popup-search-barcode-feedback" class="feedback-message"></span>
+                </div>
                 <div style="max-height:240px;overflow:auto;">
                     <table class="popup-keranjang-table" style="width:100%;border-collapse:collapse;">
                         <thead>
@@ -180,12 +190,12 @@
                         <tbody id="popup-keranjang-items"></tbody>
                     </table>
                 </div>
-               <div style="margin-top:10px;display:flex;align-items:center;gap:7px;">
-    <strong>Total: <span id="popup-keranjang-total">Rp0</span></strong>
-    <button id="popup-keranjang-mini-print" title="Cetak Struk" style="display:flex;align-items:center;justify-content:center;">
-        <i class="fas fa-print"></i>
-    </button>
-</div>
+                <div style="margin-top:10px;display:flex;align-items:center;gap:7px;">
+                    <strong>Total: <span id="popup-keranjang-total">Rp0</span></strong>
+                    <button id="popup-keranjang-mini-print" title="Cetak Struk" style="display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-print"></i>
+                    </button>
+                </div>
                 <div class="pembayaran-section-inline" style="margin-top:10px;">
                     <label for="popup-keranjang-nominal">Nominal Pembayaran:</label>
                     <input type="number" id="popup-keranjang-nominal" min="0" value="0">
@@ -202,11 +212,10 @@
         </div>
     </div>
     <!-- Tambahkan elemen audio klik -->
-<!-- Audio untuk efek klik dan beep -->
     <audio id="audio-click" src="click.mp3" preload="auto"></audio>
     <audio id="audio-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="audio-ding" src="ding.mp3" preload="auto"></audio>
     <audio id="audio-aaa" src="aaa.mp3" preload="auto"></audio>
-    <script src="script.js?v=11"></script>
+    <script src="script.js?v=12"></script>
 </body>
 </html>
