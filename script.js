@@ -515,17 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span></p>`;
             if (currentUserRole === 'kasir') {
-                hargaDisplayHtml = `
-                    <p class="edit-price-wrapper">
-                        Harga: 
-                        <input type="number" 
-                               class="product-price-input" 
-                               data-id="${produk.id}" 
-                               value="${produk.harga}" 
-                               min="0" 
-                               onchange="handlePriceChange(this, ${produk.id})"
-                               onblur="formatPriceInput(this)">
-                    </p>`;
+                hargaDisplayHtml = `<p>Harga: <span class="price-display">${formatRupiah(produk.harga)}</span></p>`;
             }
             let controlsHtml = '';
             if (currentUserRole === 'pelanggan' && qty > 0) {
@@ -543,8 +533,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 controlsHtml = `
                     <button class="qty-control-btn qty-btn minus-btn" data-id="${produk.id}" data-action="minus" title="Kurangi qty">-</button>
-                    <span class="qty-value">${qty}</span>
-                    <button class="qty-control-btn qty-btn plus-btn" data-id="${produk.id}" data-action="plus" title="Tambah qty">+</button>
+                    <input type="number" class="qty-edit-input" data-id="${produk.id}" min="1" max="999" value="${qty}" 
+                        style="width:60px;text-align:center;font-size:1.1em;font-weight:bold;border-radius:7px;border:1.5px solid #00f0ff;"
+                        onfocus="this.value='';" 
+                    >
                 `;
             }
             produkDiv.innerHTML = `
