@@ -779,16 +779,24 @@ footer {
     justify-content:center;align-items:center;
 }
 #popup-keranjang .popup-keranjang-content {
-    background: #fff;
-    min-width: 320px;
-    max-width: 98vw;
-    padding: 24px 20px 18px 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 36px #0002;
-    position: relative;
-    font-size: 1em;
-    color: #222;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    overflow-y: auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
 }
+
 #popup-keranjang .popup-keranjang-table th,
 #popup-keranjang .popup-keranjang-table td {
     color: #222 !important;
