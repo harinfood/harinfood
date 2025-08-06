@@ -1254,4 +1254,18 @@ body,
     font-size: 0.95em;
     margin-top: 2px;
 }
-/* ... CSS lain ... */
+#popup-keranjang .popup-keranjang-table input[type="number"] {
+    padding: 4px 7px;
+    border: 1px solid #00f0ff;
+    border-radius: 5px;
+    font-size: 0.98em;
+    background: #f8f8f8;
+    color: #222;
+    box-sizing: border-box;
+    margin: 0 2px;
+}
+#popup-keranjang .popup-keranjang-table input[type="number"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 8px #00f0ff44;
+}

@@ -1519,22 +1519,43 @@ document.addEventListener('DOMContentLoaded', () => {
             tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#222;font-weight:500;">Keranjang kosong.</td></tr>`;
         } else {
             keranjang.forEach((item, idx) => {
-                const subtotal = item.harga * item.qty;
-                total += subtotal;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="color:#222;">${item.nama}</td>
-                    <td>
-                        <input type="number" value="${item.qty}" min="1" style="width:48px;color:#222;"
-                            onchange="window.popupUpdateQty(${idx}, this.value)">
-                    </td>
-                    <td style="color:#222;">${formatRupiah(subtotal)}</td>
-                    <td>
-                        <button onclick="window.popupRemoveItem(${idx})" style="background:none;border:none;color:#dc3545;font-size:1.2em;cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+    const subtotal = item.harga * item.qty;
+    total += subtotal;
+    const row = document.createElement('tr');
+    if (currentUserRole === 'kasir') {
+        // Nama (tetap, tidak bisa diedit), Harga (editable), Qty, Subtotal, Hapus
+        row.innerHTML = `
+            <td>${item.nama}</td>
+            <td>
+                <input type="number" value="${item.harga}" min="0" style="width:70px;"
+                    onchange="window.popupUpdateItemPrice(${idx}, this.value)">
+            </td>
+            <td>
+                <input type="number" value="${item.qty}" min="1" style="width:48px;color:#222;"
+                    onchange="window.popupUpdateQty(${idx}, this.value)">
+            </td>
+            <td style="color:#222;">${formatRupiah(subtotal)}</td>
+            <td>
+                <button onclick="window.popupRemoveItem(${idx})" style="background:none;border:none;color:#dc3545;font-size:1.2em;cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+    } else {
+        // Pelanggan: Nama, Qty, Subtotal, Hapus (tidak bisa edit harga)
+        row.innerHTML = `
+            <td style="color:#222;">${item.nama}</td>
+            <td style="color:#222;">${formatRupiah(item.harga)}</td>
+            <td>
+                <input type="number" value="${item.qty}" min="1" style="width:48px;color:#222;"
+                    onchange="window.popupUpdateQty(${idx}, this.value)">
+            </td>
+            <td style="color:#222;">${formatRupiah(subtotal)}</td>
+            <td>
+                <button onclick="window.popupRemoveItem(${idx})" style="background:none;border:none;color:#dc3545;font-size:1.2em;cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+    }
+    tbody.appendChild(row);
+});
         }
         const staticNodes = popupKeranjang.querySelectorAll('div, strong, span');
         staticNodes.forEach(node => {
@@ -1778,6 +1799,14 @@ document.addEventListener('DOMContentLoaded', () => {
         popupContent.appendChild(stickyFooter);
         tampilkanKembalianPopupKeranjang();
     }
+    window.popupUpdateItemPrice = function(idx, newPrice) {
+    let price = parseFloat(newPrice);
+    if (isNaN(price) || price < 0) price = 0;
+    keranjang[idx].harga = price;
+    updateKeranjang();
+    updatePopupKeranjang(true);
+    saveKeranjangToStorage();
+};
     window.popupUpdateQty = function(idx, val) {
         let quantity = parseInt(val);
         if (isNaN(quantity) || quantity < 1) quantity = 0;
