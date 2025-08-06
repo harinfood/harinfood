@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
         //{ id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
         { id: 4, nama: "Tteokbokki", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
-        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki.webp", barcode: "toppoki10" },
+        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" },
         { id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
         { id: 7, nama: "spaghetti dengan toping", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1" },
         { id: 13, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" },
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" },
         { id: 11, nama: "Es Rasa rasa", harga: 2000, gambar: "2000.webp", barcode: "rasa" },
         { id: 12, nama: "kopi", harga: 4000, gambar: "kopi.webp", barcode: "kopi" },
-        { id: 14, nama: "Es Tawar", harga: 1000, gambar: "estawar.webp", barcode: "tawar" }
+        { id: 13, nama: "Es Tawar", harga: 1000, gambar: "estawar.webp", barcode: "tawar" }
     ];
     const produkDefaultHarga = produkData.map(p => ({ id: p.id, harga: p.harga }));
     let keranjang = [];
