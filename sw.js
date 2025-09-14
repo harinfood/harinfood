@@ -8,7 +8,7 @@ const ASSETS_TO_CACHE = [
   '/style.css?v=43',
   '/script.js?v=43',
   '/manifest.json?v=43',
-  // Tambahkan semua gambar/audio/icon di bawah ini:
+  // Tambahkan semua gambar/audio/icon di bawah ini ok
   '/risol.webp',
   '/cibay.webp',
   '/toppoki.webp',
