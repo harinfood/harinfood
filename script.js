@@ -1,3 +1,10 @@
+/* Full script.js with fixes:
+   - added guard checks before attaching listeners to optional login buttons
+   - added handler for new btn-kasir-icon (user icon beside KATALOG HARINFOOD)
+   - preserved all original behavior and functions
+   Replace the repository file with this content (keep filename script.js and update query string in index.html if needed).
+*/
+
 document.addEventListener('DOMContentLoaded', () => {
     // ====== FUNGSI SUARA ======
     function playSound(type) {
@@ -55,9 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
     enableSpecialButtonSounds();
     // Jalankan sekali saat awal
     enableSpecialButtonSounds();
+
     const loginPopup = document.getElementById('login-popup');
     const btnPelanggan = document.getElementById('btn-pelanggan');
     const btnKasir = document.getElementById('btn-kasir');
+    // NEW: icon user button next to title in updated index.html
+    const btnKasirIcon = document.getElementById('btn-kasir-icon');
     const formPelanggan = document.getElementById('form-pelanggan');
     const formKasir = document.getElementById('form-kasir');
     const namaPelangganLoginInput = document.getElementById('nama-pelanggan-login');
@@ -233,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span id="close-kembalian-modal" style="position:absolute;right:20px;top:10px;font-size:2em;cursor:pointer;color:#333;">&times;</span>
                 <h2 style="text-align:center;color:#28a745;margin-bottom: 1em;">Kembalian</h2>
                 <div id="kembalian-modal-value" style="font-size:2.5em;font-weight:bold;text-align:center;color:#28a745;letter-spacing: 2px; margin-bottom: 20px;">Rp 0</div>
-                <button id="ok-kembalian-modal" style="margin-top:10px; padding:0.7em 2.5em; border-radius:8px; background:#00f0ff; color:#222; border:none; font-weight:bold; font-size:1.15em; cursor:pointer;">Oke</button>
+                <button id="ok-kembalian-modal" style="margin-top:10px; padding:0.7em 2.5em; border-radius:8px; background:#00f0ff; color:#222; border:none; font-weight:bold; font-size:1.15em; cursor:pointer;">OK</button>
             </div>
         `;
         document.body.appendChild(kembalianModal);
@@ -343,56 +353,76 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.Tawk_API) delete window.Tawk_API;
         if (window.Tawk_LoadStart) delete window.Tawk_LoadStart;
     }
-    btnPelanggan.addEventListener('click', () => {
-        formPelanggan.style.display = 'flex';
-        formKasir.style.display = 'none';
-        namaPelangganLoginInput.focus();
-    });
-    btnKasir.addEventListener('click', () => {
-        formKasir.style.display = 'flex';
-        formPelanggan.style.display = 'none';
-        namaKasirLoginInput.focus();
-    });
-    formPelanggan.addEventListener('submit', (event) => {
-        event.preventDefault();
-        playSound('ding');
-        const nama = namaPelangganLoginInput.value.trim();
-        const alamat = alamatPelangganLoginInput.value.trim();
-        if (nama && alamat) {
-            localStorage.setItem('userRole', 'pelanggan');
-            localStorage.setItem('namaPelanggan', nama);
-            localStorage.setItem('alamatPelanggan', alamat);
-            localStorage.setItem('namaPemesan', nama);
-            loginPopup.style.display = 'none';
-            appContainer.style.display = 'block';
-            kasirFabs.style.display = 'none';
-            pesanInfoLabel.style.display = 'block';
-            pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
-            initializeApp();
-            loadTawktoWidget();
-        }
-    });
-    formKasir.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const namaKasir = namaKasirLoginInput.value.trim();
-        const passwordKasirLoginInput = document.getElementById('password-kasir-login');
-        if (namaKasir === 'Harry' && passwordKasirLoginInput.value.trim() === '313121') {
-            localStorage.setItem('userRole', 'kasir');
-            localStorage.setItem('namaKasir', namaKasir);
-            localStorage.removeItem('namaPelanggan');
-            localStorage.removeItem('alamatPelanggan');
-            localStorage.removeItem('namaPemesan');
-            loginPopup.style.display = 'none';
-            appContainer.style.display = 'block';
-            kasirFabs.style.display = 'block';
-            namaPemesanModal.style.display = 'none';
-            pesanInfoLabel.style.display = 'none';
-            initializeApp();
-            removeTawktoWidget();
-        } else {
-            alert('Nama kasir atau password salah!');
-        }
-    });
+
+    // If optional old buttons exist, attach handlers. Also attach handler to new icon button.
+    if (btnPelanggan) {
+        btnPelanggan.addEventListener('click', () => {
+            formPelanggan.style.display = 'flex';
+            formKasir.style.display = 'none';
+            if (namaPelangganLoginInput) namaPelangganLoginInput.focus();
+        });
+    }
+    if (btnKasir) {
+        btnKasir.addEventListener('click', () => {
+            formKasir.style.display = 'flex';
+            formPelanggan.style.display = 'none';
+            if (namaKasirLoginInput) namaKasirLoginInput.focus();
+        });
+    }
+    // New handler: user icon next to title opens kasir form
+    if (btnKasirIcon) {
+        btnKasirIcon.addEventListener('click', () => {
+            if (formKasir) formKasir.style.display = 'flex';
+            if (formPelanggan) formPelanggan.style.display = 'none';
+            if (namaKasirLoginInput) namaKasirLoginInput.focus();
+        });
+    }
+
+    if (formPelanggan) {
+        formPelanggan.addEventListener('submit', (event) => {
+            event.preventDefault();
+            playSound('ding');
+            const nama = namaPelangganLoginInput.value.trim();
+            const alamat = alamatPelangganLoginInput.value.trim();
+            if (nama && alamat) {
+                localStorage.setItem('userRole', 'pelanggan');
+                localStorage.setItem('namaPelanggan', nama);
+                localStorage.setItem('alamatPelanggan', alamat);
+                localStorage.setItem('namaPemesan', nama);
+                loginPopup.style.display = 'none';
+                appContainer.style.display = 'block';
+                kasirFabs.style.display = 'none';
+                pesanInfoLabel.style.display = 'block';
+                pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
+                initializeApp();
+                loadTawktoWidget();
+            }
+        });
+    }
+    if (formKasir) {
+        formKasir.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const namaKasir = namaKasirLoginInput.value.trim();
+            const passwordKasirLoginInput = document.getElementById('password-kasir-login');
+            if (namaKasir === 'Harry' && passwordKasirLoginInput.value.trim() === '313121') {
+                localStorage.setItem('userRole', 'kasir');
+                localStorage.setItem('namaKasir', namaKasir);
+                localStorage.removeItem('namaPelanggan');
+                localStorage.removeItem('alamatPelanggan');
+                localStorage.removeItem('namaPemesan');
+                loginPopup.style.display = 'none';
+                appContainer.style.display = 'block';
+                kasirFabs.style.display = 'block';
+                namaPemesanModal.style.display = 'none';
+                pesanInfoLabel.style.display = 'none';
+                initializeApp();
+                removeTawktoWidget();
+            } else {
+                alert('Nama kasir atau password salah!');
+            }
+        });
+    }
+
     document.getElementById('btnSimpanNamaPemesan').onclick = function() {
         var nama = inputNamaPemesan.value.trim();
         if (nama.length < 2) { return; }
@@ -1000,12 +1030,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <link rel="stylesheet" href="style.css">
                 <style>
                     @media print { .print-actions { display: none !important; } }
-                    body, #print-area { font-family:'Arial', 'Poppins', sans-serif !important; font-size:11px !important; line-height:1.05 !important; font-weight:bold !important; margin:0 !important; padding:0 !important;}
+                    body, #print-area { font-family:'Arial', 'Poppins', sans-serif !important; font-size:11px !important; line-height:1.05 !important; font-weight:bold !important; margin:0 !important; }
                     #print-area { width:58mm !important; max-width:58mm !important; padding:2mm 2mm 0 2mm !important; }
                     table { width:100%; border-collapse: collapse; font-size:11px;}
                     td { padding:0.5px 0; font-weight:bold; font-size:11px;}
                     .total-row td { border-top:1.5px solid #000; font-size:12px;}
-                    .print-header { text-align:center!important;margin-bottom:4px!important;font-size:14px!important;font-weight:bold!important;line-height:1.05!important;letter-spacing:0.02em!important;}
+                    .print-header { text-align:center!important;margin-bottom:4px!important;font-size:14px!important;font-weight:bold!important;line-height:1.05!important;letter-spacing:0.02em!important; }
                     .print-header .shop-address-print, .print-header .shop-phone-print { font-size:11px!important;font-weight:bold!important;margin:0!important;line-height:1.05!important;}
                     .print-info p { margin:0!important;font-size:11px!important;font-weight:bold!important; }
                     .thank-you { text-align:center;margin-top:8px!important;font-size:11px!important;font-style:italic!important;font-weight:bold!important;}
@@ -1736,7 +1766,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stickyFooter.style.flexDirection = 'column';
         stickyFooter.style.gap = '2px';
         stickyFooter.style.paddingTop = '10px';
-        stickyFooter.style.boxShadow = '0 -2px 12px #0001';
+        stickyFooter.style.boxShadow = '0 -2px 12px #0002';
         if (!popupKeranjangPrintBtn) {
             popupKeranjangPrintBtn = document.createElement('button');
             popupKeranjangPrintBtn.id = 'popup-keranjang-print';

@@ -15,18 +15,22 @@
     <!-- Popup Login -->
     <div id="login-popup" class="popup-overlay" style="display: flex;">
         <div class="popup-content">
-            <h2 class="login-title">KATALOG HARINFOOD</h2>
-            <div class="button-group">
-                <button id="btn-pelanggan" class="login-choice-btn">Pelanggan</button>
-                <button id="btn-kasir" class="login-choice-btn">Kasir</button>
+            <div class="login-header" style="display:flex;align-items:center;justify-content:center;gap:12px;">
+                <h2 class="login-title" style="margin:0;">KATALOG HARINFOOD</h2>
+                <!-- Tombol ikon untuk menuju login kasir -->
+                <button id="btn-kasir-icon" title="Login Kasir" style="background:transparent;border:none;color:inherit;font-size:1.4em;cursor:pointer;"><i class="fas fa-user"></i></button>
             </div>
-            <form id="form-pelanggan" style="display: none;">
+
+            <!-- Form Pelanggan ditampilkan langsung sebagai default -->
+            <form id="form-pelanggan" style="display: flex; flex-direction: column;">
                 <label for="nama-pelanggan-login">Nama Anda:</label>
                 <input type="text" id="nama-pelanggan-login" required>
                 <label for="alamat-pelanggan-login">Alamat Anda:</label>
                 <input type="text" id="alamat-pelanggan-login" required>
                 <button type="submit" class="submit-login-btn">Lanjutkan</button>
             </form>
+
+            <!-- Form Kasir tetap ada namun tersembunyi, akan dibuka lewat ikon user -->
             <form id="form-kasir" style="display: none;">
                 <label for="nama-kasir-login">Nama Kasir:</label>
                 <input type="text" id="nama-kasir-login" required>
