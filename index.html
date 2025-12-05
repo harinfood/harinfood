@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
-    <link rel="manifest" href="manifest.json?v=48">
-    <link rel="stylesheet" href="style.css?v=48">
+    <link rel="manifest" href="manifest.json?v=50">
+    <link rel="stylesheet" href="style.css?v=50">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <!--<script>
         window.location.href = "https://harinfood.github.io/libur/";
@@ -24,7 +24,7 @@
             <!-- Form Pelanggan ditampilkan langsung sebagai default -->
             <form id="form-pelanggan" style="display: flex; flex-direction: column;">
                 <label for="nama-pelanggan-login">Nama Anda:</label>
-                <input type="text" id="nama-pelanggan-login" required>
+                <input type="text" id="nama-pelanggan-login" autofocus required>
                 <label for="alamat-pelanggan-login">Alamat Anda:</label>
                 <input type="text" id="alamat-pelanggan-login" required>
                 <button type="submit" class="submit-login-btn">Lanjutkan</button>
@@ -38,7 +38,11 @@
                 <input type="password" id="password-kasir-login" required>
                 <button type="submit" class="submit-login-btn">Login Kasir</button>
             </form>
+            <div>
+              <h6>Silahkan isi formulir di atas untuk melihat katalog dan anda bisa memesannya</h6>
+            </div>
         </div>
+        
     </div>
 
     <!-- Modal Nama Pemesan -->
@@ -224,6 +228,6 @@
     <audio id="audio-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="audio-ding" src="ding.mp3" preload="auto"></audio>
     <audio id="audio-aaa" src="aaa.mp3" preload="auto"></audio>
-    <script src="script.js?v=48"></script>
+    <script src="script.js?v=50"></script>
 </body>
 </html>
