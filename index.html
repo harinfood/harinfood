@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
-    <link rel="manifest" href="manifest.json?v=53">
-    <link rel="stylesheet" href="style.css?v=53">
+    <link rel="manifest" href="manifest.json?v=54">
+    <link rel="stylesheet" href="style.css?v=54">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <!--<script>
         window.location.href = "https://harinfood.github.io/libur/";
@@ -218,6 +218,10 @@
                     <button id="popup-keranjang-print" style="background:#007bff;color:#fff;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;">
                         <i class="fas fa-print"></i> Cetak Struk
                     </button>
+                    <!-- Tombol Cetak untuk pelanggan (ditampilkan hanya untuk pelanggan) -->
+                    <button id="popup-keranjang-print-pelanggan" style="display:none;background:linear-gradient(45deg,#28a745,#1e7e34);color:#fff;border:none;padding:8px 16px;border-radius:25px;cursor:pointer;margin-left:8px;">
+                        <i class="fas fa-print"></i> Cetak Struk
+                    </button>
                     <!-- Tombol WhatsApp akan dimasukkan lewat JS agar dinamis -->
                 </div>
             </div>
@@ -228,6 +232,6 @@
     <audio id="audio-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="audio-ding" src="ding.mp3" preload="auto"></audio>
     <audio id="audio-aaa" src="aaa.mp3" preload="auto"></audio>
-    <script src="script.js?v=53"></script>
+    <script src="script.js?v=54"></script>
 </body>
 </html>
