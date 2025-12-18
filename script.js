@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //{ id: 7, nama: "spaghetti dengan toping", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1" },
         //{ id: 8, nama: "Balungan", harga: 6000, gambar: "balungan.webp", barcode: "balungan" },
         //{ id: 14, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" },
-        { id: 9, nama: "Es Teh Jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" },
+        { id: 9, nama: "Es Teh sedang", harga: 2500, gambar: "esteh.webp", barcode: "esteh" },
         { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" },
         { id: 11, nama: "Es Rasa rasa", harga: 2000, gambar: "2000.webp", barcode: "rasa" },
         { id: 12, nama: "kopi", harga: 4000, gambar: "kopi.webp", barcode: "kopi" },
