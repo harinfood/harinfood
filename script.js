@@ -277,10 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
     createKembalianModal();
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
-        //{ id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
-        { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
-        //{ id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
-        //{ id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" },
+        { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
+        //{ id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
+        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
+        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" },
         //{ id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
         //{ id: 7, nama: "spaghetti dengan toping", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1" },
         //{ id: 8, nama: "Balungan", harga: 6000, gambar: "balungan.webp", barcode: "balungan" },
