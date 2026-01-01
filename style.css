@@ -1269,3 +1269,19 @@ body,
     outline: none;
     box-shadow: 0 0 8px #00f0ff44;
 }
+
+/* === ULTIMATE STOK KOSONG === */
+.produk-item.stok-habis{
+  filter: grayscale(100%) !important;
+  opacity: .45 !important;
+  pointer-events: none !important;
+}
+.badge-stok-kosong{
+  background:#b00020;
+  color:#fff;
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:.75em;
+  margin-top:6px;
+  display:inline-block;
+}

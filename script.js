@@ -1,3 +1,28 @@
+
+/* ===============================
+   ULTIMATE FIX CENTRAL HANDLER
+   =============================== */
+function isStokKosong(produk){
+  return typeof produk.stok !== 'undefined' && Number(produk.stok) === 0;
+}
+
+function tambahQtyUniversal(produk){
+  if (isStokKosong(produk)) return;
+  let item = keranjang.find(i=>i.id===produk.id && !i.isManual);
+  if(!item){
+    keranjang.push({
+      id: produk.id,
+      nama: produk.nama,
+      harga: produk.harga,
+      qty: 1,
+      isManual:false
+    });
+  }else if(item.qty < 999){
+    item.qty++;
+  }
+  updateKeranjang();
+  displayProduk();
+}
 /* Full script.js with fixes:
    - added guard checks before attaching listeners to optional login buttons
    - added handler for new btn-kasir-icon (user icon beside KATALOG HARINFOOD)
@@ -276,15 +301,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createKembalianModal();
     const produkData = [
-        { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol" },
-        { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" },
-        //{ id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung" },
-        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki" },
-        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" },
-        //{ id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti" },
-        //{ id: 7, nama: "spaghetti dengan toping", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1" },
-        //{ id: 8, nama: "Balungan", harga: 6000, gambar: "balungan.webp", barcode: "balungan" },
-        //{ id: 14, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" },
+        { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol", stok: 1},
+        { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1},
+        { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 1 },
+        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1 },
+        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1},
+        { id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 },
+        { id: 7, nama: "spaghetti dengan toping", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 0},
+        { id: 8, nama: "Balungan", harga: 6000, gambar: "balungan.webp", barcode: "balungan", stok: 0 },
+        { id: 14, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" , stok: 0 },
         { id: 15, nama: "Es Teh jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" },
         { id: 9, nama: "Es Teh sedang", harga: 2500, gambar: "esteh2.webp", barcode: "esteh3" },
         { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" },
@@ -541,6 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             let qty = itemInCart ? itemInCart.qty : 0;
             const produkDiv = document.createElement('div');
+if(isStokKosong(produk)) produkDiv.classList.add('stok-habis');
             produkDiv.classList.add('produk-item');
             produkDiv.setAttribute('data-id', produk.id);
 
@@ -572,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             produkDiv.innerHTML = `
                 <img src="${produk.gambar}" alt="${produk.nama}" data-id="${produk.id}" class="produk-img" style="cursor:pointer;">
-                <h3>${produk.nama}</h3>
+                <h3>${produk.nama}</h3>${isStokKosong(produk)?'<div class="badge-stok-kosong">STOK KOSONG</div>':''}
                 ${hargaDisplayHtml} 
                 <div class="produk-controls" id="controls-${produk.id}">
                     ${controlsHtml}
@@ -2042,4 +2068,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         });
     }
+});
+// === EVENT DELEGATION (FINAL) ===
+document.addEventListener('DOMContentLoaded', function(){
+  const list = document.getElementById('produk-list');
+  if(!list) return;
+  list.addEventListener('click', function(e){
+    const item = e.target.closest('.produk-item');
+    if(!item) return;
+    if(e.target.closest('button')) return;
+
+    const id = Number(item.dataset.id);
+    const produk = produkData.find(p=>p.id===id);
+    if(!produk) return;
+
+    tambahQtyUniversal(produk);
+  });
 });
