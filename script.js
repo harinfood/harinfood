@@ -2088,65 +2088,43 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 /* ==================================================
-   PRODUCTION FINAL UX FIX
-   - BACK popup → katalog (restore scroll)
-   - BACK katalog → confirm exit (aware keranjang)
+   TAMBAHAN TOMBOL + UNTUK KASIR (UI: - qty +)
+   Pelanggan TIDAK berubah
    ================================================== */
 (function () {
-    let allowExit = false;
-    let lastScrollY = 0;
+    function enhanceKasirQtyControls() {
+        if (localStorage.getItem('userRole') !== 'kasir') return;
 
-    function saveScroll() {
-        lastScrollY = window.scrollY || document.documentElement.scrollTop || 0;
-    }
+        document.querySelectorAll('.produk-item').forEach(item => {
+            const controls = item.querySelector('.produk-controls');
+            if (!controls) return;
 
-    function restoreScroll() {
-        requestAnimationFrame(() => {
-            window.scrollTo(0, lastScrollY);
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
+            const qtyInput = controls.querySelector('.qty-edit-input');
+            const minusBtn = controls.querySelector('.minus-btn');
+            if (!qtyInput || !minusBtn) return;
+
+            // Cegah double render
+            if (controls.querySelector('.plus-btn')) return;
+
+            const plusBtn = document.createElement('button');
+            plusBtn.className = 'qty-control-btn qty-btn plus-btn';
+            plusBtn.textContent = '+';
+            plusBtn.title = 'Tambah qty';
+
+            plusBtn.addEventListener('click', () => {
+                let val = parseInt(qtyInput.value || '0', 10);
+                if (val < 999) {
+                    qtyInput.value = val + 1;
+                    qtyInput.dispatchEvent(new Event('blur'));
+                }
+            });
+
+            controls.appendChild(plusBtn);
         });
     }
 
-    history.pushState({ page: 'app' }, '', location.href);
+    const observer = new MutationObserver(enhanceKasirQtyControls);
+    observer.observe(document.body, { childList: true, subtree: true });
 
-    window.addEventListener('popstate', function () {
-        const popupKeranjang = document.getElementById('popup-keranjang');
-
-        // 1. Popup keranjang terbuka → tutup & restore scroll
-        if (popupKeranjang && popupKeranjang.style.display === 'flex') {
-            saveScroll();
-            popupKeranjang.style.display = 'none';
-            restoreScroll();
-            history.pushState({ page: 'app' }, '', location.href);
-            return;
-        }
-
-        // 2. Sudah diizinkan keluar → biarkan
-        if (allowExit) return;
-
-        // 3. Keranjang masih ada?
-        let keranjangAda = false;
-        try {
-            const data = JSON.parse(localStorage.getItem('keranjang') || '[]');
-            keranjangAda = Array.isArray(data) && data.length > 0;
-        } catch (e) {}
-
-        const pesan = keranjangAda
-            ? 'Keranjang masih berisi item. Yakin ingin keluar?'
-            : 'Apakah Anda yakin ingin keluar dari aplikasi katalog ini?';
-
-        if (confirm(pesan)) {
-            allowExit = true;
-            history.back();
-        } else {
-            history.pushState({ page: 'app' }, '', location.href);
-        }
-    });
-
-    // Simpan scroll saat popup dibuka
-    document.addEventListener('click', function (e) {
-        const btn = e.target.closest('#cart-fab');
-        if (btn) saveScroll();
-    });
+    document.addEventListener('DOMContentLoaded', enhanceKasirQtyControls);
 })();
