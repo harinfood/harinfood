@@ -2085,3 +2085,68 @@ document.addEventListener('DOMContentLoaded', function(){
     tambahQtyUniversal(produk);
   });
 });
+
+
+/* ==================================================
+   PRODUCTION FINAL UX FIX
+   - BACK popup → katalog (restore scroll)
+   - BACK katalog → confirm exit (aware keranjang)
+   ================================================== */
+(function () {
+    let allowExit = false;
+    let lastScrollY = 0;
+
+    function saveScroll() {
+        lastScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    }
+
+    function restoreScroll() {
+        requestAnimationFrame(() => {
+            window.scrollTo(0, lastScrollY);
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        });
+    }
+
+    history.pushState({ page: 'app' }, '', location.href);
+
+    window.addEventListener('popstate', function () {
+        const popupKeranjang = document.getElementById('popup-keranjang');
+
+        // 1. Popup keranjang terbuka → tutup & restore scroll
+        if (popupKeranjang && popupKeranjang.style.display === 'flex') {
+            saveScroll();
+            popupKeranjang.style.display = 'none';
+            restoreScroll();
+            history.pushState({ page: 'app' }, '', location.href);
+            return;
+        }
+
+        // 2. Sudah diizinkan keluar → biarkan
+        if (allowExit) return;
+
+        // 3. Keranjang masih ada?
+        let keranjangAda = false;
+        try {
+            const data = JSON.parse(localStorage.getItem('keranjang') || '[]');
+            keranjangAda = Array.isArray(data) && data.length > 0;
+        } catch (e) {}
+
+        const pesan = keranjangAda
+            ? 'Keranjang masih berisi item. Yakin ingin keluar?'
+            : 'Apakah Anda yakin ingin keluar dari aplikasi katalog ini?';
+
+        if (confirm(pesan)) {
+            allowExit = true;
+            history.back();
+        } else {
+            history.pushState({ page: 'app' }, '', location.href);
+        }
+    });
+
+    // Simpan scroll saat popup dibuka
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('#cart-fab');
+        if (btn) saveScroll();
+    });
+})();
