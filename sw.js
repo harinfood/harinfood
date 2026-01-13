@@ -5,9 +5,9 @@ const CACHE_NAME = `harinfood-cache-${CACHE_VERSION}`;
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/style.css?v=87',
-  '/script.js?v=87',
-  '/manifest.json?v=87',
+  '/style.css?v=88',
+  '/script.js?v=88',
+  '/manifest.json?v=88',
   // Tambahkan semua gambar/audio/icon di bawah ini ok
   '/risol.webp',
   '/cibay.webp',
