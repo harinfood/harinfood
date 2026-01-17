@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
-    <link rel="manifest" href="manifest.json?v=90">
-    <link rel="stylesheet" href="style.css?v=90">
+    <link rel="manifest" href="manifest.json?v=91">
+    <link rel="stylesheet" href="style.css?v=91">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-           <!--  <script>
-        window.location.href = "https://harinfood.github.io/tutup/";
+         <!-- <script>
+        window.location.href = "https://harinfood.github.io/libur/";
       </script> -->
 </head>
 <body>
+
+<div id="global-header">
+  <div class="header-inner">
+    <h1 class="section-title">DAFTAR MENU HARINFOOD</h1>
+    <div id="kasir-header-bar" class="kasir-header-bar"></div>
+  </div>
+</div>
+
     <!-- Popup Login -->
     <div id="login-popup" class="popup-overlay" style="display: flex;">
         <div class="popup-content">
@@ -71,7 +79,7 @@
         <div class="main-layout">
             <!-- Produk -->
             <section id="menu-produk-section">
-                <h1 style="font-size:25px" class="section-title">DAFTAR MENU <br> HARINFOOD</h1>
+                
                 <div class="search-barcode-input">
                     <input type="text" id="product-search-barcode" placeholder="Cari produk atau scan barcode..." autofocus>
                     <span id="search-barcode-feedback" class="feedback-message"></span>
@@ -232,6 +240,34 @@
     <audio id="audio-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="audio-ding" src="ding.mp3" preload="auto"></audio>
     <audio id="audio-aaa" src="aaa.mp3" preload="auto"></audio>
-    <script src="script.js?v=90"></script>
+    <script src="script.js?v=91"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const popup = document.getElementById('popup-keranjang');
+  const cartFab = document.getElementById('cart-fab');
+  const closeBtn = document.getElementById('close-popup-keranjang');
+  const barcodeInput = document.getElementById('popup-product-search-barcode');
+
+  function openPopup(){
+    if(!popup) return;
+    popup.classList.add('active');
+    popup.style.display = 'flex';
+    document.body.classList.add('popup-open');
+    setTimeout(()=>{ barcodeInput && barcodeInput.focus(); },150);
+  }
+  function closePopup(){
+    if(!popup) return;
+    popup.classList.remove('active');
+    popup.style.display = 'none';
+    document.body.classList.remove('popup-open');
+  }
+
+  cartFab && cartFab.addEventListener('click', e => { e.stopPropagation(); openPopup(); });
+  closeBtn && closeBtn.addEventListener('click', e => { e.stopPropagation(); closePopup(); });
+  popup && popup.addEventListener('click', e => { if(e.target===popup) closePopup(); });
+});
+</script>
+
 </body>
 </html>
