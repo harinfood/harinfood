@@ -1,4 +1,12 @@
 
+/* ===== ROOT HISTORY ANTI EXIT (V93) ===== */
+(function(){
+  if (!history.state) {
+    history.replaceState({ page: 'home' }, '', location.href);
+  }
+})();
+
+
 /* ===============================
    ULTIMATE FIX CENTRAL HANDLER
    =============================== */
@@ -2203,3 +2211,25 @@ function renderKasirHeaderBar(){
 
 document.addEventListener('DOMContentLoaded', renderKasirHeaderBar);
 window.addEventListener('focus', renderKasirHeaderBar);
+
+
+/* ===== POPUP KERANJANG ANDROID SAFE V93 ===== */
+(function(){
+  window.bukaPopupKeranjang = function(){
+    if(!window.popupKeranjang) return;
+    popupKeranjang.style.display = 'flex';
+    history.pushState({ popup:'keranjang' }, '', '#keranjang');
+  };
+
+  window.tutupPopupKeranjang = function(){
+    if(!window.popupKeranjang) return;
+    popupKeranjang.style.display = 'none';
+  };
+
+  window.addEventListener('popstate', function(e){
+    if (popupKeranjang && popupKeranjang.style.display === 'flex') {
+      tutupPopupKeranjang();
+      history.replaceState({ page:'home' }, '', location.href);
+    }
+  });
+})();
