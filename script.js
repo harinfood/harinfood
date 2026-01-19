@@ -2266,3 +2266,19 @@ document.querySelectorAll('.kategori-btn').forEach(btn=>{
     displayProduk();
   });
 });
+
+// ===== V102 AUTO HIDE HEADER =====
+(function(){
+  let lastScroll = 0;
+  const header = document.getElementById('global-header');
+  if(!header) return;
+  window.addEventListener('scroll', () => {
+    const current = window.pageYOffset;
+    if (current > lastScroll && current > 80) {
+      header.classList.add('hide');
+    } else {
+      header.classList.remove('hide');
+    }
+    lastScroll = current;
+  });
+})();

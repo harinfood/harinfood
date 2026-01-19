@@ -1965,3 +1965,109 @@ body.popup-open { overflow: hidden; }
 #app-container {
     margin-top: 8px !important;
 }
+
+
+/* ======================================================
+   V101 FINAL LOOK – MERGED (AUTO GENERATED)
+   ====================================================== */
+#global-header,
+header {
+    background: transparent !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.header-inner {
+    border: none !important;
+    box-shadow: none !important;
+    padding-bottom: 8px !important;
+}
+
+.section-title {
+    margin-bottom: 10px !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background: linear-gradient(45deg, #00f0ff, #4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.kategori-tabs {
+    border: none !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+.kategori-btn {
+    border-radius: 999px !important;
+    padding: 12px 22px !important;
+    background: rgba(255,255,255,0.12) !important;
+    backdrop-filter: blur(8px);
+    border: none !important;
+    transition: all 0.25s ease;
+}
+
+.kategori-btn.active {
+    background: linear-gradient(45deg, #00f0ff, #00b0ff) !important;
+    color: #111 !important;
+    box-shadow: 0 0 18px rgba(0,240,255,0.55);
+}
+
+#app-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+#menu-produk-section,
+#keranjang-form-section {
+    background: rgba(255,255,255,0.08) !important;
+    backdrop-filter: blur(14px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: none !important;
+}
+
+.produk-item {
+    background: rgba(255,255,255,0.12) !important;
+    border-radius: 14px;
+    border: 1px solid rgba(0,240,255,0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.produk-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,240,255,0.25);
+}
+
+.qty-btn,
+.qty-control-btn {
+    border-radius: 50% !important;
+    background: linear-gradient(45deg, #00f0ff, #00b0ff) !important;
+    color: #111 !important;
+}
+
+.minus-btn {
+    background: linear-gradient(45deg, #ff4d4d, #ff7676) !important;
+    color: #fff !important;
+}
+
+footer {
+    border-top: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* ============================
+   V102 AUTO HIDE HEADER
+   ============================ */
+#global-header.hide {
+    transform: translateY(-100%);
+    transition: transform 0.35s ease;
+}
+#global-header {
+    transition: transform 0.35s ease;
+}
