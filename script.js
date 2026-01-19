@@ -997,7 +997,7 @@ if(isStokKosong(produk)) produkDiv.classList.add('stok-habis');
         if (keteranganPesanan) {
             message += `\nCatatan: ${keteranganPesanan}\n`;
         }
-        message += `\n[Link Pembayaran QRIS]\nhttps://bit.ly/4eVAZkA`;
+        message += `\nPembayaran bisa tunai atau \n via QRIS\nhttps://bit.ly/4eVAZkA`;
         return {
             success: true,
             message,
