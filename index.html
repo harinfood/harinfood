@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
-    <link rel="manifest" href="manifest.json?v=94">
-    <link rel="stylesheet" href="style.css?v=94">
+    <link rel="manifest" href="manifest.json?v=99">
+    <link rel="stylesheet" href="style.css?v=99">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
          <!-- <script>
         window.location.href = "https://harinfood.github.io/libur/";
@@ -17,6 +17,12 @@
   <div class="header-inner">
     <h1 class="section-title">DAFTAR MENU HARINFOOD</h1>
     <div id="kasir-header-bar" class="kasir-header-bar"></div>
+
+<div class="kategori-tabs header-kategori">
+  <button class="kategori-btn active" data-kategori="makanan">🍽️ Makanan</button>
+  <button class="kategori-btn" data-kategori="minuman">🥤 Minuman</button>
+</div>
+
   </div>
 </div>
 
@@ -80,7 +86,10 @@
             <!-- Produk -->
             <section id="menu-produk-section">
                 
-                <div class="search-barcode-input">
+                
+
+
+<div class="search-barcode-input">
                     <input type="text" id="product-search-barcode" placeholder="Cari produk atau scan barcode..." autofocus>
                     <span id="search-barcode-feedback" class="feedback-message"></span>
                 </div>
@@ -240,7 +249,7 @@
     <audio id="audio-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="audio-ding" src="ding.mp3" preload="auto"></audio>
     <audio id="audio-aaa" src="aaa.mp3" preload="auto"></audio>
-    <script src="script.js?v=94"></script>
+    <script src="script.js?v=99"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){

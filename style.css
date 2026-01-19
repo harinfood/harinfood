@@ -1889,3 +1889,79 @@ body.popup-open { overflow: hidden; }
     border-radius: 0;
   }
 }
+
+/* ===== KATEGORI TABS ===== */
+.kategori-tabs{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
+.kategori-btn{
+  flex:1;
+  padding:10px;
+  border-radius:12px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+}
+.kategori-btn.active{
+  background:#00f0ff;
+  color:#000;
+}
+
+/* === KATEGORI HEADER === */
+.header-kategori{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+.header-kategori .kategori-btn{
+  flex:1;
+  padding:8px 14px;
+  border-radius:12px;
+  font-weight:700;
+}
+
+
+/* ===== HEADER ULTRA TIGHT (SEHELAI RAMBUT) ===== */
+#global-header {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
+#global-header .header-inner {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#global-header h1,
+#global-header .section-title {
+    margin-top: 0 !important;
+    margin-bottom: 1px !important;
+    line-height: 1.05 !important;
+}
+
+.kasir-header-bar {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.header-kategori,
+.kategori-tabs {
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+    padding: 0 !important;
+    gap: 4px !important;
+}
+
+.kategori-btn {
+    margin: 0 !important;
+    padding: 6px 14px !important;
+    line-height: 1 !important;
+}
+
+#app-container {
+    margin-top: 8px !important;
+}
