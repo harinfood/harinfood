@@ -429,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 pesanInfoLabel.style.display = 'block';
                 pesanInfoLabel.textContent = "Terima kasih pelanggan setia, sehat selalu ya 🙏 tanpa anda tidak ada cerita di kedai kita. Selalu kunjungi kami ya";
                 initializeApp();
+applyRoleUIFix();
                 loadTawktoWidget();
             }
         });
@@ -450,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 namaPemesanModal.style.display = 'none';
                 pesanInfoLabel.style.display = 'none';
                 initializeApp();
+applyRoleUIFix();
                 removeTawktoWidget();
             } else {
                 alert('Nama kasir atau password salah!');
@@ -1961,6 +1963,7 @@ if(isStokKosong(produk)) produkDiv.classList.add('stok-habis');
             if (cartFab) cartFab.style.display = 'none';
         }
         initializeApp();
+applyRoleUIFix();
     } else {
         document.body.removeAttribute("data-role");
         loginPopup.style.display = 'flex';
@@ -2282,3 +2285,18 @@ document.querySelectorAll('.kategori-btn').forEach(btn=>{
     lastScroll = current;
   });
 })();
+
+// ===== FIX FINAL: SEMBUNYIKAN KERANJANG UNTUK PELANGGAN (AMAN LOGIN) =====
+function applyRoleUIFix() {
+    const role = localStorage.getItem('userRole');
+    const keranjangSection = document.getElementById('keranjang-form-section');
+    if (!keranjangSection) return;
+
+    if (role === 'pelanggan') {
+        keranjangSection.style.display = 'none';
+        if (typeof updateFloatingButtonVisibility === 'function') updateFloatingButtonVisibility();
+        if (typeof updatePelangganFabClearCartVisibility === 'function') updatePelangganFabClearCartVisibility();
+    } else if (role === 'kasir') {
+        keranjangSection.style.display = 'flex';
+    }
+}
