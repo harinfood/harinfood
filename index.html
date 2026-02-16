@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
-    <link rel="manifest" href="manifest.json?v=108">
-    <link rel="stylesheet" href="style.css?v=108">
+    <link rel="manifest" href="manifest.json?v=109">
+    <link rel="stylesheet" href="style.css?v=109">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-         <!--<script>
-        window.location.href = "https://harinfood.github.io/tutup/";
+         <!-- <script>
+        window.location.href = "https://harinfood.github.io/libur/";
       </script> -->
 </head>
 <body>
@@ -249,7 +249,7 @@
     <audio id="audio-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="audio-ding" src="ding.mp3" preload="auto"></audio>
     <audio id="audio-aaa" src="aaa.mp3" preload="auto"></audio>
-    <script src="script.js?v=108"></script>
+    <script src="script.js?v=109"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
@@ -277,20 +277,6 @@ document.addEventListener('DOMContentLoaded', function(){
   popup && popup.addEventListener('click', e => { if(e.target===popup) closePopup(); });
 });
 </script>
-
-
-<!-- DELIVERY POPUP -->
-<button id="openDelivery" class="delivery-btn">Delivery</button>
-
-<div id="deliveryModal" class="modal">
-  <div class="modal-content">
-    <h3>🚚 Pilih Area Delivery</h3>
-    <select id="deliverySelect">
-      <option value="">-- Pilih Area --</option>
-    </select>
-    <button id="closeDelivery">Simpan</button>
-  </div>
-</div>
 
 </body>
 </html>
