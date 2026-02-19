@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
         { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1 , kategori:"makanan"},
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},
-        { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 0 , kategori:"makanan"},
+        { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 1 , kategori:"makanan"},
          { id: 16, nama: "Cilok", harga: 1000, gambar: "cilok.webp", barcode: "cilok", stok: 0 , kategori:"makanan"},
          { id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 , kategori:"makanan"},
         { id: 7, nama: "spaghetti dengan toping", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 0, kategori:"makanan"},
