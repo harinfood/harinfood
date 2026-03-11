@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog HARINFOOD POS Lite</title>
-    <link rel="manifest" href="manifest.json?v=117">
-    <link rel="stylesheet" href="style.css?v=117">
+    <link rel="manifest" href="manifest.json?v=118">
+    <link rel="stylesheet" href="style.css?v=118">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-       <!--  <script>
+       <script>
         window.location.href = "https://harinfood.github.io/tutup/";
-      </script> -->
+      </script>
 </head>
 <body>
 
@@ -225,7 +225,20 @@
                         <i class="fas fa-print"></i>
                     </button>
                 </div>
-                <div class="pembayaran-section-inline" style="margin-top:10px;">
+                
+<!-- DELIVERY SECTION -->
+<div id="popup-delivery-section" style="margin-top:10px;">
+    <label style="font-weight:bold;">Pilih Area Delivery:</label>
+    <select id="popup-area-delivery" style="width:100%;padding:6px;margin-top:5px;border-radius:6px;">
+        <option value="">-- Ambil Sendiri / Makan Di Tempat --</option>
+        <option value="Kesambi|5000">Kesambi - Rp 5.000</option>
+        <option value="Kejaksan|7000">Kejaksan - Rp 7.000</option>
+        <option value="Harjamukti|10000">Harjamukti - Rp 10.000</option>
+    </select>
+    <p id="popup-ongkir-display" style="margin-top:5px;font-weight:bold;color:#ff9800;"></p>
+</div>
+
+<div class="pembayaran-section-inline" style="margin-top:10px;">
                     <label for="popup-keranjang-nominal">Nominal Pembayaran:</label>
                     <input type="number" id="popup-keranjang-nominal" min="0" value="0">
                     <p>Kembalian: <span id="popup-kembalian-display">Rp0</span></p>
@@ -249,7 +262,7 @@
     <audio id="audio-beep" src="beep.mp3" preload="auto"></audio>
     <audio id="audio-ding" src="ding.mp3" preload="auto"></audio>
     <audio id="audio-aaa" src="aaa.mp3" preload="auto"></audio>
-    <script src="script.js?v=117"></script>
+    <script src="script.js?v=118"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
