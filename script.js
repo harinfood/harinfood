@@ -311,8 +311,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol", stok: 1, kategori:"makanan"},
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
-        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1 , kategori:"makanan"},
-        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},
+        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 0 , kategori:"makanan"},
+        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 0, kategori:"makanan"},
         { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 0 , kategori:"makanan"},
         { id: 3, nama: "Cilok", harga: 1000, gambar: "cilok.webp", barcode: "cilok", stok: 0 , kategori:"makanan"},        
         //{ id: 6, nama: "spaghetti tanpa toping", harga: 6000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 , kategori:"makanan"},
@@ -328,7 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     const produkDefaultHarga = produkData.map(p => ({ id: p.id, harga: p.harga }));
     let keranjang = [];
-let orderType = localStorage.getItem('orderType') || 'ambil';
     let nextManualItemId = 1000;
     let isNominalInputFocused = false;
     function saveKeranjangToStorage() {
@@ -979,7 +978,7 @@ if(isStokKosong(produk)) produkDiv.classList.add('stok-habis');
         }
         let message = '';
         if (showNamaAlamat) {
-            message += `${orderType === 'delivery' ? '=== DELIVERY ===\n' : '=== AMBIL SENDIRI ===\n'}Nama: ${namaPemesan || '-'}\nAlamat: ${alamatPemesan || '-'}\n`;
+            message += `Nama: ${namaPemesan || '-'}\nAlamat: ${alamatPemesan || '-'}\n`;
         }
         if (currentUserRole === 'kasir') {
             message += `Kasir: ${kasirName}\n`;
@@ -2060,7 +2059,7 @@ applyRoleUIFix();
             "<big>HARINFOOD<br>" +
             "Jl Ender Rakit - Gedongan<br>" +
             "----------------------<br>" +
-            "${orderType === 'delivery' ? '=== DELIVERY ===\n' : '=== AMBIL SENDIRI ===\n'}Nama: " + nama + "<br>" +
+            "Nama: " + nama + "<br>" +
             "Alamat: " + alamat + "<br>" +
             "----------------------<br>" +
             belanjaan +
@@ -2302,87 +2301,3 @@ function applyRoleUIFix() {
         keranjangSection.style.display = 'flex';
     }
 }
-
-/* ===== FINAL FIX: BUTTON INSIDE POPUP ABOVE CETAK STRUK ===== */
-function injectOrderTypeInsidePopup() {
-    const popup = document.getElementById('popup-keranjang');
-    if (!popup) return;
-
-    if (popup.querySelector('#order-type-wrapper')) return;
-
-    const wrapper = document.createElement('div');
-    wrapper.id = 'order-type-wrapper';
-    wrapper.style.display = 'flex';
-    wrapper.style.gap = '10px';
-    wrapper.style.marginTop = '15px';
-
-    const btnAmbil = document.createElement('button');
-    btnAmbil.innerHTML = '🏠 Ambil Sendiri';
-    btnAmbil.style.flex = '1';
-    btnAmbil.style.padding = '12px';
-    btnAmbil.style.borderRadius = '12px';
-    btnAmbil.style.border = 'none';
-
-    const btnDelivery = document.createElement('button');
-    btnDelivery.innerHTML = '🚚 Delivery';
-    btnDelivery.style.flex = '1';
-    btnDelivery.style.padding = '12px';
-    btnDelivery.style.borderRadius = '12px';
-    btnDelivery.style.border = 'none';
-
-    wrapper.appendChild(btnAmbil);
-    wrapper.appendChild(btnDelivery);
-
-    // 🔥 MASUK KE DALAM POPUP, TEPAT DI ATAS CETAK STRUK
-    const tombolCetak = popup.querySelector('#popup-keranjang-print') 
-        || popup.querySelector('#cetak-struk-button');
-
-    if (tombolCetak) {
-        tombolCetak.parentNode.insertBefore(wrapper, tombolCetak);
-    } else {
-        popup.appendChild(wrapper);
-    }
-
-    function updateUI() {
-        if (orderType === 'ambil') {
-            btnAmbil.style.background = '#007bff';
-            btnAmbil.style.color = '#fff';
-            btnDelivery.style.background = '#ccc';
-        } else {
-            btnDelivery.style.background = '#28a745';
-            btnDelivery.style.color = '#fff';
-            btnAmbil.style.background = '#ccc';
-        }
-    }
-
-    btnAmbil.onclick = () => {
-        orderType = 'ambil';
-        localStorage.setItem('orderType', orderType);
-        updateUI();
-    };
-
-    btnDelivery.onclick = () => {
-        let total = 0;
-        try {
-            total = parseInt(document.getElementById('popup-keranjang-total').textContent.replace(/[^0-9]/g,'')) || 0;
-        } catch(e){}
-
-        if (total < 10000) {
-            alert('Delivery minimal Rp 10.000 untuk area delivery Ender kidul, Rakit, BBO, Gedongan, Gtm blok 1,2 dan 3');
-            return;
-        }
-
-        orderType = 'delivery';
-        localStorage.setItem('orderType', orderType);
-        updateUI();
-    };
-
-    updateUI();
-}
-
-setInterval(() => {
-    const popup = document.getElementById('popup-keranjang');
-    if (popup && popup.style.display !== 'none') {
-        injectOrderTypeInsidePopup();
-    }
-}, 500);
