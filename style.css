@@ -1222,7 +1222,7 @@ body,
 /* 2 kolom untuk layar kecil (HP) */
 @media (max-width: 599px) {
     #produk-list {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.8em;
     }
 }
