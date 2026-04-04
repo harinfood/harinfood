@@ -39,6 +39,39 @@ function tambahQtyUniversal(produk){
 */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ====== JAM OPERASIONAL HARINFOOD ======
+function cekJamOperasional() {
+    const sekarang = new Date();
+    const jam = sekarang.getHours();
+    const menit = sekarang.getMinutes();
+
+    const totalMenit = jam * 60 + menit;
+
+    const buka = 10 * 60; // 10:00
+    const tutup = 23 * 60; // 18:00
+
+    return totalMenit >= buka && totalMenit < tutup;
+}
+
+// ====== POPUP KEDAI TUTUP ======
+  function tampilkanKedaiTutup() {
+    const overlay = document.createElement('div');
+    overlay.id = "kedai-tutup-overlay";
+    overlay.innerHTML = `
+        <div class="kedai-tutup-box">
+            <h1>⛔ Kedai Tutup</h1>
+            <p>Mohon maaf, saat ini kedai sedang tutup</p>
+            <p>Jam operasional: <b>10:00 - 18:00 </b></p>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+}
+
+// ====== CEK SAAT LOAD ======
+if (!cekJamOperasional()) {
+    tampilkanKedaiTutup();
+    return; // Hentikan seluruh script
+}
     // ====== FUNGSI SUARA ======
     function playSound(type) {
         if (type === 'click') {
@@ -323,8 +356,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 8, nama: "Balungan", harga: 6000, gambar: "balungan.webp", barcode: "balungan", stok: 0 , kategori:"makanan"},
         { id: 14, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" , stok: 0 , kategori:"makanan"},
        // { id: 15, nama: "Es Teh jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" , kategori:"minuman"},
-        { id: 9, nama: "Es Teh sedang", harga: 3000, gambar: "esteh2.webp", barcode: "esteh3" , kategori:"minuman"},
-        { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" , kategori:"minuman"},
+        { id: 9, nama: "Es Teh tong tji", harga: 3000, gambar: "esteh.webp", barcode: "esteh3" , kategori:"minuman"},
+       // { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" , kategori:"minuman"},
         //{ id: 11, nama: "Es Rasa rasa", harga: 2000, gambar: "2000.webp", barcode: "rasa" , kategori:"minuman"},
         //{ id: 12, nama: "kopi", harga: 4000, gambar: "kopi.webp", barcode: "kopi" , kategori:"minuman"},
         //{ id: 13, nama: "Es Tawar", harga: 1500, gambar: "estawar.webp", barcode: "tawar" , kategori:"minuman"}
