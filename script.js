@@ -48,7 +48,7 @@ function cekJamOperasional() {
     const totalMenit = jam * 60 + menit;
 
     const buka = 10 * 60; // 10:00
-    const tutup = 23 * 60; // 18:00
+    const tutup = 18 * 60; // 18:00
 
     return totalMenit >= buka && totalMenit < tutup;
 }
