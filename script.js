@@ -62,8 +62,11 @@ function cekJamOperasional() {
     overlay.innerHTML = `
         <div class="kedai-tutup-box" style="position:relative;">
             <button id="close-kedai" style="position:absolute;top:10px;right:15px;font-size:20px;background:none;border:none;color:white;cursor:pointer;">&times;</button>
-            <h1>⛔ Kedai Tutup</h1>
-            <p>Mohon maaf, saat ini kedai sedang libur tanggal 6-7 April silahkan melihat daftar menu dan datang lagi nanti 🙏 </p>
+        <h1> ⛔
+        <br>KEDAI LIBUR</h1>
+    <!--<h1>⛔
+        <br>KEDAI TUTUP</h1>-->
+             <p>Mohon maaf, saat ini kedai sedang libur tanggal 6-7 April silahkan melihat daftar menu dan datang lagi nanti 🙏 </p>
             <!--<p>Jam operasional: <b>10:00 - 18:00</b></p>-->
         </div>
     `;
