@@ -47,30 +47,37 @@ function cekJamOperasional() {
 
     const totalMenit = jam * 60 + menit;
 
-    const buka = 10 * 60; // 10:00
-    const tutup = 18 * 60; // 18:00
+    const buka = 01 * 60; // 10:00
+    const tutup = 02 * 60; // 18:00
 
     return totalMenit >= buka && totalMenit < tutup;
 }
 
 // ====== POPUP KEDAI TUTUP ======
   function tampilkanKedaiTutup() {
+    if (document.getElementById('kedai-tutup-overlay')) return;
+
     const overlay = document.createElement('div');
     overlay.id = "kedai-tutup-overlay";
     overlay.innerHTML = `
-        <div class="kedai-tutup-box">
+        <div class="kedai-tutup-box" style="position:relative;">
+            <button id="close-kedai" style="position:absolute;top:10px;right:15px;font-size:20px;background:none;border:none;color:white;cursor:pointer;">&times;</button>
             <h1>⛔ Kedai Tutup</h1>
-            <p>Mohon maaf, saat ini kedai sedang tutup</p>
-            <p>Jam operasional: <b>10:00 - 18:00 </b></p>
+            <p>Mohon maaf, saat ini kedai sedang libur tanggal 6-7 April silahkan melihat daftar menu dan datang lagi nanti 🙏 </p>
+            <!--<p>Jam operasional: <b>10:00 - 18:00</b></p>-->
         </div>
     `;
     document.body.appendChild(overlay);
+
+    document.getElementById('close-kedai').onclick = function(){
+        overlay.remove();
+    }
 }
 
 // ====== CEK SAAT LOAD ======
 if (!cekJamOperasional()) {
     tampilkanKedaiTutup();
-    return; // Hentikan seluruh script
+    // tidak memblokir lagi
 }
     // ====== FUNGSI SUARA ======
     function playSound(type) {
@@ -343,7 +350,7 @@ if (!cekJamOperasional()) {
     createKembalianModal();
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol", stok: 1, kategori:"makanan"},
-        // { id: 20, nama: "Risol Pizza", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 1, kategori:"makanan"},       
+        { id: 20, nama: "Risol Pizza", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 1, kategori:"makanan"},       
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
        { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 1, kategori:"makanan"},  
        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1, kategori:"makanan"},
