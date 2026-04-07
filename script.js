@@ -1,5 +1,5 @@
 
-/* ===== ROOT HISTORY ANTI EXIT (V93) ===== */
+/* ===== ROOT HISTORY ANTI br>EXIT (V93) ===== */
 (function(){
   if (!history.state) {
     history.replaceState({ page: 'home' }, '', location.href);
@@ -47,8 +47,8 @@ function cekJamOperasional() {
 
     const totalMenit = jam * 60 + menit;
 
-    const buka = 01 * 60; // 10:00
-    const tutup = 02 * 60; // 18:00
+    const buka = 10 * 60; // 10:00
+    const tutup = 18 * 60; // 18:00
 
     return totalMenit >= buka && totalMenit < tutup;
 }
@@ -61,13 +61,14 @@ function cekJamOperasional() {
     overlay.id = "kedai-tutup-overlay";
     overlay.innerHTML = `
         <div class="kedai-tutup-box" style="position:relative;">
-            <button id="close-kedai" style="position:absolute;top:10px;right:15px;font-size:20px;background:none;border:none;color:white;cursor:pointer;">&times;</button>
-        <h1> ⛔
-        <br>KEDAI LIBUR</h1>
-    <!--<h1>⛔
-        <br>KEDAI TUTUP</h1>-->
-             <p>Mohon maaf, saat ini kedai sedang libur tanggal 6-7 April silahkan melihat daftar menu dan datang lagi nanti 🙏 </p>
-            <!--<p>Jam operasional: <b>10:00 - 18:00</b></p>-->
+            <button id="close-kedai" style="position:absolute;top:10px;right:17px;font-size:45px;background:none;border:none;color:#ff0000;cursor:pointer;">&times;</button>
+        <!-- <h1> ⛔
+        <br>KEDAI LIBUR</h1> -->
+        <h1> 🙏
+        <br>KEDAI TUTUP</h1>
+             <p>Mohon maaf, saat ini kedai sedang tutup  silahkan melihat daftar menu dan datang lagi nanti ? </p>
+            <p style = "color:#f0ca26"> Jam operasional: 
+            <br><b>10:00 - 18:00</b></p>
         </div>
     `;
     document.body.appendChild(overlay);
