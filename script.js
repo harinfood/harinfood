@@ -61,7 +61,7 @@ function cekJamOperasional() {
     overlay.id = "kedai-tutup-overlay";
     overlay.innerHTML = `
         <div class="kedai-tutup-box" style="position:relative;">
-            <button id="close-kedai" style="position:absolute;top:10px;right:17px;font-size:45px;background:none;border:none;color:#ff0000;cursor:pointer;">&times;</button>
+            <button id="close-kedai" style="position:absolute;top:15px;right:20px;font-size:30px;background:none;border:none;color:#ff0000;cursor:pointer;">❎</button>
         <!-- <h1> ⛔
         <br>KEDAI LIBUR</h1> -->
         <h1> 🙏
@@ -358,7 +358,7 @@ if (!cekJamOperasional()) {
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
        { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 1, kategori:"makanan"},  
        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1, kategori:"makanan"},
-        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 0, kategori:"makanan"},   
+        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},   
         { id: 21, nama: "sosis bakar", harga: 5000, gambar: "sosis.webp", barcode: "sosis", stok: 0, kategori:"makanan"},
         { id: 21, nama: "sosis kecil bakar", harga: 2000, gambar: "sosis1.webp", barcode: "sosis1", stok: 0, kategori:"makanan"},             
         { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 0 , kategori:"makanan"},
