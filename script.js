@@ -66,7 +66,7 @@ function cekJamOperasional() {
         <br>KEDAI LIBUR</h1> -->
         <h1> 🙏
         <br>KEDAI TUTUP</h1>
-             <p>Mohon maaf, saat ini kedai sedang tutup  silahkan melihat daftar menu dan datang lagi nanti ? </p>
+             <p>Mohon maaf, saat ini kedai sedang tutup  silahkan melihat daftar menu dengan cara menean tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dan tunggu konfrmasi, mengenai jam oprasional menyeuaikan stok  </p>
             <p style = "color:#f0ca26"> Jam operasional: 
             <br><b>10:00 - 18:00</b></p>
         </div>
