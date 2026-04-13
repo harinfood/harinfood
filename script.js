@@ -47,7 +47,7 @@ function cekJamOperasional() {
 
     const totalMenit = jam * 60 + menit;
 
-    const buka = 10 * 60; // 10:00
+    const buka = 11 * 60; // 10:00
     const tutup = 18 * 60; // 18:00
 
     return totalMenit >= buka && totalMenit < tutup;
@@ -69,7 +69,7 @@ function cekJamOperasional() {
              <p style="font-size:15px;">Mohon maaf, saat ini kedai sedang tutup  silahkan melihat daftar menu dengan cara menean tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dan tunggu konfrmasi, mengenai jam oprasional menyesuaikan ketersediaan stok !
             </p>
             <p style = "color:#f0ca26"> Jam operasional: 
-            <br><b>10:00 - 18:00</b></p>
+            <br><b>11:00 - 18:00</b></p>
         </div>
     `;
     document.body.appendChild(overlay);
@@ -355,12 +355,12 @@ if (!cekJamOperasional()) {
     createKembalianModal();
     const produkData = [
         { id: 1, nama: "Risol", harga: 3000, gambar: "risol.webp", barcode: "risol", stok: 1, kategori:"makanan"},
+        { id: 20, nama: "Risol saos pizza & keju", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 1, kategori:"makanan"},  
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1, kategori:"makanan"},
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},          
-        { id: 20, nama: "Risol Pizza", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 0, kategori:"makanan"},       
-       { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 0, kategori:"makanan"},
-       { id: 6, nama: "spaghetti tanpa toping", harga: 8000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 , kategori:"makanan"},      
+       { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 1, kategori:"makanan"},
+      // { id: 6, nama: "spaghetti tanpa toping", harga: 8000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 , kategori:"makanan"},      
         { id: 21, nama: "sosis bakar", harga: 5000, gambar: "sosis.webp", barcode: "sosis", stok: 0, kategori:"makanan"},
         { id: 21, nama: "sosis kecil bakar", harga: 2000, gambar: "sosis1.webp", barcode: "sosis1", stok: 0, kategori:"makanan"},             
         { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 0 , kategori:"makanan"},
