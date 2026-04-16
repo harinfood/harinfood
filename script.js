@@ -47,8 +47,8 @@ function cekJamOperasional() {
 
     const totalMenit = jam * 60 + menit;
 
-    const buka = 11 * 60; // 10:00
-    const tutup = 18 * 60; // 18:00
+    const buka = 01 * 60; // 10:00
+    const tutup = 02 * 60; // 18:00
 
     return totalMenit >= buka && totalMenit < tutup;
 }
@@ -62,14 +62,16 @@ function cekJamOperasional() {
     overlay.innerHTML = `
         <div class="kedai-tutup-box" style="position:relative;">
             <button id="close-kedai" style="position:absolute;top:15px;right:20px;font-size:30px;background:none;border:none;color:#ff0000;cursor:pointer;">❎</button>
-        <!-- <h1> ⛔
-        <br>KEDAI LIBUR</h1> -->
-        <h1> 🙏
-        <br>KEDAI TUTUP</h1>
-             <p style="font-size:15px;">Mohon maaf, saat ini kedai sedang tutup  silahkan melihat daftar menu dengan cara menekan tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dan tunggu konfrmasi, mengenai jam oprasional menyesuaikan ketersediaan stok !
+        <h1> ⛔
+        <br>KEDAI LIBUR</h1> 
+        <!--   <h1> 🙏
+        <br>KEDAI TUTUP</h1>-->
+             <p style="font-size:15px;">Mohon maaf, saat ini kedai sedang libur  silahkan melihat daftar menu dengan cara menekan tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dan tunggu konfrmasi, mengenai jam oprasional menyesuaikan ketersediaan stok !
             </p>
+            <!--
             <p style = "color:#f0ca26"> Jam operasional: 
             <br><b>11:00 - 18:00</b></p>
+            -->
         </div>
     `;
     document.body.appendChild(overlay);
@@ -359,14 +361,14 @@ if (!cekJamOperasional()) {
        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1, kategori:"makanan"},
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},          
        { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 1, kategori:"makanan"},
-       { id: 20, nama: "Risol saos pizza & keju", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 0, kategori:"makanan"},         
+       { id: 20, nama: "Risol saos pizza & keju", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 1, kategori:"makanan"},         
       // { id: 6, nama: "spaghetti tanpa toping", harga: 8000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 , kategori:"makanan"},      
-        { id: 21, nama: "sosis bakar", harga: 5000, gambar: "sosis.webp", barcode: "sosis", stok: 0, kategori:"makanan"},
-        { id: 21, nama: "sosis kecil bakar", harga: 2000, gambar: "sosis1.webp", barcode: "sosis1", stok: 0, kategori:"makanan"},             
-        { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 0 , kategori:"makanan"},
-        { id: 3, nama: "Cilok", harga: 1000, gambar: "cilok.webp", barcode: "cilok", stok: 0 , kategori:"makanan"},        
-        { id: 8, nama: "Balungan", harga: 6000, gambar: "balungan.webp", barcode: "balungan", stok: 0 , kategori:"makanan"},
-        { id: 14, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" , stok: 0 , kategori:"makanan"},
+        { id: 21, nama: "sosis bakar", harga: 5000, gambar: "sosis.webp", barcode: "sosis", stok: 1, kategori:"makanan"},
+        { id: 21, nama: "sosis kecil bakar", harga: 2000, gambar: "sosis1.webp", barcode: "sosis1", stok: 1, kategori:"makanan"},             
+        { id: 3, nama: "Citung", harga: 2500, gambar: "citung.webp", barcode: "citung", stok: 1 , kategori:"makanan"},
+        { id: 3, nama: "Cilok", harga: 1000, gambar: "cilok.webp", barcode: "cilok", stok: 1 , kategori:"makanan"},        
+        { id: 8, nama: "Balungan", harga: 6000, gambar: "balungan.webp", barcode: "balungan", stok: 1 , kategori:"makanan"},
+        { id: 14, nama: "spaghetti balungan", harga: 12000, gambar: "sbalungan.webp", barcode: "spaghetti2" , stok: 1 , kategori:"makanan"},
        // { id: 15, nama: "Es Teh jumbo", harga: 3000, gambar: "esteh.webp", barcode: "esteh" , kategori:"minuman"},
         { id: 9, nama: "Es Teh tong tji", harga: 3000, gambar: "esteh.webp", barcode: "esteh3" , kategori:"minuman"},
        // { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" , kategori:"minuman"},
