@@ -356,8 +356,8 @@ if (!cekJamOperasional()) {
     }
     createKembalianModal();
     const produkData = [
-        { id: 1, nama: "Risol ayam & sayuran", harga: 3000, gambar: "risol.webp", barcode: "risol",stok: 1, kategori:"makanan"},
-        { id: 20, nama: "Risol saos pizza & keju", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 1, kategori:"makanan"},         
+        { id: 1, nama: "Risol ayam & sayuran", harga: 3000, gambar: "risol.webp", barcode: "risol",stok: 0, kategori:"makanan"},
+        { id: 20, nama: "Risol saos pizza & keju", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 0, kategori:"makanan"},         
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1, kategori:"makanan"},
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},          
