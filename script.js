@@ -361,7 +361,7 @@ if (!cekJamOperasional()) {
         { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
        { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1, kategori:"makanan"},
         { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},          
-       { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 1, kategori:"makanan"},
+       { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 0, kategori:"makanan"},
       // { id: 6, nama: "spaghetti tanpa toping", harga: 8000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 , kategori:"makanan"},      
         { id: 21, nama: "sosis bakar", harga: 5000, gambar: "sosis.webp", barcode: "sosis", stok: 0, kategori:"makanan"},
         { id: 21, nama: "sosis kecil bakar", harga: 2000, gambar: "sosis1.webp", barcode: "sosis1", stok: 0, kategori:"makanan"},             
