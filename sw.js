@@ -1,13 +1,13 @@
 // sw.js - Service Worker HARINFOOD POS Lite (Optimal for Automatic Updates & Offline)
 // GANTI versi cache SETIAP kali ada update file!
-const CACHE_VERSION = 'v167-header-kategori'; // Ganti setiap update!
+const CACHE_VERSION = 'v168-header-kategori'; // Ganti setiap update!
 const CACHE_NAME = `harinfood-cache-${CACHE_VERSION}`;
 const ASSETS_TO_CACHE = [
   '/',
-  '/index.html?v=167',
-  '/style.css?v=167',
-  '/script.js?v=167',
-  '/manifest.json?v=167',
+  '/index.html?v=168',
+  '/style.css?v=168',
+  '/script.js?v=168',
+  '/manifest.json?v=168',
   // Tambahkan semua gambar/audio/icon di bawah ini ok
   '/risol.webp',
   '/cibay.webp',
