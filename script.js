@@ -47,7 +47,7 @@ function cekJamOperasional() {
 
     const totalMenit = jam * 60 + menit;
 
-    const buka = 12 * 60; // 10:00
+    const buka = 10 * 60; // 10:00
     const tutup = 18 * 60; // 18:00
 
     return totalMenit >= buka && totalMenit < tutup;
@@ -66,11 +66,11 @@ function cekJamOperasional() {
         <br>KEDAI LIBUR</h1> -->
          <h1> 🙏
         <br>JAM OPERASIONAL</h1>
-             <p style="font-size:15px;">Mohon maaf, saat ini kedai sedang tutup atau belum buka silahkan melihat daftar menu dengan cara menekan tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dengn cara menekan gambar pada daftar menu dan tekan pesan berwarna hijau lalu tunggu konfrmasi, mengenai jam oprasional menyesuaikan ketersediaan stok !
+             <p style="font-size:15px;">Mohon maaf, saat ini kedai sedang belum buka silahkan melihat daftar menu dengan cara menekan tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dengn cara menekan gambar pada daftar menu dan tekan pesan berwarna hijau lalu tunggu konfrmasi, mengenai jam oprasional menyesuaikan ketersediaan stok !
             </p>
 
-            <p style = "color:#f0ca26"> Jam operasional hari jumat: 
-            <br><b>12:00 - 18:00</b></p>
+            <p style = "color:#f0ca26"> Jam operasional : 
+            <br><b>10:00 - 18:00</b></p>
             
         </div>
     `;
@@ -359,8 +359,8 @@ if (!cekJamOperasional()) {
         { id: 1, nama: "Risol ayam & sayuran", harga: 3000, gambar: "risol.webp", barcode: "risol",stok: 1, kategori:"makanan"},
        { id: 20, nama: "Risol saos Bolognese & keju", harga: 3000, gambar: "risolpizza.webp", barcode: "risol1", stok: 1, kategori:"makanan"},          
       { id: 2, nama: "Cibay", harga: 2500, gambar: "cibay.webp", barcode: "cibay" , stok: 1, kategori:"makanan"},
-       { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 1, kategori:"makanan"},
-        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 1, kategori:"makanan"},          
+       { id: 4, nama: "Tteokbokki 5K", harga: 5000, gambar: "toppoki.webp", barcode: "toppoki", stok: 0, kategori:"makanan"},
+        { id: 5, nama: "Tteokbokki", harga: 10000, gambar: "toppoki1.webp", barcode: "toppoki10" , stok: 0, kategori:"makanan"},          
        { id: 7, nama: "spaghetti", harga: 10000, gambar: "spaghetti1.webp", barcode: "spaghetti1", stok: 0, kategori:"makanan"},
  
       // { id: 6, nama: "spaghetti tanpa toping", harga: 8000, gambar: "spaghetti.webp", barcode: "spaghetti", stok: 0 , kategori:"makanan"},      
