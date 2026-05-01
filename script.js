@@ -47,7 +47,7 @@ function cekJamOperasional() {
 
     const totalMenit = jam * 60 + menit;
 
-    const buka = 11 * 60; // 10:00
+    const buka = 12 * 60; // 10:00
     const tutup = 18 * 60; // 18:00
 
     return totalMenit >= buka && totalMenit < tutup;
@@ -65,12 +65,12 @@ function cekJamOperasional() {
        <!--  <h1> ⛔
         <br>KEDAI LIBUR</h1> -->
          <h1> 🙏
-        <br>KEDAI TUTUP</h1>
-             <p style="font-size:15px;">Mohon maaf, saat ini kedai sedang tutup  silahkan melihat daftar menu dengan cara menekan tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dengn cara menekan gambar menu dan tekan pesan berwarna hijau lalu tunggu konfrmasi, mengenai jam oprasional menyesuaikan ketersediaan stok !
+        <br>JAM OPERASIONAL</h1>
+             <p style="font-size:15px;">Mohon maaf, saat ini kedai sedang tutup atau belum buka silahkan melihat daftar menu dengan cara menekan tombol ❎ dan datang lagi saat kedai sudah buka, untuk pemesanan melalui katalog ini silahkan anda lakukan dengn cara menekan gambar pada daftar menu dan tekan pesan berwarna hijau lalu tunggu konfrmasi, mengenai jam oprasional menyesuaikan ketersediaan stok !
             </p>
 
-            <p style = "color:#f0ca26"> Jam operasional: 
-            <br><b>11:00 - 18:00</b></p>
+            <p style = "color:#f0ca26"> Jam operasional hari jumat: 
+            <br><b>12:00 - 18:00</b></p>
             
         </div>
     `;
