@@ -375,7 +375,7 @@ if (!cekJamOperasional()) {
        // { id: 10, nama: "Es Teh kecil", harga: 2000, gambar: "esteh1.webp", barcode: "esteh2" , kategori:"minuman"},
         //{ id: 11, nama: "Es Rasa rasa", harga: 2000, gambar: "2000.webp", barcode: "rasa" , kategori:"minuman"},
         //{ id: 12, nama: "kopi", harga: 4000, gambar: "kopi.webp", barcode: "kopi" , kategori:"minuman"},
-        //{ id: 13, nama: "Es Tawar", harga: 1500, gambar: "estawar.webp", barcode: "tawar" , kategori:"minuman"}
+        { id: 13, nama: "Es Tawar cup", harga: 2000, gambar: "estawar.webp", barcode: "tawar" , kategori:"minuman"}
     ];
     const produkDefaultHarga = produkData.map(p => ({ id: p.id, harga: p.harga }));
     let keranjang = [];
